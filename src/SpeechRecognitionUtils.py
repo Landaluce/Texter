@@ -21,7 +21,7 @@ def recognize_speech(recognizer, source):
         str: The recognized text, or None if recognition fails.
     """
     try:
-        audio = recognizer.listen(source)
+        audio = recognizer.listen(source, timeout=2)
         text = recognizer.recognize_google(audio).lower()
         return text
 
@@ -30,6 +30,9 @@ def recognize_speech(recognizer, source):
         pass
     except sr.RequestError as e:
         print(f"Error from Speech Recognition service: {e}")
+    except sr.WaitTimeoutError:
+        # Suppress timeout error message and continue
+        pass
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     return None
