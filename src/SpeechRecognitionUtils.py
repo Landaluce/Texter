@@ -1,5 +1,7 @@
 # Standard library imports
 import json
+import sys
+import threading
 
 # Third-party imports
 import pyautogui as gui
@@ -9,19 +11,21 @@ import speech_recognition as sr
 from src.ErrorHandler import noalsaerr
 
 
-def recognize_speech(recognizer, source):
+def recognize_speech(recognizer, source, timeout=2):
     """
     Recognizes and returns the speech from the given audio source using the specified recognizer.
 
     Parameters:
         recognizer (sr.Recognizer): The speech recognition object used to process the audio.
         source (sr.Microphone): The audio source from which to listen for speech.
+        timeout (int): Maximum number of seconds to wait for speech input before giving up.
+                       If no speech is detected within this period, a WaitTimeoutError is raised.
 
     Returns:
         str: The recognized text, or None if recognition fails.
     """
     try:
-        audio = recognizer.listen(source, timeout=2)
+        audio = recognizer.listen(source, timeout=timeout)
         text = recognizer.recognize_google(audio).lower()
         return text
 
@@ -36,6 +40,7 @@ def recognize_speech(recognizer, source):
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     return None
+
 
 def live_speech_interpreter(state, texter_ui, keyboard_commands, info_commands, selection_commands, recognizer):
     """
@@ -53,16 +58,12 @@ def live_speech_interpreter(state, texter_ui, keyboard_commands, info_commands, 
         selection_commands (list): A list of selection commands to check against the recognized text.
         recognizer (sr.Recognizer): The speech recognition object used to process the audio input.
     """
+    print_running_threads()
     with noalsaerr():
         with sr.Microphone() as source:
             state.print_status()
             texter_ui.print_status()
-            while True:
-                # Check if termination is requested
-                if state.terminate:
-                    print("Terminating Texter...")
-                    break  # Exit the loop to stop the thread
-
+            while not state.terminate:
                 text = recognize_speech(recognizer, source)
                 if text:
                     # Hardcoded check to always output "Texter"
@@ -83,11 +84,29 @@ def live_speech_interpreter(state, texter_ui, keyboard_commands, info_commands, 
                         if state.typing_active:
                             gui.typewrite(text[5:])
                     else:
+                        # Check if termination is requested
                         if text == "terminate texter":
-                            break
+                            print("Terminating Texter...")
+                            state.terminate = True
+                            texter_ui.terminate_all_threads()
+                            # texter_ui.root.destroy()
+
+                            # sys.exit(0)  # Terminate the main thread and exit the program
+                            break  # Exit the loop to stop the thread
                         if not state.handle_command(text, keyboard_commands, info_commands, selection_commands):
                             if state.typing_active:
                                 gui.typewrite(text)
+            print_running_threads()
+
+
+def print_running_threads():
+    """
+    Prints all currently active threads.
+    """
+    threads = threading.enumerate()
+    print(f"Running threads ({len(threads)}):")
+    for thread in threads:
+        print(f"- {thread.name} (ID: {thread.ident})")
 
 
 def print_all_commands(): # TODO: CRETE VOICE COMMAND TO PRINT SPECIFIC COMMANDS
