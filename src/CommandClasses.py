@@ -7,8 +7,10 @@ import pyautogui as gui
 import speech_recognition as sr
 from word2number import w2n
 
+# from src.AppState import AppState
+
+
 # Local application imports
-from src.SpeechRecognitionUtils import print_all_commands
 
 
 class CommandType(Enum):
@@ -28,6 +30,7 @@ class CommandType(Enum):
     INFO = auto()
     SELECTION = auto()
     TERMINAL = auto()
+    SPELLING = auto()
 
 
 class Command:
@@ -47,7 +50,7 @@ class Command:
         _extract_num(text): Extracts and returns a numeric value from the text.
         numeric_str_to_int(numeric_str): Converts a numeric string to an integer.
     """
-    def __init__(self, name, command_type, key=None, num_key=None):
+    def __init__(self, name: str, command_type: CommandType, key=None, num_key=None):
         """
         Initializes a new Command instance.
 
@@ -62,7 +65,7 @@ class Command:
         self.key = key
         self.num_key = num_key
 
-    def execute(self, text, state):
+    def execute(self, text: str, state) -> None:
         """
         Executes the command based on its type.
 
@@ -73,25 +76,30 @@ class Command:
         Depending on the command type, this method will either execute a keyboard command,
         toggle typing activity, type out a programming or info command, or execute a selection command.
         """
+
         if self.command_type == CommandType.KEYBOARD:
             self._execute_keyboard_command(text)
+
         elif self.command_type == CommandType.START_STOP:
             self._execute_switch_commands(text, state)
-
-        elif self.command_type == CommandType.PROGRAMMING:
-            self.execute_programming_commands(text, state)
-
-        elif self.command_type == CommandType.TERMINAL:
-            self.execute_terminal_commands(text, state)
 
         elif self.command_type == CommandType.INFO:
             self._execute_info_command(text)
 
+        elif self.command_type == CommandType.PROGRAMMING:
+            self.execute_programming_command(text, state)
+
+        elif self.command_type == CommandType.TERMINAL:
+            self.execute_terminal_command(text, state)
+
         elif self.command_type == CommandType.SELECTION:
             self._execute_selection_command(text)
 
+        elif self.command_type == CommandType.SPELLING:
+            self.execute_spelling_command(text, state)
+
     @staticmethod
-    def set_typing_to_active(state):
+    def set_typing_to_active(state) -> None:
         """
         Sets the typing activity to active in the application state.
 
@@ -105,7 +113,7 @@ class Command:
         state.print_status()
 
     @staticmethod
-    def _execute_switch_commands(text, state):
+    def _execute_switch_commands(text: str, state) -> None:
         """
         Executes switch commands based on the recognized text input.
 
@@ -118,7 +126,7 @@ class Command:
         """
         if text == "go to sleep":
             state.typing_active = False
-        if text == "wake up":
+        elif text == "wake up":
             state.typing_active = True
         elif text == "refresh texter":
             state.restart_script()
@@ -130,24 +138,21 @@ class Command:
             state.terminal = True
         elif text == "terminal off":
             state.terminal = False
+        elif text == "switch mode":
+             state.switch_mode()
 
         state.print_status()
 
-    def _execute_info_command(self, text):
+    def _execute_info_command(self, text: str) -> None:
         """
         Executes the information command based on the given text.
 
         Parameters:
             text (str): The recognized text input.
-
-        If the text is 'print commands', it prints all available commands; otherwise, it types out the associated key.
         """
-        if text == "print commands":
-            print_all_commands()
-        else:
-            gui.typewrite(self.key)
+        gui.typewrite(self.key)
 
-    def _execute_keyboard_command(self, text):
+    def _execute_keyboard_command(self, text: str) -> None:
         """
         Handles the execution of a keyboard command.
 
@@ -177,7 +182,7 @@ class Command:
             gui.hotkey(self.key)
 
     @staticmethod
-    def _execute_selection_command(text):
+    def _execute_selection_command(text: str) -> None:
         """
         Handles the execution of a selection command.
 
@@ -202,16 +207,18 @@ class Command:
         elif text == "paste":
             gui.hotkey('ctrl', 'v')
 
-    def execute_programming_commands(self, text, state):
+    def execute_programming_command(self, text: str, state) -> None:
         """
         Execute programming-related commands based on the user's selected programming language.
 
         Parameters:
-        - text (str): The input text that may contain specific commands or additional details (e.g., class or method names).
+        - text (str): The input text that may contain specific commands or additional details
+            (e.g., class or method names).
         - state (object): An object containing the current state, including the selected programming language.
 
         This method performs different actions based on the `programming_language` attribute in the `state` object:
-        - For Python, it can generate print statements, classes, methods, functions, variable declarations (int, str, float), and main script structures.
+        - For Python, it can generate print statements, classes, methods, functions, variable declarations
+            (int, str, float), and main script structures.
         - For Java, it supports creating print statements, classes, public/private methods, and functions.
 
         Commands are interpreted from `self.key` and may include actions like:
@@ -305,12 +312,13 @@ class Command:
             else:
                 gui.typewrite(self.key)
 
-    def execute_terminal_commands(self, text, state):
+    def execute_terminal_command(self, text, state):
         """
         Execute terminal commands based on the user's selected operating system (OS).
 
         Parameters:
-        - text (str): The input text that contains terminal commands or details (e.g., file paths or navigation commands).
+        - text (str): The input text that contains terminal commands or details
+            (e.g., file paths or navigation commands).
         - state (object): An object containing the current state, including the selected terminal operating system (OS).
 
         This method checks the `terminal_os` attribute in the `state` object to determine the current OS:
@@ -320,14 +328,19 @@ class Command:
         The method uses GUI automation (via `gui.typewrite`) to simulate typing the command in the terminal.
         """
         if state.terminal_os == "linux":
-            if self.name == "go to":
+            if self.name.startswith("go to"):
                 gui.typewrite(self.key)
         elif state. terminal_os == "windows":
             if self.name == "go to":
                 gui.typewrite(self.key)
 
+    def execute_spelling_command(self, text, state):
+        print("NEVER GETS EXECUTED")
+        if state.mode == "spelling":
+            gui.typewrite(self.key)
+
     @staticmethod
-    def string_to_camel_case(input_str):
+    def string_to_camel_case(input_str: str) -> str:
         """Capitalizes the first letter of each word in a string.
 
           Parameters:

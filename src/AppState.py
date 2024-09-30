@@ -3,12 +3,8 @@ import json
 import subprocess
 import sys
 
-from typing import Tuple, List
-
 # Local application imports
 from src.CommandClasses import CommandType, Command
-from src.TexterUI import TexterUI
-
 
 class AppState:
     """
@@ -20,9 +16,7 @@ class AppState:
         programming_language (str): The currently selected programming language.
         programming_commands (list): A list of commands associated with the selected programming language.
     """
-
-
-    def __init__(self, app_ui: TexterUI=None):
+    def __init__(self, app_ui=None):
         """
         Initializes a new instance of the AppState class with default settings.
         """
@@ -47,7 +41,7 @@ class AppState:
         self.load_spelling_commands("config.json")
 
     @staticmethod
-    def load_commands(config: json) -> Tuple[List[Command], List[Command], List[Command]]:
+    def load_commands(config):
         """
         Loads all command types (keyboard, info, selection) from a configuration file.
 
@@ -70,9 +64,10 @@ class AppState:
             Command(cmd["name"], CommandType.SELECTION)
             for cmd in config["selection_commands"]
         ]
+
         return keyboard_commands, info_commands, selection_commands
 
-    def load_programming_commands(self, language: str, config_file_path: str):
+    def load_programming_commands(self, language, config_file_path):
         """
         Loads programming commands for the specified language from a configuration file and sets the current language.
 
@@ -101,7 +96,7 @@ class AppState:
         self.programming_language = language
         self.print_status()
 
-    def load_terminal_commands(self, os, config_file_path):
+    def load_terminal_commands(self, os: str, config_file_path: str) -> None:
         """
         Loads terminal commands for the specified operating system from a configuration file and sets the current os.
 
@@ -127,7 +122,7 @@ class AppState:
         self.terminal_os = os
         self.print_status()
 
-    def load_spelling_commands(self, config_file_path):
+    def load_spelling_commands(self, config_file_path: str) -> None:
         """
         Loads spelling commands from a configuration file.
 
@@ -190,7 +185,7 @@ class AppState:
         Parameters:
             text (str): The command text to process.
             keyboard_commands (list): List of keyboard commands.
-
+            config_file_path (str): The path of the json file the spelling command.
         Returns:
             bool: True if a keyboard command was handled, False otherwise.
         """
@@ -208,7 +203,7 @@ class AppState:
                 return True
         return False
 
-    def _handle_programming_command(self, text):
+    def _handle_programming_command(self, text: str) -> bool:
         """
         Handles a programming command if the text matches any of the available programming commands.
 
@@ -226,7 +221,7 @@ class AppState:
                 return True
         return False
 
-    def _handle_terminal_command(self, text):
+    def _handle_terminal_command(self, text: str) -> bool:
         """
         Handles a terminal command if the text matches any of the available terminal commands.
 
@@ -261,7 +256,7 @@ class AppState:
                 return True
         return False
 
-    def _handle_selection_command(self, text, selection_commands):
+    def _handle_selection_command(self, text: str, selection_commands) -> bool:
         """
         Handles a selection command if the text matches any of the available selection commands.
 
@@ -278,7 +273,7 @@ class AppState:
                 return True
         return False
 
-    def _handle_spelling_command(self, text):
+    def _handle_spelling_command(self, text: str) -> bool:
         """
         Handles a spelling command if the text matches any of the available terminal commands.
 
@@ -300,19 +295,11 @@ class AppState:
         Prints the current status of typing activity and programming language.
         If app_ui is passed, it will update the TexterUI status box.
         """
-        # status_message = "┌────────────────────────────────\n"
         status_message = f"Typing: {'started' if self.typing_active else 'stopped'}\n"
-        if self.programming:
-            status_message += f"Programming: On\n"
-            status_message += f"Programming language: {self.programming_language}\n"
-        else:
-            status_message += "Programming: Off\n"
-        # status_message += "└────────────────────────────────\n"
-        if self.terminal:
-            status_message += f"Terminal: On\n"
-            status_message += f"Terminal OS: {self.terminal_os}\n"
-        else:
-            status_message += "Terminal: Off\n"
+        status_message += f"mode: {self.mode}\n"
+        status_message += f"{self.programming_language} Programming: On\n" if self.programming else "Programming: Off\n"
+        status_message += f"{self.terminal_os} Terminal: On\n" if self.terminal else "Terminal: Off\n"
+
         # Check if app_ui is available and update UI
         if self.app_ui:
             self.app_ui.update_status(status_message)
@@ -330,7 +317,6 @@ class AppState:
         self.print_status()
 
     @staticmethod
-    def restart_script():
+    def restart_script() -> None:
         subprocess.Popen([sys.executable, sys.argv[0]])
         sys.exit()
-        # subprocess.run(["python3.8", "main.py"])

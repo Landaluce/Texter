@@ -1,17 +1,19 @@
 # Standard library imports
+from __future__ import annotations
 import json
-import sys
 import threading
 
 # Third-party imports
 import pyautogui as gui
 import speech_recognition as sr
 
+from src.AppState import AppState
 # Local application imports
 from src.ErrorHandler import noalsaerr
+from src.TexterUI import TexterUI
 
 
-def recognize_speech(recognizer, source, timeout=2):
+def recognize_speech(recognizer: sr.Recognizer, source: sr.Microphone, timeout: int=2) -> str | None:
     """
     Recognizes and returns the speech from the given audio source using the specified recognizer.
 
@@ -24,6 +26,7 @@ def recognize_speech(recognizer, source, timeout=2):
     Returns:
         str: The recognized text, or None if recognition fails.
     """
+
     try:
         audio = recognizer.listen(source, timeout=timeout)
         text = recognizer.recognize_google(audio).lower()
@@ -42,7 +45,8 @@ def recognize_speech(recognizer, source, timeout=2):
     return None
 
 
-def live_speech_interpreter(state, texter_ui, keyboard_commands, info_commands, selection_commands, recognizer):
+def live_speech_interpreter(state: AppState, texter_ui: TexterUI, keyboard_commands: list, info_commands: list,
+                            selection_commands: list, recognizer: sr.Recognizer) -> None:
     """
     Continuously listens for and interprets speech commands, executing corresponding actions.
 
@@ -58,7 +62,6 @@ def live_speech_interpreter(state, texter_ui, keyboard_commands, info_commands, 
         selection_commands (list): A list of selection commands to check against the recognized text.
         recognizer (sr.Recognizer): The speech recognition object used to process the audio input.
     """
-    print_running_threads()
     with noalsaerr():
         with sr.Microphone() as source:
             state.print_status()
@@ -80,26 +83,52 @@ def live_speech_interpreter(state, texter_ui, keyboard_commands, info_commands, 
 
                     texter_ui.append_text("You said:" + "~" + text + "~")
 
-                    if text.startswith("type"):
-                        if state.typing_active:
-                            gui.typewrite(text[5:])
-                    else:
-                        # Check if termination is requested
-                        if text == "terminate texter":
-                            print("Terminating Texter...")
-                            state.terminate = True
-                            texter_ui.terminate_all_threads()
-                            # texter_ui.root.destroy()
+                    # Check if the user wants to switch modes
+                    if text == "switch mode":
+                        state.switch_mode()
+                        texter_ui.append_text(f"Switched to {state.mode} mode.")
+                        continue  # Skip further processing after switching modes
 
-                            # sys.exit(0)  # Terminate the main thread and exit the program
-                            break  # Exit the loop to stop the thread
-                        if not state.handle_command(text, keyboard_commands, info_commands, selection_commands):
+                    # Handle spelling mode
+                    if state.mode == "spelling":
+                        spelling_output = convert_to_spelling(text, state.spelling_commands)
+                        if spelling_output:
+                            gui.typewrite(spelling_output)
+                        else:
+                            texter_ui.append_text("No valid spelling commands found.")
+                        continue
+
+                    # Handle dictation mode
+                    if state.mode == "dictation":
+                        if text.startswith("type"):
                             if state.typing_active:
-                                gui.typewrite(text)
-            print_running_threads()
+                                gui.typewrite(text[5:])
+                        else:
+                            # Check if termination is requested
+                            if text == "terminate texter":
+                                print("Terminating Texter...")
+                                state.terminate = True
+                                texter_ui.terminate_all_threads()
+                                # texter_ui.root.destroy()
 
+                                # sys.exit(0)  # Terminate the main thread and exit the program
+                                break  # Exit the loop to stop the thread
+                            if not state.handle_command(text, keyboard_commands, info_commands, selection_commands):
+                                if state.typing_active:
+                                    gui.typewrite(text)
 
-def print_running_threads():
+def convert_to_spelling(text: str, spelling_commands: list) -> str:
+    """Convert spoken words to corresponding spelling characters."""
+    words = text.split()
+    output = []
+    for word in words:
+        for command in spelling_commands:
+            if command.name == word:
+                output.append(command.key)
+                break
+    return ''.join(output)
+
+def print_running_threads() -> None:
     """
     Prints all currently active threads.
     """
@@ -107,21 +136,3 @@ def print_running_threads():
     print(f"Running threads ({len(threads)}):")
     for thread in threads:
         print(f"- {thread.name} (ID: {thread.ident})")
-
-
-def print_all_commands(): # TODO: CRETE VOICE COMMAND TO PRINT SPECIFIC COMMANDS
-    with open('config.json', 'r') as f:
-        config = json.load(f)
-
-    for command_type in config:
-        if command_type not in ["key_mappings", "programming_language",
-                                "speech_engine", "sensitivity", "typing_delay"]:
-            print("┌────────────────────────────┐")
-            print(f"│ {command_type}:")
-            print("├────────────────────────────┤")
-            for command in config[command_type]:
-                for key, val in command.items():
-                    if key == "name": # "command_type":
-                        print(f"│ {val}", end=" ")
-                print()
-            print("└────────────────────────────┘\n")

@@ -8,7 +8,7 @@ from SpeechRecognitionUtils import *
 
 
 # Serpent
-def run_live_speech_interpreter(state, app_ui, keyboard_commands, info_commands, selection_commands, recognizer):
+def run_live_speech_interpreter(state, app_ui, keyboard_commands, info_commands, selection_commands, recognizer) -> None:
     """
     This function runs the live speech interpreter in a separate thread.
     """
