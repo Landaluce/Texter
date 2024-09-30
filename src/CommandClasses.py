@@ -7,9 +7,6 @@ import pyautogui as gui
 import speech_recognition as sr
 from word2number import w2n
 
-# from src.AppState import AppState
-
-
 # Local application imports
 
 
@@ -65,13 +62,13 @@ class Command:
         self.key = key
         self.num_key = num_key
 
-    def execute(self, text: str, state) -> None:
+    def execute(self, text: str, app_state) -> None:
         """
         Executes the command based on its type.
 
         Parameters:
             text (str): The command text.
-            state (AppState): The current application state.
+            app_state (AppState): The current application state.
 
         Depending on the command type, this method will either execute a keyboard command,
         toggle typing activity, type out a programming or info command, or execute a selection command.
@@ -81,67 +78,67 @@ class Command:
             self._execute_keyboard_command(text)
 
         elif self.command_type == CommandType.START_STOP:
-            self._execute_switch_commands(text, state)
+            self._execute_switch_commands(text, app_state)
 
         elif self.command_type == CommandType.INFO:
             self._execute_info_command(text)
 
         elif self.command_type == CommandType.PROGRAMMING:
-            self.execute_programming_command(text, state)
+            self.execute_programming_command(text, app_state)
 
         elif self.command_type == CommandType.TERMINAL:
-            self.execute_terminal_command(text, state)
+            self.execute_terminal_command(text, app_state)
 
         elif self.command_type == CommandType.SELECTION:
             self._execute_selection_command(text)
 
         elif self.command_type == CommandType.SPELLING:
-            self.execute_spelling_command(text, state)
+            self.execute_spelling_command(text, app_state)
 
     @staticmethod
-    def set_typing_to_active(state) -> None:
+    def set_typing_to_active(app_state) -> None:
         """
         Sets the typing activity to active in the application state.
 
         Parameters:
-            state (AppState): The current application state object.
+            app_state (AppState): The current application state object.
 
         This method sets the 'typing_active' attribute of the state object to True
         and prints the current status of the application state.
         """
-        state.typing_active = True
-        state.print_status()
+        app_state.typing_active = True
+        app_state.print_status()
 
     @staticmethod
-    def _execute_switch_commands(text: str, state) -> None:
+    def _execute_switch_commands(text: str, app_state) -> None:
         """
         Executes switch commands based on the recognized text input.
 
         Parameters:
             text (str): The recognized text input.
-            state (AppState): The current application state.
+            app_state (AppState): The current application state.
 
         This method handles various switch commands like toggling typing activity, restarting the script,
         enabling or disabling programming mode, and prints the current status of the application state.
         """
         if text == "go to sleep":
-            state.typing_active = False
+            app_state.typing_active = False
         elif text == "wake up":
-            state.typing_active = True
+            app_state.typing_active = True
         elif text == "refresh texter":
-            state.restart_script()
+            app_state.restart_script()
         elif text == "programming on":
-            state.programming = True
+            app_state.programming = True
         elif text == "programming off":
-            state.programming = False
+            app_state.programming = False
         elif text == "terminal on":
-            state.terminal = True
+            app_state.terminal = True
         elif text == "terminal off":
-            state.terminal = False
+            app_state.terminal = False
         elif text == "switch mode":
-             state.switch_mode()
+             app_state.switch_mode()
 
-        state.print_status()
+        app_state.print_status()
 
     def _execute_info_command(self, text: str) -> None:
         """
@@ -207,14 +204,14 @@ class Command:
         elif text == "paste":
             gui.hotkey('ctrl', 'v')
 
-    def execute_programming_command(self, text: str, state) -> None:
+    def execute_programming_command(self, text: str, app_state) -> None:
         """
         Execute programming-related commands based on the user's selected programming language.
 
         Parameters:
         - text (str): The input text that may contain specific commands or additional details
             (e.g., class or method names).
-        - state (object): An object containing the current state, including the selected programming language.
+        - app_state (object): An object containing the current state, including the selected programming language.
 
         This method performs different actions based on the `programming_language` attribute in the `state` object:
         - For Python, it can generate print statements, classes, methods, functions, variable declarations
@@ -229,7 +226,7 @@ class Command:
         The method uses GUI automation (via `gui.typewrite` and `gui.hotkey`) to simulate typing the corresponding code
         structure in the editor.
         """
-        if state.programming_language == "python":
+        if app_state.programming_language == "python":
             if self.key == "print statement":
                 gui.typewrite("print()")
                 gui.hotkey("left")
@@ -275,7 +272,7 @@ class Command:
             else:
                 gui.typewrite(self.key)
 
-        elif state.programming_language == "java":
+        elif app_state.programming_language == "java":
             if self.key == "print statement":
                 gui.typewrite("System.out.println();")
                 gui.hotkey("left")
@@ -312,14 +309,14 @@ class Command:
             else:
                 gui.typewrite(self.key)
 
-    def execute_terminal_command(self, text, state):
+    def execute_terminal_command(self, text, app_state):
         """
         Execute terminal commands based on the user's selected operating system (OS).
 
         Parameters:
         - text (str): The input text that contains terminal commands or details
             (e.g., file paths or navigation commands).
-        - state (object): An object containing the current state, including the selected terminal operating system (OS).
+        - app_state (object): An object containing the current state, including the selected terminal operating system (OS).
 
         This method checks the `terminal_os` attribute in the `state` object to determine the current OS:
         - If the OS is "linux", it will execute Linux-specific terminal commands.
@@ -327,16 +324,16 @@ class Command:
 
         The method uses GUI automation (via `gui.typewrite`) to simulate typing the command in the terminal.
         """
-        if state.terminal_os == "linux":
+        if app_state.terminal_os == "linux":
             if self.name.startswith("go to"):
                 gui.typewrite(self.key)
-        elif state. terminal_os == "windows":
+        elif app_state. terminal_os == "windows":
             if self.name == "go to":
                 gui.typewrite(self.key)
 
-    def execute_spelling_command(self, text, state):
+    def execute_spelling_command(self, text, app_state):
         print("NEVER GETS EXECUTED")
-        if state.mode == "spelling":
+        if app_state.mode == "spelling":
             gui.typewrite(self.key)
 
     @staticmethod
