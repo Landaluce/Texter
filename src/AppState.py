@@ -1,5 +1,4 @@
 # Standard library imports
-import json
 import subprocess
 import sys
 
@@ -21,9 +20,10 @@ class AppState:
         Initializes a new instance of the AppState class with default settings.
         """
         self.mode = "dictation"
-        # self.spelling = False
+        self.spelling = False
         self.typing_active = True
         self.terminate = False
+        self.config = None
 
         self.programming = True
         self.programming_language = "python"  # None
@@ -36,18 +36,19 @@ class AppState:
         self.spelling_commands = None
 
         self.app_ui = app_ui
-        self.load_programming_commands(self.programming_language, "config.json")
-        self.load_terminal_commands(self.terminal_os, "config.json")
-        self.load_spelling_commands("config.json")
+        # self.load_programming_commands(self.programming_language, "config.json")
+        # self.load_terminal_commands(self.terminal_os, "config.json")
+        # self.load_spelling_commands()
 
-    @staticmethod
-    def load_commands(config):
+
+    def load_commands(self, config):
         """
         Loads all command types (keyboard, info, selection) from a configuration file.
 
         Returns:
             tuple: A tuple containing lists of keyboard commands, info commands, and selection commands.
         """
+        self.config = config
         keyboard_commands = []
         for i in config["keyboard_commands"]:
             if i["command_type"] == "keyboard":
@@ -65,82 +66,50 @@ class AppState:
             for cmd in config["selection_commands"]
         ]
 
+        self.load_programming_commands()
+        self.load_terminal_commands()
+        self.load_spelling_commands()
+
         return keyboard_commands, info_commands, selection_commands
 
-    def load_programming_commands(self, language, config_file_path):
+    def load_programming_commands(self):
         """
         Loads programming commands for the specified language from a configuration file and sets the current language.
-
-        Parameters:
-        - language (str): The programming language for which to load commands.
-        - config_file_path (str): The path to the configuration JSON file containing the programming commands.
 
         Returns:
         - None: If the configuration file is not found or contains errors.
         """
         if not self.programming:
             return
-        try:
-            with open(config_file_path, 'r') as f:
-                config = json.load(f)
-        except FileNotFoundError:
-            print("Configuration file not found.")
-            return None
-        except json.JSONDecodeError:
-            print("Invalid JSON format in configuration file.")
-            return None
+
         self.programming_commands = [
             Command(cmd.get("name", ""), CommandType.PROGRAMMING, cmd["key"], cmd.get("num_key", ""))
-            for cmd in config[language + "_commands"]
+            for cmd in self.config[self.programming_language + "_commands"]
         ]
-        self.programming_language = language
+        # self.programming_language = self.language
         self.print_status()
 
-    def load_terminal_commands(self, os: str, config_file_path: str) -> None:
+    def load_terminal_commands(self) -> None:
         """
         Loads terminal commands for the specified operating system from a configuration file and sets the current os.
-
-        Parameters:
-            config_file_path (str): The path of the json file the terminal command.
-            os (str): The operating system for which to load commands.
         """
         if not self.terminal:
             return
-        try:
-            with open(config_file_path, 'r') as f:
-                config = json.load(f)
-        except FileNotFoundError:
-            print("Configuration file not found.")
-            return None
-        except json.JSONDecodeError:
-            print("Invalid JSON format in configuration file.")
-            return None
+
         self.terminal_commands = [
             Command(cmd.get("name", ""), CommandType.TERMINAL, cmd["key"]) #, cmd.get("num_key", ""))
-            for cmd in config[os + "_commands"]
+            for cmd in self.config[self.terminal_os + "_commands"]
         ]
-        self.terminal_os = os
+        # self.terminal_os = os
         self.print_status()
 
-    def load_spelling_commands(self, config_file_path: str) -> None:
+    def load_spelling_commands(self) -> None:
         """
         Loads spelling commands from a configuration file.
-
-        Parameters:
-            config_file_path (str): The path of the json file the spelling command.
         """
-        try:
-            with open(config_file_path, 'r') as f:
-                config = json.load(f)
-        except FileNotFoundError:
-            print("Configuration file not found.")
-            return None
-        except json.JSONDecodeError:
-            print("Invalid JSON format in configuration file.")
-            return None
         self.spelling_commands = [
             Command(cmd.get("name", ""), CommandType.SPELLING, cmd["key"], cmd.get("num_key", ""))
-            for cmd in config["spelling_commands"]
+            for cmd in self.config["spelling_commands"]
         ]
         self.print_status()
 
@@ -158,7 +127,7 @@ class AppState:
         - bool: True if a command was successfully handled, False otherwise.
         """
         # Try to handle as a keyboard command first
-        if self._handle_keyboard_command(text, keyboard_commands, "config.json"):
+        if self._handle_keyboard_command(text, keyboard_commands):
             return True
         # Handle programming commands if applicable
         elif self._handle_programming_command(text):
@@ -178,14 +147,13 @@ class AppState:
         # Return False if no command matches
         return False
 
-    def _handle_keyboard_command(self, text, keyboard_commands, config_file_path):
+    def _handle_keyboard_command(self, text, keyboard_commands):
         """
         Handles a keyboard command if the text matches any of the available keyboard commands.
 
         Parameters:
             text (str): The command text to process.
             keyboard_commands (list): List of keyboard commands.
-            config_file_path (str): The path of the json file the spelling command.
         Returns:
             bool: True if a keyboard command was handled, False otherwise.
         """
@@ -195,9 +163,9 @@ class AppState:
                     language = command.name.split(" ")[-1]
 
                     if language == "python" or language == "java":
-                        self.load_programming_commands(language, config_file_path)
+                        self.load_programming_commands()
                     elif language == "linux" or language == "windows":
-                        self.load_terminal_commands(language, config_file_path)
+                        self.load_terminal_commands()
                 else:
                     command.execute(text, self)
                 return True
@@ -310,10 +278,10 @@ class AppState:
         """Toggle between dictation and spelling modes."""
         if self.mode == "dictation":
             self.mode = "spelling"
-            print("Switched to spelling mode")
+            # print("Switched to spelling mode")
         elif self.mode == "spelling":
             self.mode = "dictation"
-            print("Switched to dictation mode")
+            # print("Switched to dictation mode")
         self.print_status()
 
     @staticmethod
