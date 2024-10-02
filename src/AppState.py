@@ -25,6 +25,10 @@ class AppState:
         self.terminate = False
         self.config = None
 
+        self.keyboard_commands = []
+        self.info_commands = []
+        self.selection_commands = []
+
         self.programming = True
         self.programming_language = "python"  # None
         self.programming_commands = []
@@ -36,32 +40,28 @@ class AppState:
         self.spelling_commands = None
 
         self.app_ui = app_ui
-        # self.load_programming_commands(self.programming_language, "config.json")
-        # self.load_terminal_commands(self.terminal_os, "config.json")
-        # self.load_spelling_commands()
 
 
     def load_commands(self, config):
         """
-        Loads all command types (keyboard, info, selection) from a configuration file.
+        Loads all command types (keyboard, info, selection) from the given dictionary
 
         Returns:
             tuple: A tuple containing lists of keyboard commands, info commands, and selection commands.
         """
         self.config = config
-        keyboard_commands = []
         for i in config["keyboard_commands"]:
             if i["command_type"] == "keyboard":
-                keyboard_commands.append(Command(i["name"], CommandType.KEYBOARD, i["key"], i["num_key"]))
+                self.keyboard_commands.append(Command(i["name"], CommandType.KEYBOARD, i["key"], i["num_key"]))
             elif i["command_type"] == "start_stop":
-                keyboard_commands.append(Command(i["name"], CommandType.START_STOP))
+                self.keyboard_commands.append(Command(i["name"], CommandType.START_STOP))
 
-        info_commands = [
+        self.info_commands = [
             Command(cmd["name"], CommandType.INFO, cmd["key"])
             for cmd in config["info_commands"]
         ]
 
-        selection_commands = [
+        self.selection_commands = [
             Command(cmd["name"], CommandType.SELECTION)
             for cmd in config["selection_commands"]
         ]
@@ -70,7 +70,7 @@ class AppState:
         self.load_terminal_commands()
         self.load_spelling_commands()
 
-        return keyboard_commands, info_commands, selection_commands
+        # return keyboard_commands, info_commands, selection_commands
 
     def load_programming_commands(self):
         """
@@ -113,7 +113,7 @@ class AppState:
         ]
         self.print_status()
 
-    def handle_command(self, text, keyboard_commands, info_commands, selection_commands):
+    def handle_command(self, text):
         """
         Processes a given text command by checking it against different command types.
 
@@ -127,7 +127,7 @@ class AppState:
         - bool: True if a command was successfully handled, False otherwise.
         """
         # Try to handle as a keyboard command first
-        if self._handle_keyboard_command(text, keyboard_commands):
+        if self._handle_keyboard_command(text):
             return True
         # Handle programming commands if applicable
         elif self._handle_programming_command(text):
@@ -136,10 +136,10 @@ class AppState:
         elif self._handle_terminal_command(text):
             return True
         # Handle info commands if applicable
-        elif self._handle_info_command(text, info_commands):
+        elif self._handle_info_command(text):
             return True
         # Handle selection commands if applicable
-        elif self._handle_selection_command(text, selection_commands):
+        elif self._handle_selection_command(text):
             return True
         # Handle spelling commands if applicable
         elif self._handle_spelling_command(text):
@@ -147,17 +147,16 @@ class AppState:
         # Return False if no command matches
         return False
 
-    def _handle_keyboard_command(self, text, keyboard_commands):
+    def _handle_keyboard_command(self, text):
         """
         Handles a keyboard command if the text matches any of the available keyboard commands.
 
         Parameters:
             text (str): The command text to process.
-            keyboard_commands (list): List of keyboard commands.
         Returns:
             bool: True if a keyboard command was handled, False otherwise.
         """
-        for command in keyboard_commands:
+        for command in self.keyboard_commands:
             if text.startswith(command.name):
                 if command.name.startswith("switch to"):
                     language = command.name.split(" ")[-1]
@@ -207,35 +206,33 @@ class AppState:
                 return True
         return False
 
-    def _handle_info_command(self, text, info_commands):
+    def _handle_info_command(self, text):
         """
         Handles an info command if the text matches any of the available info commands.
 
         Parameters:
             text (str): The command text to process.
-            info_commands (list): List of info commands.
 
         Returns:
             bool: True if an info command was handled, False otherwise.
         """
-        for command in info_commands:
+        for command in self.info_commands:
             if text.startswith(command.name):
                 command.execute(text, self)
                 return True
         return False
 
-    def _handle_selection_command(self, text: str, selection_commands) -> bool:
+    def _handle_selection_command(self, text: str) -> bool:
         """
         Handles a selection command if the text matches any of the available selection commands.
 
         Parameters:
             text (str): The command text to process.
-            selection_commands (list): List of selection commands.
 
         Returns:
             bool: True if a selection command was handled, False otherwise.
         """
-        for command in selection_commands:
+        for command in self.selection_commands:
             if text.startswith(command.name):
                 command.execute(text, self)
                 return True
@@ -258,7 +255,7 @@ class AppState:
                     return True
         return False
 
-    def print_status(self, texter_ui=None):
+    def print_status(self):
         """
         Prints the current status of typing activity and programming language.
         If app_ui is passed, it will update the TexterUI status box.

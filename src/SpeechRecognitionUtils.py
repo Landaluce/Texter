@@ -45,8 +45,7 @@ def recognize_speech(recognizer: sr.Recognizer, source: sr.Microphone, timeout: 
     return None
 
 
-def live_speech_interpreter(state: AppState, texter_ui: TexterUI, keyboard_commands: list, info_commands: list,
-                            selection_commands: list, recognizer: sr.Recognizer) -> None:
+def live_speech_interpreter(state: AppState, texter_ui: TexterUI, recognizer: sr.Recognizer) -> None:
     """
     Continuously listens for and interprets speech commands, executing corresponding actions.
 
@@ -113,7 +112,7 @@ def live_speech_interpreter(state: AppState, texter_ui: TexterUI, keyboard_comma
 
                                 # sys.exit(0)  # Terminate the main thread and exit the program
                                 break  # Exit the loop to stop the thread
-                            if not state.handle_command(text, keyboard_commands, info_commands, selection_commands):
+                            if not state.handle_command(text):
                                 if state.typing_active:
                                     gui.typewrite(text)
 

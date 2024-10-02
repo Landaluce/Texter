@@ -2,18 +2,27 @@
 import threading
 
 # Local application imports
-from AppState import AppState
-from TexterUI import TexterUI
 from SpeechRecognitionUtils import *
 
 
 # Serpent
-def run_live_speech_interpreter(state, app_ui, keyboard_commands, info_commands, selection_commands, recognizer) -> None:
+def run_live_speech_interpreter(app_state, app_ui, recognizer) -> None:
     """
     This function runs the live speech interpreter in a separate thread.
     """
-    while not state.terminate:
-        live_speech_interpreter(state, app_ui, keyboard_commands, info_commands, selection_commands, recognizer)
+    while not app_state.terminate:
+        live_speech_interpreter(app_state, app_ui, recognizer)
+
+def get_commands(file):
+    try:
+        with open(file, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print("Configuration file not found.")
+        return None
+    except json.JSONDecodeError:
+        print("Invalid JSON format in configuration file.")
+        return None
 
 def main():
     """
@@ -26,25 +35,17 @@ def main():
     app = TexterUI()
     app_state = AppState(app)
     config_file_path = "config.json"
-    # hello
 
-    try:
-        with open(config_file_path, 'r') as f:
-            config = json.load(f)
-    except FileNotFoundError:
-        print("Configuration file not found.")
-        return None
-    except json.JSONDecodeError:
-        print("Invalid JSON format in configuration file.")
-        return None
+    # get commands from json
+    config = get_commands(config_file_path)
 
-    keyboard_commands, info_commands, selection_commands = app_state.load_commands(config)
+    app_state.load_commands(config)
     recognizer = sr.Recognizer()
 
     # Create a thread for the live speech interpreter
     speech_thread = threading.Thread(target=run_live_speech_interpreter,
-                                     args=(app_state, app, keyboard_commands, info_commands, selection_commands,
-                                           recognizer))
+                                     args=(app_state, app, recognizer))
+    # Initialize live speech interpreter thread
     app.speech_thread = speech_thread
     speech_thread.start()
 
