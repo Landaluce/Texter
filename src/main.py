@@ -1,11 +1,7 @@
-# Standard library imports
-import threading
-
 # Local application imports
 from SpeechRecognitionUtils import *
 
 
-# Serpent
 def run_live_speech_interpreter(app_state, app_ui, recognizer) -> None:
     """
     This function runs the live speech interpreter in a separate thread.
