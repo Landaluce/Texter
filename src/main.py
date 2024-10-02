@@ -25,9 +25,18 @@ def main():
     """
     app = TexterUI()
     app_state = AppState(app)
+    config_file_path = "config.json"
+    # hello
 
-    with open("config.json", 'r') as f:
-        config = json.load(f)
+    try:
+        with open(config_file_path, 'r') as f:
+            config = json.load(f)
+    except FileNotFoundError:
+        print("Configuration file not found.")
+        return None
+    except json.JSONDecodeError:
+        print("Invalid JSON format in configuration file.")
+        return None
 
     keyboard_commands, info_commands, selection_commands = app_state.load_commands(config)
     recognizer = sr.Recognizer()
