@@ -45,7 +45,7 @@ def recognize_speech(recognizer: sr.Recognizer, source: sr.Microphone, timeout: 
     return None
 
 
-def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, keyboard_commands: list, info_commands: list,
+def live_speech_interpreter(state: AppState, texter_ui: TexterUI, keyboard_commands: list, info_commands: list,
                             selection_commands: list, recognizer: sr.Recognizer) -> None:
     """
     Continuously listens for and interprets speech commands, executing corresponding actions.
@@ -56,7 +56,7 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, keyboard_c
 
     Parameters:
         texter_ui(TexterUI): frontend
-        app_state (AppState): The current application state, including typing status and loaded commands.
+        state (AppState): The current application state, including typing status and loaded commands.
         keyboard_commands (list): A list of keyboard commands to check against the recognized text.
         info_commands (list): A list of info commands to check against the recognized text.
         selection_commands (list): A list of selection commands to check against the recognized text.
@@ -64,9 +64,9 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, keyboard_c
     """
     with noalsaerr():
         with sr.Microphone() as source:
-            app_state.print_status()
+            state.print_status()
             texter_ui.print_status()
-            while not app_state.terminate:
+            while not state.terminate:
                 text = recognize_speech(recognizer, source)
                 if text:
                     # Hardcoded check to always output "Texter"
@@ -85,13 +85,13 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, keyboard_c
 
                     # Check if the user wants to switch modes
                     if text == "switch mode":
-                        app_state.switch_mode()
-                        texter_ui.append_text(f"Switched to {app_state.mode} mode.")
+                        state.switch_mode()
+                        texter_ui.append_text(f"Switched to {state.mode} mode.")
                         continue  # Skip further processing after switching modes
 
                     # Handle spelling mode
-                    if app_state.mode == "spelling":
-                        spelling_output = convert_to_spelling(text, app_state.spelling_commands)
+                    if state.mode == "spelling":
+                        spelling_output = convert_to_spelling(text, state.spelling_commands)
                         if spelling_output:
                             gui.typewrite(spelling_output)
                         else:
@@ -99,22 +99,22 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, keyboard_c
                         continue
 
                     # Handle dictation mode
-                    if app_state.mode == "dictation":
+                    if state.mode == "dictation":
                         if text.startswith("type"):
-                            if app_state.typing_active:
+                            if state.typing_active:
                                 gui.typewrite(text[5:])
                         else:
                             # Check if termination is requested
                             if text == "terminate texter":
                                 print("Terminating Texter...")
-                                app_state.terminate = True
+                                state.terminate = True
                                 texter_ui.terminate_all_threads()
                                 # texter_ui.root.destroy()
 
                                 # sys.exit(0)  # Terminate the main thread and exit the program
                                 break  # Exit the loop to stop the thread
-                            if not app_state.handle_command(text, keyboard_commands, info_commands, selection_commands):
-                                if app_state.typing_active:
+                            if not state.handle_command(text, keyboard_commands, info_commands, selection_commands):
+                                if state.typing_active:
                                     gui.typewrite(text)
 
 def convert_to_spelling(text: str, spelling_commands: list) -> str:
