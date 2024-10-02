@@ -281,7 +281,7 @@ class TexterUI:
         """
         Updates the UI to reflect the current status.
         """
-        self.app_state.print_status(self)
+        self.app_state.print_status()
 
     def append_text(self, text: str) -> None:
         """
