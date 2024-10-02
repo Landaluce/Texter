@@ -2,14 +2,14 @@
 from SpeechRecognitionUtils import *
 
 
-def run_live_speech_interpreter(app_state, app_ui, recognizer) -> None:
+def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognizer) -> None:
     """
     This function runs the live speech interpreter in a separate thread.
     """
     while not app_state.terminate:
         live_speech_interpreter(app_state, app_ui, recognizer)
 
-def get_commands(file):
+def get_commands(file: str):
     try:
         with open(file, 'r') as f:
             return json.load(f)
