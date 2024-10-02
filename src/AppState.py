@@ -44,10 +44,7 @@ class AppState:
 
     def load_commands(self, config):
         """
-        Loads all command types (keyboard, info, selection) from the given dictionary
-
-        Returns:
-            tuple: A tuple containing lists of keyboard commands, info commands, and selection commands.
+        Loads all command from the given dictionary
         """
         self.config = config
         for i in config["keyboard_commands"]:
@@ -70,14 +67,12 @@ class AppState:
         self.load_terminal_commands()
         self.load_spelling_commands()
 
-        # return keyboard_commands, info_commands, selection_commands
-
     def load_programming_commands(self):
         """
-        Loads programming commands for the specified language from a configuration file and sets the current language.
+        Loads programming commands for the specified language from the configuration file and sets the current language.
 
         Returns:
-        - None: If the configuration file is not found or contains errors.
+        - None: If programming in False
         """
         if not self.programming:
             return
@@ -86,12 +81,14 @@ class AppState:
             Command(cmd.get("name", ""), CommandType.PROGRAMMING, cmd["key"], cmd.get("num_key", ""))
             for cmd in self.config[self.programming_language + "_commands"]
         ]
-        # self.programming_language = self.language
         self.print_status()
 
     def load_terminal_commands(self) -> None:
         """
         Loads terminal commands for the specified operating system from a configuration file and sets the current os.
+
+        Returns:
+        - None: If terminal in False
         """
         if not self.terminal:
             return
@@ -100,7 +97,6 @@ class AppState:
             Command(cmd.get("name", ""), CommandType.TERMINAL, cmd["key"]) #, cmd.get("num_key", ""))
             for cmd in self.config[self.terminal_os + "_commands"]
         ]
-        # self.terminal_os = os
         self.print_status()
 
     def load_spelling_commands(self) -> None:
@@ -119,9 +115,6 @@ class AppState:
 
         Parameters:
         - text (str): The command text to process.
-        - keyboard_commands (list): List of keyboard commands.
-        - info_commands (list): List of info commands.
-        - selection_commands (list): List of selection commands.
 
         Returns:
         - bool: True if a command was successfully handled, False otherwise.
@@ -240,7 +233,7 @@ class AppState:
 
     def _handle_spelling_command(self, text: str) -> bool:
         """
-        Handles a spelling command if the text matches any of the available terminal commands.
+        Handles a spelling command if the text matches any of the available spelling commands.
 
         Parameters:
             text (str): The command text to process.
@@ -257,8 +250,7 @@ class AppState:
 
     def print_status(self):
         """
-        Prints the current status of typing activity and programming language.
-        If app_ui is passed, it will update the TexterUI status box.
+        Prints the current status of typing activity, mode, terminal and programming language.
         """
         status_message = f"Typing: {'started' if self.typing_active else 'stopped'}\n"
         status_message += f"mode: {self.mode}\n"
@@ -275,10 +267,8 @@ class AppState:
         """Toggle between dictation and spelling modes."""
         if self.mode == "dictation":
             self.mode = "spelling"
-            # print("Switched to spelling mode")
         elif self.mode == "spelling":
             self.mode = "dictation"
-            # print("Switched to dictation mode")
         self.print_status()
 
     @staticmethod
