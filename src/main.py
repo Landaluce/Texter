@@ -9,6 +9,7 @@ def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognize
     while not app_state.terminate:
         live_speech_interpreter(app_state, app_ui, recognizer)
 
+
 def get_commands(file: str):
     try:
         with open(file, 'r') as f:
@@ -19,6 +20,7 @@ def get_commands(file: str):
     except json.JSONDecodeError:
         print("Invalid JSON format in configuration file.")
         return None
+
 
 def main():
     """
@@ -47,7 +49,6 @@ def main():
 
     # Initialize TexterUI with the app_state object
     app.init_ui(app_state, config)
-
 
 
 if __name__ == "__main__":

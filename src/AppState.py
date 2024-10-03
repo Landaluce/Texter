@@ -5,6 +5,7 @@ import sys
 # Local application imports
 from src.CommandClasses import CommandType, Command
 
+
 class AppState:
     """
     Represents the state of the application, including typing status,
@@ -15,6 +16,7 @@ class AppState:
         programming_language (str): The currently selected programming language.
         programming_commands (list): A list of commands associated with the selected programming language.
     """
+
     def __init__(self, app_ui=None):
         """
         Initializes a new instance of the AppState class with default settings.
@@ -40,7 +42,6 @@ class AppState:
         self.spelling_commands = None
 
         self.app_ui = app_ui
-
 
     def load_commands(self, config):
         """
@@ -94,7 +95,7 @@ class AppState:
             return
 
         self.terminal_commands = [
-            Command(cmd.get("name", ""), CommandType.TERMINAL, cmd["key"]) #, cmd.get("num_key", ""))
+            Command(cmd.get("name", ""), CommandType.TERMINAL, cmd["key"])  #, cmd.get("num_key", ""))
             for cmd in self.config[self.terminal_os + "_commands"]
         ]
         self.print_status()

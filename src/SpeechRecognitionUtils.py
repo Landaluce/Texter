@@ -13,7 +13,7 @@ from src.ErrorHandler import noalsaerr
 from src.TexterUI import TexterUI
 
 
-def recognize_speech(recognizer: sr.Recognizer, source: sr.Microphone, timeout: int=2) -> str | None:
+def recognize_speech(recognizer: sr.Recognizer, source: sr.Microphone, timeout: int = 2) -> str | None:
     """
     Recognizes and returns the speech from the given audio source using the specified recognizer.
 
@@ -109,6 +109,7 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
                                 if app_state.typing_active:
                                     gui.typewrite(text)
 
+
 def convert_to_spelling(text: str, spelling_commands: list) -> str:
     """
     Convert spoken words to corresponding spelling characters.
@@ -129,6 +130,7 @@ def convert_to_spelling(text: str, spelling_commands: list) -> str:
                 output.append(command.key)
                 break
     return ''.join(output)
+
 
 def print_running_threads() -> None:
     """
