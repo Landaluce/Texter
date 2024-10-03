@@ -15,10 +15,10 @@ def get_commands(file: str):
         with open(file, 'r') as f:
             return json.load(f)
     except FileNotFoundError:
-        print("Configuration file not found.")
+        print("commands file not found.")
         return None
     except json.JSONDecodeError:
-        print("Invalid JSON format in configuration file.")
+        print("Invalid JSON format in commands file.")
         return None
 
 
@@ -27,17 +27,17 @@ def main():
     Initializes the application app_state and starts the live speech interpreter.
 
     This function sets up the application by creating an instance of `AppState`, loading
-    the necessary command configurations, and initializing the speech recognizer. It then
+    the necessary commands, and initializing the speech recognizer. It then
     begins the live speech interpretation process, which listens for and handles voice commands.
     """
     app = TexterUI()
     app_state = AppState(app)
-    config_file_path = "config.json"
+    command_file_path = "commands.json"
 
     # get commands from json
-    config = get_commands(config_file_path)
+    commands = get_commands(command_file_path)
 
-    app_state.load_commands(config)
+    app_state.load_commands(commands)
     recognizer = sr.Recognizer()
 
     # Create a thread for the live speech interpreter
@@ -48,7 +48,7 @@ def main():
     speech_thread.start()
 
     # Initialize TexterUI with the app_state object
-    app.init_ui(app_state, config)
+    app.init_ui(app_state, commands)
 
 
 if __name__ == "__main__":

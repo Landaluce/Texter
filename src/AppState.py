@@ -25,7 +25,7 @@ class AppState:
         self.spelling = False
         self.typing_active = True
         self.terminate = False
-        self.config = None
+        self.commands = None
 
         self.keyboard_commands = []
         self.info_commands = []
@@ -43,12 +43,12 @@ class AppState:
 
         self.app_ui = app_ui
 
-    def load_commands(self, config):
+    def load_commands(self, commands):
         """
         Loads all command from the given dictionary
         """
-        self.config = config
-        for i in config["keyboard_commands"]:
+        self.commands = commands
+        for i in commands["keyboard_commands"]:
             if i["command_type"] == "keyboard":
                 self.keyboard_commands.append(Command(i["name"], CommandType.KEYBOARD, i["key"], i["num_key"]))
             elif i["command_type"] == "start_stop":
@@ -56,12 +56,12 @@ class AppState:
 
         self.info_commands = [
             Command(cmd["name"], CommandType.INFO, cmd["key"])
-            for cmd in config["info_commands"]
+            for cmd in commands["info_commands"]
         ]
 
         self.selection_commands = [
             Command(cmd["name"], CommandType.SELECTION)
-            for cmd in config["selection_commands"]
+            for cmd in commands["selection_commands"]
         ]
 
         self.load_programming_commands()
@@ -70,7 +70,7 @@ class AppState:
 
     def load_programming_commands(self):
         """
-        Loads programming commands for the specified language from the configuration file and sets the current language.
+        Loads programming commands for the specified language from the commands file and sets the current language.
 
         Returns:
         - None: If programming in False
@@ -80,13 +80,13 @@ class AppState:
 
         self.programming_commands = [
             Command(cmd.get("name", ""), CommandType.PROGRAMMING, cmd["key"], cmd.get("num_key", ""))
-            for cmd in self.config[self.programming_language + "_commands"]
+            for cmd in self.commands[self.programming_language + "_commands"]
         ]
         self.print_status()
 
     def load_terminal_commands(self) -> None:
         """
-        Loads terminal commands for the specified operating system from a configuration file and sets the current os.
+        Loads terminal commands for the specified operating system from the commands file and sets the current os.
 
         Returns:
         - None: If terminal in False
@@ -96,17 +96,17 @@ class AppState:
 
         self.terminal_commands = [
             Command(cmd.get("name", ""), CommandType.TERMINAL, cmd["key"])  #, cmd.get("num_key", ""))
-            for cmd in self.config[self.terminal_os + "_commands"]
+            for cmd in self.commands[self.terminal_os + "_commands"]
         ]
         self.print_status()
 
     def load_spelling_commands(self) -> None:
         """
-        Loads spelling commands from a configuration file.
+        Loads spelling commands the commands file.
         """
         self.spelling_commands = [
             Command(cmd.get("name", ""), CommandType.SPELLING, cmd["key"], cmd.get("num_key", ""))
-            for cmd in self.config["spelling_commands"]
+            for cmd in self.commands["spelling_commands"]
         ]
         self.print_status()
 

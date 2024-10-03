@@ -2,7 +2,6 @@
 import json
 import sys
 import tkinter as tk
-from tkinter import simpledialog
 from src.AppState import AppState
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -13,7 +12,7 @@ import time
 #         self.texter_ui = texter_ui
 #
 #     def on_modified(self, event):
-#         if event.src_path == 'config.json':
+#         if event.src_path == 'commands.json':
 #             self.texter_ui.reload_commands()
 
 class TexterUI:
@@ -28,6 +27,7 @@ class TexterUI:
         It sets default attributes like `state`, `commands_label`, `input_text_box`, `status_label`, and more.
         """
         # Create the main window
+        self.commands = None
         self.root = tk.Tk()
 
         self.app_state = None
@@ -45,7 +45,7 @@ class TexterUI:
         # self.setup_command_watchdog()
 
     # def setup_command_watchdog(self):
-    #     """Setup watchdog to monitor changes in config.json and auto-update the UI."""
+    #     """Setup watchdog to monitor changes in commands.json and auto-update the UI."""
     #     observer = Observer()
     #     event_handler = CommandFileHandler(self)
     #     observer.schedule(event_handler, path='.', recursive=False)
@@ -59,28 +59,23 @@ class TexterUI:
     #     observer.join(1)
     #     self.root.after(1000, self.check_observer, observer)
 
-    def init_ui(self, app_state: AppState, config: iter) -> None:
+    def init_ui(self, app_state: AppState, commands: dict) -> None:
         """
-        Initializes the Texter user interface with input elements, buttons, and labels based on the provided state and configuration.
+        Initializes the Texter user interface with input elements, buttons, and labels based on the provided state and
+        commands.
 
         Parameters:
-        - state: The current state of the user interface.
-        - config: The configuration settings for the user interface elements.
-
-        Returns:
-        None
+            app_state (AppState): The current state of the user interface.
+            commands (dict): dictionary with commands
         """
-
-        self.root.protocol("WM_DELETE_WINDOW", self.disable_close)  # Override the close window button (X)
+        self.commands = commands
+        self.root.protocol("WM_DELETE_WINDOW", self.on_terminate_button_click)  # Override the close window button
         self.root.title("Texter")  # Set the window title
 
         # Make the window always on top
         self.root.attributes("-topmost", True)
 
         self.app_state = app_state
-
-        # self.add_command_button = tk.Button(self.root, text="Add Command", command=self.add_command_dialog)
-        # self.add_command_button.place(x=10, y=600, width=100, height=30)  # Position the button
 
         # Set the dimensions and position of the window (width x height + x_offset + y_offset
         self.root.geometry("300x600+100+100")
@@ -132,7 +127,7 @@ class TexterUI:
 
         # Create a non-editable text box: commands
         self.commands_text_box = tk.Text(self.root, height=10, width=40)
-        self.print_all_commands(config)
+        self.print_all_commands(commands)
         self.commands_text_box.config(state=tk.DISABLED)
         self.commands_text_box.place(x=10, y=310, width=280, height=300)
 
@@ -142,63 +137,28 @@ class TexterUI:
         # Create the main window
         self.root.mainloop()
 
-    # def add_command_dialog(self):
-    #     # Prompt the user for command details
-    #     command_type = simpledialog.askstring("Input", "Enter command type (e.g., python_commands):")
-    #     command_name = simpledialog.askstring("Input", "Enter command name:")
-    #     command_key = simpledialog.askstring("Input", "Enter command key:")
-    #
-    #     # Call the function to add or update the command
-    #     if command_type and command_name and command_key:
-    #         self.add_or_update_command(command_type, command_name, command_key)
-    #         self.reload_commands()
-    #
-    # @staticmethod
-    # def add_or_update_command(command_type, command_name, command_key, config_file="config.json"):
-    #     # Load current configuration
-    #     with open(config_file, 'r') as f:
-    #         config = json.load(f)
-    #
-    #     # Find the correct section and check if the command exists
-    #     if command_type in config:
-    #         for command in config[command_type]:
-    #             if command['name'] == command_name:
-    #                 # Update the existing command
-    #                 command['key'] = command_key
-    #                 break
-    #         else:
-    #             # Add new command
-    #             config[command_type].append({"name": command_name, "key": command_key})
-    #     else:
-    #         # If the command type doesn't exist, create a new section
-    #         config[command_type] = [{"name": command_name, "key": command_key}]
-    #
-    #     # Write updated config back to the file
-    #     with open(config_file, 'w') as f:
-    #         json.dump(config, f, indent=4)
-
     def reload_commands(self):
-        """Reload the commands from the updated configuration and display them in the UI."""
+        """Reload the commands from the updated commands file and display them in the UI."""
         # Clear the commands text box
-        self.commands_text_box.config(state=tk.NORMAL)
+        self.commands_text_box.commands(state=tk.NORMAL)
         self.commands_text_box.delete(1.0, tk.END)
 
         # Reload updated commands
-        with open("config.json", 'r') as f:
-            config = json.load(f)
+        with open("commands.json", 'r') as f:
+            commands = json.load(f)
 
         # Re-display the commands
-        self.print_all_commands(config)
-        self.commands_text_box.config(state=tk.DISABLED)
+        self.print_all_commands(commands)
+        self.commands_text_box.commands(state=tk.DISABLED)
 
     def toggle_status_textbox(self):
         """Toggle between expanding and collapsing the Text widget."""
         if self.commands_text_box.winfo_height() == 300:
             self.commands_text_box.place(width=280, height=50)
-            self.toggle_commands_button.config(text="Expand")  # Change button text to Collapse
+            self.toggle_commands_button.commands(text="Expand")  # Change button text to Collapse
         else:
             self.commands_text_box.place(width=280, height=300) # Collapse the Text widget
-            self.toggle_commands_button.config(text="Collapse")  # Change button text to Expand
+            self.toggle_commands_button.commands(text="Collapse")  # Change button text to Expand
 
         # Adjust the window size after changing the widget
         self.adjust_window_size()
@@ -216,12 +176,6 @@ class TexterUI:
         required_width = adjusted_height_1
         self.root.geometry(f"{required_width}x{required_height}")
 
-    def disable_close(self) -> None:
-        """
-        Closes the main window when the close button is clicked.
-        """
-        self.root.destroy()
-
     def on_terminate_button_click(self) -> None:
         """
         Set the termination flag to True, and destroy the main window.
@@ -231,16 +185,19 @@ class TexterUI:
           self.speech_thread.join()  # Wait for the thread to finish
         self.root.destroy()   # Close the UI
 
-    def terminate_all_threads(self) -> None:
+    def terminate_all_threads(self):
         """
         Safely terminates the speech thread and exits the main thread.
         """
-        # Set the termination flag to stop the live interpreter
-        self.app_state.terminate = True
-        # Ensure the speech thread is joined (wait for it to finish)
-        if hasattr(self, 'speech_thread'):
-            self.speech_thread.join()
-        sys.exit(0)  # Terminate the main thread and exit the program
+        try:
+            # Set the termination flag to stop the live interpreter
+            self.app_state.terminate = True
+            # Ensure the speech thread is joined (wait for it to finish)
+            if hasattr(self, 'speech_thread'):
+                self.speech_thread.join()
+            sys.exit(0)  # Terminate the main thread and exit the program
+        except:
+            pass
 
     def on_wake_up_button_click(self) -> None:
         """
@@ -256,24 +213,24 @@ class TexterUI:
         self.app_state.typing_active = False
         self.app_state.print_status()
 
-    def print_all_commands(self, config) -> None: # TODO: DISPLAY ONLY ACTIVE COMMANDS
+    def print_all_commands(self, commands) -> None: # TODO: DISPLAY ONLY ACTIVE COMMANDS
         """
-        Display the active commands in the user interface based on the provided configuration.
+        Display the active commands in the user interface based on the provided commands.
 
         Parameters:
-        - config: A dictionary containing the configuration settings for the commands.
+            commands: A dictionary containing the commands.
 
         Returns:
-        None
+            None
         """
-        for command_type in config:
+        for command_type in commands:
             self.commands_text_box.insert(tk.END, "┌────────────────────────────┐\n")
             self.commands_text_box.insert(tk.END, f"│ {command_type}:\n")
             self.commands_text_box.insert(tk.END, "├────────────────────────────┤\n")
-            for command in config[command_type]:
+            for command in commands[command_type]:
                 for key, val in command.items():
-                    if key == "name":  # "command_type":
-                        self.commands_text_box.insert(tk.END, f"│ {val}")
+                    if key == "name":
+                        self.commands_text_box.insert(tk.END, f" {val}")
                 self.commands_text_box.insert(tk.END, "\n")
             self.commands_text_box.insert(tk.END, "└────────────────────────────┘\n")
 
