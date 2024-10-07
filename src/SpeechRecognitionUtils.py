@@ -11,7 +11,10 @@ from src.AppState import AppState
 # Local application imports
 from src.ErrorHandler import noalsaerr
 from src.TexterUI import TexterUI
+from PunctuationModel import PunctuationModel
 
+
+punctuation_model = PunctuationModel()
 
 def recognize_speech(recognizer: sr.Recognizer, source: sr.Microphone, timeout: int = 2) -> str | None:
     """
@@ -107,7 +110,8 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
                                 break  # Exit the loop to stop the thread
                             if not app_state.handle_command(text):
                                 if app_state.typing_active:
-                                    gui.typewrite(text)
+                                    text = punctuation_model.restore_punctuation(text)
+                                    gui.write(text)
 
 
 def convert_to_spelling(text: str, spelling_commands: list) -> str:
