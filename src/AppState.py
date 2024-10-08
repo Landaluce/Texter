@@ -154,14 +154,17 @@ class AppState:
             if text.startswith(command.name):
                 if command.name.startswith("switch to"):
                     language = command.name.split(" ")[-1]
-
-                    if language == "python":
+                    if language == "java":
                         self.programming_language = "java"
                         self.load_programming_commands()
-                    elif language == "java":
+                    elif language == "python":
                         self.programming_language = "python"
                         self.load_programming_commands()
-                    elif language == "linux" or language == "windows":
+                    elif language == "linux":
+                        self.terminal_os = "linux"
+                        self.load_terminal_commands()
+                    elif language == "windows":
+                        self.terminal_os = "windows"
                         self.load_terminal_commands()
                 else:
                     command.execute(text, self)
