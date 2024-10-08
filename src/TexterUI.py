@@ -2,18 +2,10 @@
 import json
 import sys
 import tkinter as tk
+
+# Local application imports
 from src.AppState import AppState
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-import time
-#
-# class CommandFileHandler(FileSystemEventHandler):
-#     def __init__(self, texter_ui):
-#         self.texter_ui = texter_ui
-#
-#     def on_modified(self, event):
-#         if event.src_path == 'commands.json':
-#             self.texter_ui.reload_commands()
+
 
 class TexterUI:
     """
@@ -41,23 +33,6 @@ class TexterUI:
         self.status_text_box = None
         self.toggle_commands_button = None
         self.add_command_button = None
-
-        # self.setup_command_watchdog()
-
-    # def setup_command_watchdog(self):
-    #     """Setup watchdog to monitor changes in commands.json and auto-update the UI."""
-    #     observer = Observer()
-    #     event_handler = CommandFileHandler(self)
-    #     observer.schedule(event_handler, path='.', recursive=False)
-    #     observer.start()
-    #
-    #     # Keep the observer running in a background thread
-    #     self.root.after(1000, self.check_observer, observer)
-    #
-    # def check_observer(self, observer):
-    #     """Keep the observer running."""
-    #     observer.join(1)
-    #     self.root.after(1000, self.check_observer, observer)
 
     def init_ui(self, app_state: AppState, commands: dict) -> None:
         """
