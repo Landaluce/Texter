@@ -74,7 +74,7 @@ class TexterUI:
         self.wake_up_button = tk.Button(self.root, text="Wake Up", command=self.on_wake_up_button_click)
         self.wake_up_button.place(x=10, y=130, width=100, height=30)
 
-        self.go_to_sleep_button = tk.Button(self.root, text="Go to Sleep", command=self.on_go_to_sleep_button_clik)
+        self.go_to_sleep_button = tk.Button(self.root, text="Go to Sleep", command=self.on_go_to_sleep_button_click)
         self.go_to_sleep_button.place(x=110, y=130, width=100, height=30)
 
         self.terminate_button = tk.Button(self.root, text="Quit", command=self.on_terminate_button_click)
@@ -156,7 +156,7 @@ class TexterUI:
         Set the termination flag to True, and destroy the main window.
         """
         self.app_state.terminate = True  # Signal all threads to terminate
-        if hasattr(self, 'speech_thread'):
+        if hasattr(self, 'speech_thread') and self.speech_thread.is_alive():
           self.speech_thread.join()  # Wait for the thread to finish
         self.root.destroy()   # Close the UI
 
@@ -168,7 +168,7 @@ class TexterUI:
             # Set the termination flag to stop the live interpreter
             self.app_state.terminate = True
             # Ensure the speech thread is joined (wait for it to finish)
-            if hasattr(self, 'speech_thread'):
+            if hasattr(self, 'speech_thread') and self.speech_thread.is_alive():
                 self.speech_thread.join()
             sys.exit(0)  # Terminate the main thread and exit the program
         except:
@@ -181,7 +181,7 @@ class TexterUI:
         self.app_state.typing_active = True
         self.app_state.print_status()
 
-    def on_go_to_sleep_button_clik(self) -> None:
+    def on_go_to_sleep_button_click(self) -> None:
         """
         Deactivates the typing mode by setting 'typing_active' to False in the current state and updates the UI status.
         """
