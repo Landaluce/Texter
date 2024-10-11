@@ -41,6 +41,9 @@ class AppState:
 
         self.spelling_commands = None
 
+        self.punctuation = False
+        self.capitalize = False
+
         self.app_ui = app_ui
 
     def load_commands(self, commands):
@@ -264,6 +267,8 @@ class AppState:
         status_message += f"mode: {self.mode}\n"
         status_message += f"{self.programming_language} Programming: On\n" if self.programming else "Programming: Off\n"
         status_message += f"{self.terminal_os} Terminal: On\n" if self.terminal else "Terminal: Off\n"
+        status_message += f"Punctuation: On  " if self.punctuation else "Punctuation: Off "
+        status_message += f"| Caps: On" if self.capitalize else "| Caps: Off\n"
 
         # Check if app_ui is available and update UI
         if self.app_ui:
