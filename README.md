@@ -8,14 +8,14 @@ Texter is a voice-controlled application that allows users to perform various ac
 - **Programming Mode**: Supports Python and Java with pre-configured commands to create classes, functions, and more.
 - **Terminal Mode**: Interact with terminal commands (Linux/Windows) via voice input.
 - **UI-Based**: Uses Tkinter for an intuitive user interface with status updates.
-- **Customizable**: Configure your own commands in the `config.json` file.
+- **Customizable**: Configure your own commands in the `commands.json` file.
 
 ## Usage
 
 1. **Wake Up / Go to Sleep**: Activate or deactivate typing and command execution by using the voice commands "Wake Up" and "Go to Sleep".
 2. **Programming Mode**: Use "Switch to Python" or "Switch to Java" to change the programming language, and voice commands like "Create class" or "Print statement" for code generation.
 3. **Terminal Mode**: Use "Switch to Linux" or "Switch to Windows" to interact with your operating system's terminal commands.
-4. **Command Extensions**: Add new custom commands in `config.json` as per your needs.
+4. **Command Extensions**: Add new custom commands in `commands.json` as per your needs.
 
 ## Installation
 
