@@ -6,7 +6,7 @@ This guide details how to add new command types to the Texter application.
 
 Here's a step-by-step guide to extend the app's functionality:
 
-1. **Modify `config.json`:**
+1. **Modify `commands.json`:**
    * Define your new command type in the appropriate section (e.g., `keyboard_commands`, `info_commands`, `selection_commands`).
    * Specify the command's name, key (if applicable), and any other relevant properties.
 
