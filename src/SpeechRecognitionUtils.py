@@ -9,6 +9,7 @@ import speech_recognition as sr
 
 # Local application imports
 from TextProcessor import TextProcessor
+
 # from TextProcessor import TextProcessor
 from src.ErrorHandler import noalsaerr
 from src.AppState import AppState
