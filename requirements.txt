@@ -2,6 +2,6 @@ PyAutoGUI==0.9.54
 SpeechRecognition==3.10.4
 word2number==1.1
 
-watchdog~=4.0.2
 transformers~=4.45.2
 setuptools~=68.2.0
+torch~=2.4.1
