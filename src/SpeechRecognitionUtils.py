@@ -15,7 +15,6 @@ from src.ErrorHandler import noalsaerr
 from src.AppState import AppState
 from src.TexterUI import TexterUI
 
-# text_processor = TextProcessor()
 text_processor = TextProcessor()
 
 
