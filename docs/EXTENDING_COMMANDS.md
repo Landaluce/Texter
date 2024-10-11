@@ -45,5 +45,4 @@ Suppose you want to add a new command type for controlling media playback:
 * Thoroughly test your new command type.
 * Update the project's documentation to reflect the new functionality.
 
-
-By following these steps, you can effectively extend Speech to Action's capabilities!
+By following these steps, you can effectively extend Texter's capabilities!

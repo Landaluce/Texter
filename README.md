@@ -22,4 +22,4 @@ Texter is a voice-controlled application that allows users to perform various ac
 1. Clone the repository:
    ```bash
    git clone https://github.com/Landaluce/Texter/
-   cd texter
+   cd Texter

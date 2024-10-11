@@ -2,16 +2,16 @@
 
 This guide provides instructions for customizing the Texter application to your preferences.
 
-### Modifying `config.json`
+### Modifying `commands.json`
 
-The `config.json` file allows you to personalize the app's behavior. Here's how:
+The `commands.json` file allows you to personalize the app's behavior. Here's how:
 
 * **Keyboard Shortcuts:** Define voice commands to trigger specific keyboard shortcuts.
 * **Info Commands:** Create commands that automatically type specific text strings.
 * **Selection Commands:** Assign voice commands to perform text selection and editing actions.
 * **Programming Language Commands:** (Optional) Configure voice commands specific to a programming language for code typing and execution.
 
-### Example Configuration:
+### Example commands.json (check commands_template.json):
 
 ```json
 {
@@ -30,3 +30,4 @@ The `config.json` file allows you to personalize the app's behavior. Here's how:
         {"name": "print hello", "command_type": "programming", "key": "print('hello')"}
     ]
 }
+
