@@ -8,14 +8,14 @@ import pyautogui as gui
 import speech_recognition as sr
 
 # Local application imports
-from PunctuationModel import PunctuationModel
+from TextProcessor import TextProcessor
 # from TextProcessor import TextProcessor
 from src.ErrorHandler import noalsaerr
 from src.AppState import AppState
 from src.TexterUI import TexterUI
 
 # text_processor = TextProcessor()
-punctuation_model = PunctuationModel()
+text_processor = TextProcessor()
 
 
 def recognize_speech(recognizer: sr.Recognizer, timeout: int = 2) -> str or None:
@@ -122,9 +122,9 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
                         if not app_state.handle_command(text):
                             if app_state.typing_active:
                                 if app_state.punctuation:
-                                    text = punctuation_model.restore_punctuation(text)
+                                    text = text_processor.restore_punctuation(text)
                                     if app_state.capitalize:
-                                        text = punctuation_model.capitalize_sentences(text)
+                                        text = text_processor.capitalize_sentences(text)
                                 gui.write(text)
 
 
