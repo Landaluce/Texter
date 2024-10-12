@@ -1,0 +1,24 @@
+{
+  "git_commands": [
+    {
+      "name": "get status",
+      "key": "git status",
+      "command_type": "git"
+    },
+    {
+      "name": "get at",
+      "key": "git add",
+      "command_type": "git"
+    },
+    {
+      "name": "get commit",
+      "key": "git commit",
+      "command_type": "git"
+    },
+    {
+      "name": "get push",
+      "key": "git push",
+      "command_type": "git"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "info_commands": [
+    {
+      "name": "input full name",
+      "key": "Foo Bar",
+      "command_type":"info"
+    },
+    {
+      "name": "input name",
+      "key": "Foo",
+      "command_type":"info"
+    },
+    {
+      "name": "input last name",
+      "key": "Bar",
+      "command_type":"command"
+    },
+    {
+      "name": "input gmail",
+      "key": "foobar@gmail.com",
+      "command_type":"command"
+    },
+    {
+      "name": "print commands",
+      "key": "print commands",
+      "command_type": "info"
+    }
+  ]
+}

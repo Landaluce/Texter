@@ -1,4 +1,7 @@
 # Local application imports
+import glob
+import os
+
 from SpeechRecognitionUtils import *
 
 
@@ -21,6 +24,27 @@ def get_commands(file: str):
         print("Invalid JSON format in commands file.")
         return None
 
+def get_commands_from_files(directory: str):
+    """
+    Retrieves commands from all JSON files in the given directory with filenames ending in 'commands'.
+    """
+    commands = {}
+    # Find all JSON files ending with 'commands' in the specified directory
+    json_files = glob.glob(os.path.join(directory, '*commands.json'))
+
+    for file in json_files:
+        try:
+            with open(file, 'r') as f:
+                file_commands = json.load(f)
+                # Merge commands from each file
+                commands.update(file_commands)
+        except FileNotFoundError:
+            print(f"Commands file {file} not found.")
+        except json.JSONDecodeError:
+            print(f"Invalid JSON format in commands file {file}.")
+
+    return commands
+
 
 def main():
     """
@@ -32,10 +56,12 @@ def main():
     """
     app = TexterUI()
     app_state = AppState(app)
-    command_file_path = "commands.json"
 
-    # get commands from json
-    commands = get_commands(command_file_path)
+    # Directory where command files are stored
+    command_files_directory = "speech_commands"
+
+    # Get commands from all relevant JSON files in the directory
+    commands = get_commands_from_files(command_files_directory)
 
     app_state.load_commands(commands)
     recognizer = sr.Recognizer()

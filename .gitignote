@@ -9,7 +9,10 @@ venv/
 *.egg-info/
 dist/
 build/
-config.json
+
+# private command files
+commands.json
+speech_commands/info_commands.json
 add_sensitive_data_to_config.py
 
 # Jupyter Notebook checkpoints

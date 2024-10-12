@@ -1,0 +1,36 @@
+{
+  "java_commands": [
+        {
+            "name": "print statement",
+            "key": "print statement"
+        },
+        {
+            "name": "create class",
+            "key": "create class"
+        },
+        {
+            "name": "create method",
+            "key": "create method"
+        },
+        {
+            "name": "create public method",
+            "key": "create public method"
+        },
+        {
+            "name": "create private method",
+            "key": "create private method"
+        },
+        {
+            "name": "create function",
+            "key": "create function"
+        },
+        {
+            "name": "create public function",
+            "key": "create public function"
+        },
+        {
+            "name": "create private function",
+            "key": "create private function"
+        }
+  ]
+}
