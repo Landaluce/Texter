@@ -44,6 +44,8 @@ class AppState:
         self.punctuation = False
         self.capitalize = False
 
+        self.git_commands = []
+
         self.app_ui = app_ui
 
     def load_commands(self, commands):
@@ -56,11 +58,13 @@ class AppState:
                 self.keyboard_commands.append(Command(i["name"], CommandType.KEYBOARD, i["key"], i["num_key"]))
             elif i["command_type"] == "start_stop":
                 self.keyboard_commands.append(Command(i["name"], CommandType.START_STOP))
-
-        self.info_commands = [
-            Command(cmd["name"], CommandType.INFO, cmd["key"])
-            for cmd in commands["info_commands"]
-        ]
+        try:
+            self.info_commands = [
+                Command(cmd["name"], CommandType.INFO, cmd["key"])
+                for cmd in commands["info_commands"]
+            ]
+        except KeyError:
+            print("Could not find info commands")
 
         self.selection_commands = [
             Command(cmd["name"], CommandType.SELECTION)
@@ -70,6 +74,7 @@ class AppState:
         self.load_programming_commands()
         self.load_terminal_commands()
         self.load_spelling_commands()
+        self.load_git_commands()
 
     def load_programming_commands(self):
         """
@@ -113,6 +118,16 @@ class AppState:
         ]
         self.print_status()
 
+    def load_git_commands(self) -> None:
+        """
+        Loads spelling commands the commands file.
+        """
+        self.git_commands = [
+            Command(cmd.get("name", ""), CommandType.SPELLING, cmd["key"], cmd.get("num_key", ""))
+            for cmd in self.commands["git_commands"]
+        ]
+        self.print_status()
+
     def handle_command(self, text):
         """
         Processes a given text command by checking it against different command types.
@@ -140,6 +155,9 @@ class AppState:
             return True
         # Handle spelling commands if applicable
         elif self._handle_spelling_command(text):
+            return True
+        # Handle git commands if applicable
+        elif self._handle_git_command(text):
             return True
         # Return False if no command matches
         return False
@@ -171,6 +189,13 @@ class AppState:
                         self.load_terminal_commands()
                 else:
                     command.execute(text, self)
+                return True
+        return False
+
+    def _handle_git_command(self, text: str) -> bool:
+        for command in self.git_commands:
+            if text.startswith(command.name):
+                command.execute_git_command(text, self)
                 return True
         return False
 

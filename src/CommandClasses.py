@@ -20,6 +20,7 @@ class CommandType(Enum):
         PROGRAMMING (auto): Commands related to programming actions.
         INFO (auto): Commands related to informational actions.
         SELECTION (auto): Commands related to text selection actions.
+        GIT (auto): Commands related to git
     """
     KEYBOARD = auto()
     START_STOP = auto()
@@ -28,6 +29,7 @@ class CommandType(Enum):
     SELECTION = auto()
     TERMINAL = auto()
     SPELLING = auto()
+    GIT = auto
 
 
 class Command:
@@ -95,6 +97,9 @@ class Command:
         elif self.command_type == CommandType.SPELLING:
             self.execute_spelling_command(text, app_state)
 
+        elif self.command_type == CommandType.GIT:
+            self.execute_git_command(text, app_state)
+
     @staticmethod
     def set_typing_to_active(app_state) -> None:
         """
@@ -108,6 +113,9 @@ class Command:
         """
         app_state.typing_active = True
         app_state.print_status()
+
+    def execute_git_command(self, text, app_state):
+        gui.typewrite(self.key)
 
     @staticmethod
     def _execute_switch_commands(text: str, app_state) -> None:
