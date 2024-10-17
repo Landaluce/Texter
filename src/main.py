@@ -13,18 +13,7 @@ def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognize
         live_speech_interpreter(app_state, app_ui, recognizer)
 
 
-def get_commands(file: str):
-    try:
-        with open(file, 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        print("commands file not found.")
-        return None
-    except json.JSONDecodeError:
-        print("Invalid JSON format in commands file.")
-        return None
-
-def get_commands_from_files(directory: str):
+def get_commands(directory: str):
     """
     Retrieves commands from all JSON files in the given directory with filenames ending in 'commands'.
     """
@@ -60,7 +49,7 @@ def main():
     command_files_directory = "speech_commands"
 
     # Get commands from all relevant JSON files in the directory
-    commands = get_commands_from_files(command_files_directory)
+    commands = get_commands(command_files_directory)
 
     app_state.load_commands(commands)
     recognizer = sr.Recognizer()
