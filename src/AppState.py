@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 # Local application imports
-from src.CommandClasses import CommandType, Command
+from CommandClasses import CommandType, Command
 
 
 class AppState:
@@ -195,7 +195,7 @@ class AppState:
     def _handle_git_command(self, text: str) -> bool:
         for command in self.git_commands:
             if text.startswith(command.name):
-                command.execute_git_command(text, self)
+                command.execute_git_command()
                 return True
         return False
 
