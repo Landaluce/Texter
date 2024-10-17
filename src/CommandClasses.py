@@ -5,9 +5,9 @@ from wave import Error
 # Third-party imports
 import pyautogui as gui
 import speech_recognition as sr
-from word2number import w2n
 
 # Local application imports
+from helperFunctions import string_to_snake_case, string_to_camel_case, numeric_str_to_int
 
 
 class CommandType(Enum):
@@ -83,7 +83,7 @@ class Command:
             self._execute_switch_commands(text, app_state)
 
         elif self.command_type == CommandType.INFO:
-            self._execute_info_command(text)
+            self._execute_info_command()
 
         elif self.command_type == CommandType.PROGRAMMING:
             self.execute_programming_command(text, app_state)
@@ -95,27 +95,10 @@ class Command:
             self._execute_selection_command(text)
 
         elif self.command_type == CommandType.SPELLING:
-            self.execute_spelling_command(text, app_state)
+            self.execute_spelling_command(app_state)
 
         elif self.command_type == CommandType.GIT:
-            self.execute_git_command(text, app_state)
-
-    @staticmethod
-    def set_typing_to_active(app_state) -> None:
-        """
-        Sets the typing activity to active in the application state.
-
-        Parameters:
-            app_state (AppState): The current application state object.
-
-        This method sets the 'typing_active' attribute of the state object to True
-        and prints the current status of the application state.
-        """
-        app_state.typing_active = True
-        app_state.print_status()
-
-    def execute_git_command(self, text, app_state):
-        gui.typewrite(self.key)
+            self.execute_git_command()
 
     @staticmethod
     def _execute_switch_commands(text: str, app_state) -> None:
@@ -148,14 +131,17 @@ class Command:
 
         app_state.print_status()
 
-    def _execute_info_command(self, text: str) -> None:
+    def _type_command_key(self) -> None:
         """
-        Executes the information command based on the given text.
+        Types the stored key.
+        """
+        gui.write(self.key)
 
-        Parameters:
-            text (str): The recognized text input.
-        """
-        gui.typewrite(self.key)
+    def execute_git_command(self) -> None:
+        self._type_command_key()
+
+    def _execute_info_command(self) -> None:
+        self._type_command_key()
 
     def _execute_keyboard_command(self, text: str) -> None:
         """
@@ -231,91 +217,91 @@ class Command:
         - "create class", "create method", "create function" to generate respective components.
         - Type hints like "integer", "string", and "double" for generating type declarations.
 
-        The method uses GUI automation (via `gui.typewrite` and `gui.hotkey`) to simulate typing the corresponding code
+        The method uses GUI automation (via `gui.write` and `gui.hotkey`) to simulate typing the corresponding code
         structure in the editor.
         """
         if app_state.programming_language == "python":
             if self.key == "print statement":
-                gui.typewrite("print()")
+                gui.write("print()")
                 gui.hotkey("left")
             elif self.key.startswith("create class"):
                 class_name = text[len(self.key):]
-                class_name = self.string_to_camel_case(class_name)
-                gui.typewrite("class :")
+                class_name = string_to_camel_case(class_name)
+                gui.write("class :")
                 gui.hotkey("enter")
                 gui.hotkey("tab")
-                gui.typewrite("def __init__(self):")
+                gui.write("def __init__(self):")
                 gui.hotkey("up")
                 gui.hotkey("left")
                 if len(class_name):
-                    gui.typewrite(class_name)
+                    gui.write(class_name)
             elif self.key.startswith("create method"):
                 method_name = text[len(self.key):]
-                method_name = self.string_to_snake_case(method_name)
-                gui.typewrite("def (self):")
+                method_name = string_to_snake_case(method_name)
+                gui.write("def (self):")
                 for _ in range(0, 7):
                     gui.hotkey("left")
                 if len(method_name):
-                    gui.typewrite(method_name)
+                    gui.write(method_name)
             elif self.key.startswith("create function"):
-                function_name = self.string_to_snake_case(text[len(self.key):])
-                gui.typewrite("def :()")
+                function_name = string_to_snake_case(text[len(self.key):])
+                gui.write("def :()")
                 for _ in range(0, 3):
                     gui.hotkey("left")
                 if len(function_name):
-                    gui.typewrite(function_name)
+                    gui.write(function_name)
             elif self.key.startswith("new script"):
-                gui.typewrite("main():")
+                gui.write("main():")
                 gui.hotkey("enter")
                 gui.hotkey("enter")
-                gui.typewrite("if __name__ == \"__main__\":")
+                gui.write("if __name__ == \"__main__\":")
                 gui.hotkey("enter")
-                gui.typewrite("main")
+                gui.write("main")
             elif self.key == "integer":
-                gui.typewrite("int")
+                gui.write("int")
             elif self.key == "string":
-                gui.typewrite("str")
+                gui.write("str")
             elif self.key == "double":
-                gui.typewrite("float")
+                gui.write("float")
             else:
-                gui.typewrite(self.key)
+                gui.write(self.key)
 
         elif app_state.programming_language == "java":
             if self.key == "print statement":
-                gui.typewrite("System.out.println();")
+                gui.write("System.out.println();")
                 gui.hotkey("left")
                 gui.hotkey("left")
             elif self.key.startswith("create class"):
                 class_name = text[len(self.key):]
-                class_name = self.string_to_camel_case(class_name)
-                gui.typewrite("public class  {")
+                class_name = string_to_camel_case(class_name)
+                gui.write("public class  {")
                 gui.hotkey("enter")
                 gui.hotkey("up")
                 gui.hotkey("end")
                 gui.hotkey("left")
                 gui.hotkey("left")
                 if len(class_name):
-                    gui.typewrite(class_name)
+                    gui.write(class_name)
             elif (self.key.startswith("create method") or self.key.startswith("create public method") or
                   self.key.startswith("create function") or self.key.startswith("create public function")):
                 method_name = text[len(self.key):]
-                method_name = self.string_to_snake_case(method_name)
-                gui.typewrite("public void () {}")
+                method_name = string_to_snake_case(method_name)
+                gui.write("public void () {}")
                 for _ in range(0, 5):
                     gui.hotkey("left")
                 if len(method_name):
-                    gui.typewrite(method_name)
+                    gui.write(method_name)
             elif self.key.startswith("create private method") or self.key.startswith("create private function"):
                 method_name = text[len(self.key):]
-                method_name = self.string_to_snake_case(method_name)
-                gui.typewrite("private void () {}")
+                method_name = string_to_snake_case(method_name)
+                gui.write("private void () {}")
                 for _ in range(0, 5):
                     gui.hotkey("left")
                 if len(method_name):
-                    gui.typewrite(method_name)
+                    gui.write(method_name)
 
             else:
-                gui.typewrite(self.key)
+                gui.write(self.key)
 
     def execute_terminal_command(self, text, app_state):
         """
@@ -330,48 +316,22 @@ class Command:
         - If the OS is "linux", it will execute Linux-specific terminal commands.
         - If the OS is "windows", it will execute Windows-specific terminal commands.
 
-        The method uses GUI automation (via `gui.typewrite`) to simulate typing the command in the terminal.
+        The method uses GUI automation (via `gui.write`) to simulate typing the command in the terminal.
         """
         if app_state.terminal_os == "linux":
             if self.name.startswith("go to"):
-                gui.typewrite(self.key)
+                gui.write(self.key)
         elif app_state. terminal_os == "windows":
             if self.name == "go to":
-                gui.typewrite(self.key)
+                gui.write(self.key)
 
-    def execute_spelling_command(self, text, app_state):
+    def execute_spelling_command(self, app_state):
         print("NEVER GETS EXECUTED")
         if app_state.mode == "spelling":
-            gui.typewrite(self.key)
+            gui.write(self.key)
 
     @staticmethod
-    def string_to_camel_case(input_str: str) -> str:
-        """Capitalizes the first letter of each word in a string.
-
-          Parameters:
-            input_str: The input string.
-
-          Returns:
-            The string with the first letter of each word capitalized.
-          """
-        words = input_str.split()
-        capitalized_words = [word.capitalize() for word in words]
-        return "".join(capitalized_words)
-
-    @staticmethod
-    def string_to_snake_case(input_str):
-        """
-        Convert a given string to snake_case format.
-
-        Parameters:
-        - input_str (str): The input string to be converted, where words are typically separated by spaces.
-
-        Returns:
-        - str: The converted string in snake_case format, where spaces are replaced by underscores.
-        """
-        return input_str.replace(" ", "_")[1:]
-
-    def _extract_num(self, text):
+    def _extract_num(text):
         """
         Extracts and returns a numeric value from the command text.
 
@@ -387,21 +347,8 @@ class Command:
             elif text.isdigit():
                 return int(text)
             else:
-                return self.numeric_str_to_int(text)
+                return numeric_str_to_int(text)
         except (ValueError, sr.UnknownValueError):
             return 1
 
-    @staticmethod
-    def numeric_str_to_int(numeric_str):
-        """
-        Converts a numeric string to an integer.
 
-        Parameters:
-        - numeric_str (str): The numeric string (e.g., "three") to convert.
-
-        Returns:
-        - int: The corresponding integer value.
-        """
-        numeric_str = numeric_str.split(" ")
-        nums = [str(w2n.word_to_num(w)) for w in numeric_str]
-        return int(''.join(nums))

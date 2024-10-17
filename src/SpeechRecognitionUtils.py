@@ -10,10 +10,10 @@ import speech_recognition as sr
 # Local application imports
 from TextProcessor import TextProcessor
 
-# from TextProcessor import TextProcessor
-from src.ErrorHandler import noalsaerr
-from src.AppState import AppState
-from src.TexterUI import TexterUI
+from ErrorHandler import noalsaerr
+from AppState import AppState
+from TexterUI import TexterUI
+from helperFunctions import string_to_snake_case, string_to_camel_case, convert_to_spelling
 
 text_processor = TextProcessor()
 
@@ -113,12 +113,23 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
                         if app_state.typing_active:
                             gui.typewrite(text[5:])
                     else:
+                        if text.startswith("camel case"):
+                            gui.write(string_to_camel_case(text[len("camel case") + 1:]))
+                            continue
+                        if text.startswith("camelcase"):
+                            gui.write(string_to_camel_case(text[len("camelcase") + 1:]))
+                            continue
+                        if text.startswith("snake case"):
+                            gui.write(string_to_snake_case(text[len("snake case") + 1:]))
+                            continue
+
                         # Check if termination is requested
                         if text == "terminate texter":
                             print("Terminating Texter...")
                             app_state.terminate = True
                             texter_ui.terminate_all_threads()
                             break  # Exit the loop to stop the thread
+
                         if not app_state.handle_command(text):
                             if app_state.typing_active:
                                 if app_state.punctuation:
@@ -128,23 +139,4 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
                                 gui.write(text)
 
 
-def convert_to_spelling(text: str, spelling_commands: list) -> str:
-    """
-    Convert spoken words to corresponding spelling characters.
 
-    Parameters:
-        text (str): The command text to process.
-        spelling_commands (dict): spelling commands
-    Returns:
-        eg:
-            input text: alpha beta
-            output: ab
-    """
-    words = text.split()
-    output = []
-    for word in words:
-        for command in spelling_commands:
-            if command.name == word:
-                output.append(command.key)
-                break
-    return ''.join(output)

@@ -4,7 +4,6 @@ import sys
 import tkinter as tk
 
 # Local application imports
-from src.AppState import AppState
 
 
 class TexterUI:
@@ -34,7 +33,7 @@ class TexterUI:
         self.toggle_commands_button = None
         self.add_command_button = None
 
-    def init_ui(self, app_state: AppState, commands: dict) -> None:
+    def init_ui(self, app_state, commands: dict) -> None:
         """
         Initializes the Texter user interface with input elements, buttons, and labels based on the provided state and
         commands.
