@@ -29,7 +29,7 @@ def get_commands_from_files(directory: str):
     Retrieves commands from all JSON files in the given directory with filenames ending in 'commands'.
     """
     commands = {}
-    # Find all JSON files ending with 'commands' in the specified directory
+    # Find all JSON files ending with commands in the specified directory
     json_files = glob.glob(os.path.join(directory, '*commands.json'))
 
     for file in json_files:
@@ -57,7 +57,6 @@ def main():
     app = TexterUI()
     app_state = AppState(app)
 
-    # Directory where command files are stored
     command_files_directory = "speech_commands"
 
     # Get commands from all relevant JSON files in the directory
@@ -73,7 +72,7 @@ def main():
     app.speech_thread = speech_thread
     speech_thread.start()
 
-    # Initialize TexterUI with the app_state object
+    # Initialize TexterUI
     app.init_ui(app_state, commands)
 
 
