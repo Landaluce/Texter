@@ -3,8 +3,6 @@ import json
 import sys
 import tkinter as tk
 
-# Local application imports
-
 
 class TexterUI:
     """
@@ -105,9 +103,6 @@ class TexterUI:
         self.commands_text_box.config(state=tk.DISABLED)
         self.commands_text_box.place(x=10, y=310, width=280, height=300)
 
-        # Automatically adjust the window size to wrap content
-        self.adjust_window_size()
-
         # Create the main window
         self.root.mainloop()
 
@@ -128,27 +123,13 @@ class TexterUI:
     def toggle_status_textbox(self):
         """Toggle between expanding and collapsing the Text widget."""
         if self.commands_text_box.winfo_height() == 300:
-            self.commands_text_box.place(width=280, height=50)
-            self.toggle_commands_button.commands(text="Expand")  # Change button text to Collapse
+            self.commands_text_box.place(width=280, height=0)  # Collapse the Text widget
+            self.toggle_commands_button.config(text="Expand")  # Change button text to Collapse
+            self.root.geometry(f"300x320")                     # Collapse window
         else:
-            self.commands_text_box.place(width=280, height=300) # Collapse the Text widget
-            self.toggle_commands_button.commands(text="Collapse")  # Change button text to Expand
-
-        # Adjust the window size after changing the widget
-        self.adjust_window_size()
-
-    def adjust_window_size(self) -> None:
-        """Adjust window size based on widget sizes."""
-        default_height = 300
-        adjusted_height_1 = 310
-        adjusted_height_2 = 620
-        if self.commands_text_box.winfo_height() == default_height:
-            required_height = adjusted_height_1
-        else:
-            required_height = adjusted_height_2
-        self.root.update_idletasks()  # Make sure sizes are updated
-        required_width = adjusted_height_1
-        self.root.geometry(f"{required_width}x{required_height}")
+            self.commands_text_box.place(width=280, height=300)  # Expand the Text widget
+            self.toggle_commands_button.config(text="Collapse")  # Change button text to Expand
+            self.root.geometry(f"300x600")                       # Expand window
 
     def on_terminate_button_click(self) -> None:
         """
