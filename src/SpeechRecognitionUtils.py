@@ -1,7 +1,7 @@
 # Standard library imports
 from __future__ import annotations
-import threading
-import json
+import threading  # don't delete
+import json  # don't delete
 
 # Third-party imports
 import pyautogui as gui
