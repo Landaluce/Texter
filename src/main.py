@@ -1,7 +1,8 @@
-# Local application imports
+# Standard library imports
 import glob
 import os
 
+# Local application imports
 from SpeechRecognitionUtils import *
 
 
