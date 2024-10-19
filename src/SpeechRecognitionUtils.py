@@ -119,6 +119,12 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
                         if text.startswith("camelcase"):
                             gui.write(string_to_camel_case(text[len("camelcase") + 1:]))
                             continue
+                        if text.startswith("small camel case"):
+                            gui.write(string_to_camel_case(text[len("small camel case") + 1:], True))
+                            continue
+                        if text.startswith("small camelcase"):
+                            gui.write(string_to_camel_case(text[len("small camelcase") + 1:], True))
+                            continue
                         if text.startswith("snake case"):
                             gui.write(string_to_snake_case(text[len("snake case") + 1:]))
                             continue

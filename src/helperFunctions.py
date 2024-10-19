@@ -38,18 +38,23 @@ def convert_to_spelling(text: str, spelling_commands: list) -> str:
     return ''.join(output)
 
 
-def string_to_camel_case(input_str: str) -> str:
+def string_to_camel_case(input_str: str, lower: bool=False) -> str:
     """Capitalizes the first letter of each word in a string.
 
       Parameters:
         input_str: The input string.
-
+        lower (bool): indicates if the first word should be capitalized
       Returns:
         The string with the first letter of each word capitalized.
       """
     words = input_str.split()
     capitalized_words = [word.capitalize() for word in words]
-    return "".join(capitalized_words)
+    if lower:
+        capitalized_words[0] = capitalized_words[0].lower()
+    result = "".join(capitalized_words)
+
+    return result
+
 
 
 def string_to_snake_case(input_str):
