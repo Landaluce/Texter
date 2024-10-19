@@ -51,6 +51,8 @@ class TexterUI:
 
         # Set the dimensions and position of the window (width x height + x_offset + y_offset
         self.root.geometry("300x600+100+100")
+        # Disable resizing both horizontally and vertically
+        self.root.resizable(False, False)
 
         # Allow the window to wrap content dynamically
         self.root.pack_propagate(False)
@@ -101,7 +103,7 @@ class TexterUI:
         self.commands_text_box = tk.Text(self.root, height=10, width=40)
         self.print_all_commands(commands)
         self.commands_text_box.config(state=tk.DISABLED)
-        self.commands_text_box.place(x=10, y=310, width=280, height=300)
+        self.commands_text_box.place(x=10, y=310, width=280, height=275)
 
         # Create the main window
         self.root.mainloop()
@@ -122,12 +124,12 @@ class TexterUI:
 
     def toggle_status_textbox(self):
         """Toggle between expanding and collapsing the Text widget."""
-        if self.commands_text_box.winfo_height() == 300:
+        if self.commands_text_box.winfo_height() == 275:
             self.commands_text_box.place(width=280, height=0)  # Collapse the Text widget
             self.toggle_commands_button.config(text="Expand")  # Change button text to Collapse
             self.root.geometry(f"300x320")                     # Collapse window
         else:
-            self.commands_text_box.place(width=280, height=300)  # Expand the Text widget
+            self.commands_text_box.place(width=280, height=275)  # Expand the Text widget
             self.toggle_commands_button.config(text="Collapse")  # Change button text to Expand
             self.root.geometry(f"300x600")                       # Expand window
 
