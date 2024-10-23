@@ -7,7 +7,7 @@ import pyautogui as gui
 import speech_recognition as sr
 
 # Local application imports
-from helperFunctions import string_to_snake_case, string_to_camel_case, numeric_str_to_int
+from helperFunctions import string_to_snake_case, string_to_camel_case, numeric_str_to_int, convert_to_spelling
 
 
 class CommandType(Enum):
@@ -325,10 +325,13 @@ class Command:
             if self.name == "go to":
                 gui.write(self.key)
 
-    def execute_spelling_command(self, app_state):
-        print("NEVER GETS EXECUTED")
-        if app_state.mode == "spelling":
-            gui.write(self.key)
+    def execute_spelling_command(self, app_state, text, spelling_commands):
+        gui.write(self.key)
+        spelling_output = convert_to_spelling(text, spelling_commands)
+        if spelling_output:
+            gui.write(spelling_output)
+        else:
+            app_state.append_text("No valid spelling commands found.")
 
     @staticmethod
     def _extract_num(text):

@@ -277,11 +277,11 @@ class AppState:
         Returns:
             bool: True if a spelling command was handled, False otherwise.
         """
-        if self.mode == "spelling":
-            for command in self.spelling_commands:
-                if text.startswith(command.name):
-                    command.execute_spelling_command(self, text)
-                    return True
+        # if self.mode == "spelling":
+        for command in self.spelling_commands:
+            if text.startswith(command.name):
+                command.execute_spelling_command(self, text, self.spelling_commands)
+                return True
         return False
 
     def print_status(self):

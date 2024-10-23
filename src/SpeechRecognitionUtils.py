@@ -98,6 +98,7 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
                     app_state.capitalize = not app_state.capitalize
                     app_state.print_status()
                     continue
+
                 # Handle spelling mode
                 if app_state.mode == "spelling":
                     spelling_output = convert_to_spelling(text, app_state.spelling_commands)
