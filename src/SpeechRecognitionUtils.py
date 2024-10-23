@@ -146,4 +146,9 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
                                 gui.write(text)
 
 
-
+def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognizer) -> None:
+    """
+    This function runs the live speech interpreter in a separate thread.
+    """
+    while not app_state.terminate:
+        live_speech_interpreter(app_state, app_ui, recognizer)
