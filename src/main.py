@@ -3,6 +3,9 @@ from helperFunctions import get_commands
 from SpeechRecognitionUtils import *
 
 
+command_files_directory = "speech_commands"
+
+
 def main():
     """
     Initializes the application app_state and starts the live speech interpreter.
@@ -14,7 +17,7 @@ def main():
     app = TexterUI()
     app_state = AppState(app)
 
-    command_files_directory = "speech_commands"
+
 
     # Get commands from all relevant JSON files in the directory
     commands = get_commands(command_files_directory)

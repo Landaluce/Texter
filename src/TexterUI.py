@@ -1,8 +1,11 @@
 # Standard library imports
-import json
 import sys
 import tkinter as tk
-from PIL import Image
+
+# Local application imports
+from main import command_files_directory
+from helperFunctions import get_commands
+
 
 
 class TexterUI:
@@ -138,9 +141,7 @@ class TexterUI:
         self.commands_text_box.commands(state=tk.NORMAL)
         self.commands_text_box.delete(1.0, tk.END)
 
-        # Reload updated commands
-        with open("commands.json", 'r') as f:
-            commands = json.load(f)
+        commands = get_commands(command_files_directory)
 
         # Re-display the commands
         self.print_all_commands(commands)
