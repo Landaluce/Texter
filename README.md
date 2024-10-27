@@ -15,9 +15,9 @@ Texter is a voice-controlled application that allows users to perform various ac
 1. Clone the repository:
    ```bash
    git clone https://github.com/Landaluce/Texter/
-   cd Texter
 2. Create virtual environment:
    ```bash
+   cd Texter
    python3 -m venv .venv
    source .venv/bin/activate
 3. Install dependencies:
