@@ -1,6 +1,6 @@
 # Texter Application
 
-Texter is a voice-controlled application that allows users to perform various actions through speech commands. The app integrates with speech recognition to simulate keyboard and programming operations, making it easy for users to type, select, and execute commands without using a physical keyboard.
+Texter is a voice-controlled application that allows users to perform various actions through speech commands. The app integrates with speech recognition to simulate keyboard and programming operations, making it easy for users to type, select, spell words and execute commands without using a physical keyboard.
 
 ## Current Features
 
