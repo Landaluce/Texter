@@ -21,7 +21,6 @@ def main():
 
     # Get commands from all relevant JSON files in the directory
     commands = get_commands(command_files_directory)
-
     app_state.load_commands(commands)
     recognizer = sr.Recognizer()
 
