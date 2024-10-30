@@ -7,7 +7,7 @@ import pyautogui as gui
 import speech_recognition as sr
 
 # Local application imports
-from helperFunctions import string_to_snake_case, string_to_camel_case, numeric_str_to_int, convert_to_spelling
+from src.helperFunctions import string_to_snake_case, string_to_camel_case, numeric_str_to_int, convert_to_spelling
 
 
 class CommandType(Enum):
