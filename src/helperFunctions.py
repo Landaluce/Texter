@@ -10,7 +10,18 @@ from word2number import w2n
 def get_commands(directory: str):
     """
     Retrieves commands from all JSON files in the given directory with filenames ending in 'commands'.
+
+    Parameters:
+    - directory (str): The path to the directory containing JSON files with commands.
+
+    Returns:
+    - dict: A dictionary of commands combined from all JSON files.
     """
+    # Check if directory is valid
+    if not os.path.isdir(directory):
+        "The specified directory does not exist or is not a valid directory."
+        return {}
+
     commands = {}
     # Find all JSON files ending with commands in the specified directory
     json_files = glob.glob(os.path.join(directory, '*commands.json'))
@@ -95,4 +106,4 @@ def string_to_snake_case(input_str):
     Returns:
     - str: The converted string in snake_case format, where spaces are replaced by underscores.
     """
-    return input_str.replace(" ", "_")[1:]
+    return input_str.replace(" ", "_")

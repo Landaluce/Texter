@@ -236,7 +236,7 @@ class Command:
                 if len(class_name):
                     gui.write(class_name)
             elif self.key.startswith("create method"):
-                method_name = text[len(self.key):]
+                method_name = text[len(self.key):].strip()
                 method_name = string_to_snake_case(method_name)
                 gui.write("def (self):")
                 for _ in range(0, 7):
@@ -244,7 +244,7 @@ class Command:
                 if len(method_name):
                     gui.write(method_name)
             elif self.key.startswith("create function"):
-                function_name = string_to_snake_case(text[len(self.key):])
+                function_name = string_to_snake_case(text[len(self.key):].strip())
                 gui.write("def :()")
                 for _ in range(0, 3):
                     gui.hotkey("left")
@@ -284,7 +284,7 @@ class Command:
                     gui.write(class_name)
             elif (self.key.startswith("create method") or self.key.startswith("create public method") or
                   self.key.startswith("create function") or self.key.startswith("create public function")):
-                method_name = text[len(self.key):]
+                method_name = text[len(self.key):].strip()
                 method_name = string_to_snake_case(method_name)
                 gui.write("public void () {}")
                 for _ in range(0, 5):
@@ -292,7 +292,7 @@ class Command:
                 if len(method_name):
                     gui.write(method_name)
             elif self.key.startswith("create private method") or self.key.startswith("create private function"):
-                method_name = text[len(self.key):]
+                method_name = text[len(self.key):].strip()
                 method_name = string_to_snake_case(method_name)
                 gui.write("private void () {}")
                 for _ in range(0, 5):

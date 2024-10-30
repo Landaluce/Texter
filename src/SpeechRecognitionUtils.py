@@ -127,7 +127,7 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
                             gui.write(string_to_camel_case(text[len("small camelcase") + 1:], True))
                             continue
                         if text.startswith("snake case"):
-                            gui.write(string_to_snake_case(text[len("snake case") + 1:]))
+                            gui.write(string_to_snake_case(text[len("snake case") + 1:].strip()))
                             continue
 
                         # Check if termination is requested
