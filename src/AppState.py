@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 # Local application imports
-from CommandClasses import CommandType, Command
+from src.CommandClasses import CommandType, Command
 
 
 class AppState:
