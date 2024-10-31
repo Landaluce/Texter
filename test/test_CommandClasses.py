@@ -3,7 +3,6 @@ from unittest.mock import patch, Mock, call
 
 from src.CommandClasses import Command, CommandType
 
-
 # class TestCommandClasses(unittest.TestCase):
 #     def setUp(self):
 #         self.mock_app_state = Mock()
