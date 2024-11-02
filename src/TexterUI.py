@@ -3,8 +3,8 @@ import sys
 import tkinter as tk
 
 # Local application imports
-from main import command_files_directory
-from helperFunctions import get_commands
+from src.main import command_files_directory
+from src.helperFunctions import get_commands
 
 
 
@@ -37,15 +37,15 @@ class TexterUI:
         self.commands = None
         self.background_color = '#1f618d'
         self.font_color = 'white'
-        self.wakeup_button_image = tk.PhotoImage(file="imgs/play.png")
+        self.wakeup_button_image = tk.PhotoImage(file="../src/imgs/play.png")
         self.wakeup_button_image.configure(width=25, height=25)
-        self.go_to_sleep_button_image = tk.PhotoImage(file="imgs/pause.png")
+        self.go_to_sleep_button_image = tk.PhotoImage(file="../src/imgs/pause.png")
         self.go_to_sleep_button_image.configure(width=25, height=25)
-        self.terminate_button_image = tk.PhotoImage(file="imgs/stop.png")
+        self.terminate_button_image = tk.PhotoImage(file="../src/imgs/stop.png")
         self.terminate_button_image.configure(width=25, height=25)
-        self.collapse_button_image = tk.PhotoImage(file="imgs/collapse.png")
+        self.collapse_button_image = tk.PhotoImage(file="../src/imgs/collapse.png")
         self.collapse_button_image.configure(width=25, height=25)
-        self.expand_button_image = tk.PhotoImage(file="imgs/expand.png")
+        self.expand_button_image = tk.PhotoImage(file="../src/imgs/expand.png")
         self.expand_button_image.configure(width=25, height=25)
 
 

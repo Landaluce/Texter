@@ -8,12 +8,11 @@ import pyautogui as gui
 import speech_recognition as sr
 
 # Local application imports
-from TextProcessor import TextProcessor
-
-from ErrorHandler import noalsaerr
-from AppState import AppState
-from TexterUI import TexterUI
-from helperFunctions import string_to_snake_case, string_to_camel_case, convert_to_spelling
+from src.TextProcessor import TextProcessor
+from src.ErrorHandler import noalsaerr
+from src.AppState import AppState
+from src.TexterUI import TexterUI
+from src.helperFunctions import string_to_snake_case, string_to_camel_case, convert_to_spelling
 
 text_processor = TextProcessor()
 
@@ -41,11 +40,13 @@ def recognize_speech(recognizer: sr.Recognizer, timeout: int = 2) -> str or None
             pass
         except sr.RequestError as e:
             print(f"Error from Speech Recognition service: {e}")
+            return None
         except sr.WaitTimeoutError:
             # Suppress timeout error message and continue
             pass
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
+            return None
     return None
 
 
