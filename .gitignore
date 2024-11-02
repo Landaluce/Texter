@@ -1,4 +1,5 @@
 # Python
+.idea/
 **/__pycache__/
 *.pyc
 *.pyo
@@ -12,8 +13,9 @@ build/
 
 # private command files
 commands.json
-speech_commands/info_commands.json
-add_sensitive_data_to_config.py
+src/add_sensitive_data_to_commands.py
+src/speech_commands/info_commands.json
+
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
