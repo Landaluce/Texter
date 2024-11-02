@@ -3,7 +3,6 @@ import sys
 import tkinter as tk
 
 # Local application imports
-from src.main import command_files_directory
 from src.helperFunctions import get_commands
 
 
@@ -12,13 +11,14 @@ class TexterUI:
     """
     A class representing the Texter user interface.
     """
-    def __init__(self):
+    def __init__(self, command_files_directory):
         """
         Initializes the TexterUI class with attributes for the user interface elements.
 
         This method creates the main window and initializes elements such as buttons, labels, and text boxes.
         It sets default attributes like `state`, `commands_label`, `input_text_box`, `status_label`, and more.
         """
+        self.command_files_directory = command_files_directory
         # Create the main window
         self.root = tk.Tk()
         self.root.title("Texter")
@@ -141,7 +141,7 @@ class TexterUI:
         self.commands_text_box.commands(state=tk.NORMAL)
         self.commands_text_box.delete(1.0, tk.END)
 
-        commands = get_commands(command_files_directory)
+        commands = get_commands(self.command_files_directory)
 
         # Re-display the commands
         self.print_all_commands(commands)
