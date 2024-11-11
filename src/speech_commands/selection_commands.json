@@ -1,34 +1,10 @@
 {
-  "selection_commands": [
-    {
-      "name": "select line",
-      "key": "select line",
-      "command_type": "selection"
-    },
-    {
-      "name": "select all",
-      "key": "select all",
-      "command_type": "selection"
-    },
-    {
-      "name": "delete line",
-      "key": "delete line",
-      "command_type": "selection"
-    },
-    {
-      "name": "delete all",
-      "key": "delete all",
-      "command_type": "selection"
-    },
-    {
-      "name": "copy",
-      "key": "copy",
-      "command_type": "selection"
-    },
-    {
-      "name": "paste",
-      "key": "paste",
-      "command_type": "selection"
-    }
-  ]
+    "selection_commands": [
+        {"name": "select line", "key": "select line", "command_type": "selection"},
+        {"name": "select all", "key": "select all", "command_type": "selection"},
+        {"name": "delete line", "key": "delete line", "command_type": "selection"},
+        {"name": "delete all", "key": "delete all", "command_type": "selection"},
+        {"name": "copy", "key": "copy", "command_type": "selection"},
+        {"name": "paste", "key": "paste", "command_type": "selection"}
+    ]
 }

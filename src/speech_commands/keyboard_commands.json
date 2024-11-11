@@ -1,30 +1,16 @@
 {
     "keyboard_commands": [
-        {
-            "name": "wake up",
-            "key": "wake up",
-            "command_type": "start_stop"
-        },
-        {
-            "name": "go to sleep",
-            "key": "go to sleep",
-            "command_type": "start_stop"
-        },
-        {
-            "name": "refresh texter",
-            "key": "refresh texter",
-            "command_type": "start_stop"
-        },
+        {"name": "wake up", "key": "wake up", "command_type": "start_stop"},
+        {"name": "go to sleep", "key": "go to sleep", "command_type": "start_stop"},
+        {"name": "refresh texter", "key": "refresh texter", "command_type": "start_stop"},
         {
             "name": "programming on",
             "key": "programming on",
-            "command_type": "start_stop"
-        },
+            "command_type": "start_stop"},
         {
             "name": "programming off",
             "key": "programming off",
-            "command_type": "start_stop"
-        },
+            "command_type": "start_stop"},
         {
             "name": "switch to python",
             "key": "switch to python",
@@ -35,16 +21,8 @@
             "key": "switch to java",
             "command_type": "start_stop"
         },
-        {
-            "name": "terminal on",
-            "key": "terminal on",
-            "command_type": "start_stop"
-        },
-        {
-            "name": "terminal off",
-            "key": "terminal off",
-            "command_type": "start_stop"
-        },
+        {"name": "terminal on", "key": "terminal on", "command_type": "start_stop"},
+        {"name": "terminal off", "key": "terminal off", "command_type": "start_stop"},
         {
             "name": "switch to linux",
             "key": "switch to linux",
@@ -55,35 +33,16 @@
             "key": "switch to windows",
             "command_type": "start_stop"
         },
-        {
-            "name": "switch mode",
-            "key": "switch mode",
-            "command_type": "start_stop"
-        },
-        {
-            "name": "left",
-            "key": "left",
-            "num_key": "left ",
-            "command_type": "keyboard"
-        },
+        {"name": "switch mode", "key": "switch mode", "command_type": "start_stop"},
+        {"name": "left", "key": "left", "num_key": "left ", "command_type": "keyboard"},
         {
             "name": "right",
             "key": "right",
             "num_key": "right ",
             "command_type": "keyboard"
         },
-        {
-            "name": "up",
-            "key": "up",
-            "num_key": "up ",
-            "command_type": "keyboard"
-        },
-        {
-            "name": "down",
-            "key": "down",
-            "num_key": "down ",
-            "command_type": "keyboard"
-        },
+        {"name": "up", "key": "up", "num_key": "up ", "command_type": "keyboard"},
+        {"name": "down", "key": "down", "num_key": "down ", "command_type": "keyboard"},
         {
             "name": "slap",
             "key": "enter",
@@ -120,24 +79,9 @@
             "num_key": "question mark ",
             "command_type": "keyboard"
         },
-        {
-            "name": "coma",
-            "key": ",",
-            "num_key": "coma ",
-            "command_type": "keyboard"
-        },
-        {
-            "name": "comma",
-            "key": ",",
-            "num_key": "comma ",
-            "command_type": "keyboard"
-        },
-        {
-            "name": "stop",
-            "key": ".",
-            "num_key": "stop ",
-            "command_type": "keyboard"
-        },
+        {"name": "coma", "key": ",", "num_key": "coma ", "command_type": "keyboard"},
+        {"name": "comma", "key": ",", "num_key": "comma ", "command_type": "keyboard"},
+        {"name": "stop", "key": ".", "num_key": "stop ", "command_type": "keyboard"},
         {
             "name": "exclamation mark",
             "key": "!",
@@ -174,12 +118,7 @@
             "num_key": "hashtag ",
             "command_type": "keyboard"
         },
-        {
-            "name": "slash",
-            "key": "/",
-            "num_key": "slash ",
-            "command_type": "keyboard"
-        },
+        {"name": "slash", "key": "/", "num_key": "slash ", "command_type": "keyboard"},
         {
             "name": "backslash",
             "key": "\\",
@@ -222,42 +161,22 @@
             "num_key": "curly right ",
             "command_type": "keyboard"
         },
-        {
-            "name": "score",
-            "key": "-",
-            "num_key": "score ",
-            "command_type": "keyboard"
-        },
+        {"name": "score", "key": "-", "num_key": "score ", "command_type": "keyboard"},
         {
             "name": "underscore",
             "key": "_",
             "num_key": "underscore ",
             "command_type": "keyboard"
         },
-        {
-            "name": "minus",
-            "key": "-",
-            "num_key": "minus ",
-            "command_type": "keyboard"
-        },
-        {
-            "name": "plus",
-            "key": "+",
-            "num_key": "plus ",
-            "command_type": "keyboard"
-        },
+        {"name": "minus", "key": "-", "num_key": "minus ", "command_type": "keyboard"},
+        {"name": "plus", "key": "+", "num_key": "plus ", "command_type": "keyboard"},
         {
             "name": "multiply",
             "key": "*",
             "num_key": "multiply ",
             "command_type": "keyboard"
         },
-        {
-            "name": "times",
-            "key": "*",
-            "num_key": "times ",
-            "command_type": "keyboard"
-        },
+        {"name": "times", "key": "*", "num_key": "times ", "command_type": "keyboard"},
         {
             "name": "divide",
             "key": "/",
@@ -270,12 +189,7 @@
             "num_key": "semicolon ",
             "command_type": "keyboard"
         },
-        {
-            "name": "colon",
-            "key": ":",
-            "num_key": "colon ",
-            "command_type": "keyboard"
-        },
+        {"name": "colon", "key": ":", "num_key": "colon ", "command_type": "keyboard"},
         {
             "name": "less than",
             "key": "<",
@@ -312,23 +226,13 @@
             "num_key": "page down ",
             "command_type": "keyboard"
         },
-        {
-            "name": "pipe",
-            "key": "|",
-            "num_key": "pipe ",
-            "command_type": "keyboard"
-        },
+        {"name": "pipe", "key": "|", "num_key": "pipe ", "command_type": "keyboard"},
         {
             "name": "increase brightness",
             "key": "F3",
             "num_key": "increase brightness ",
             "command_type": "keyboard"
         },
-        {
-            "name": "home",
-            "key": "home",
-            "num_key": "home ",
-            "command_type": "keyboard"
-        }
-      ]
+        {"name": "home", "key": "home", "num_key": "home ", "command_type": "keyboard"}
+    ]
 }

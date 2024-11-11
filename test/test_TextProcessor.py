@@ -2,8 +2,10 @@ import os
 import unittest
 from unittest.mock import patch, MagicMock
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 from src.TextProcessor import TextProcessor
+
 
 class TestTextProcessor(unittest.TestCase):
     @patch("TextProcessor.pipeline")
@@ -22,9 +24,13 @@ class TestTextProcessor(unittest.TestCase):
 
     def test_restore_punctuation(self):
         # Mock the predict and prediction_to_text methods
-        with patch.object(self.text_processor, 'predict',
-                          return_value=[["Hello", "0", 0.99], ["world", ".", 0.99]]) as mock_predict, \
-                patch.object(self.text_processor, 'prediction_to_text', return_value="Hello world."):
+        with patch.object(
+            self.text_processor,
+            "predict",
+            return_value=[["Hello", "0", 0.99], ["world", ".", 0.99]],
+        ) as mock_predict, patch.object(
+            self.text_processor, "prediction_to_text", return_value="Hello world."
+        ):
             text = "Hello world"
             result = self.text_processor.restore_punctuation(text)
             self.assertEqual(result, "Hello world.")
@@ -42,11 +48,7 @@ class TestTextProcessor(unittest.TestCase):
         lst = list(range(10))
         n = 5
         stride = 2
-        expected_output = [
-            [0, 1, 2, 3, 4],
-            [3, 4, 5, 6, 7],
-            [6, 7, 8, 9]
-        ]
+        expected_output = [[0, 1, 2, 3, 4], [3, 4, 5, 6, 7], [6, 7, 8, 9]]
         result = list(self.text_processor.overlap_chunks(lst, n, stride))
         self.assertEqual(result, expected_output)
 
@@ -56,21 +58,27 @@ class TestTextProcessor(unittest.TestCase):
         mock_output = [
             {"end": 5, "entity": "0", "score": 0.9989766},  # "Hello"
             {"end": 11, "entity": ".", "score": 0.99827456},  # "world"
-            {"end": 16, "entity": "0", "score": 0.0}  # "test"
+            {"end": 16, "entity": "0", "score": 0.0},  # "test"
         ]
         self.mock_pipe.return_value = mock_output
         result = self.text_processor.predict(words)
         expected_output = [
             ["Hello", "0", 0.9989766],
             ["world", ".", 0.99827456],
-            ["test", "0", 0.0]
+            ["test", "0", 0.0],
         ]
-        self.assertEqual(len(result), len(expected_output), "Lengths of result and expected_output do not match")
+        self.assertEqual(
+            len(result),
+            len(expected_output),
+            "Lengths of result and expected_output do not match",
+        )
 
         for actual, expected in zip(result, expected_output):
             self.assertEqual(actual[0], expected[0], "Words do not match")
             self.assertEqual(actual[1], expected[1], "Entities do not match")
-            self.assertAlmostEqual(actual[2], expected[2], places=5, msg="Scores do not match")
+            self.assertAlmostEqual(
+                actual[2], expected[2], places=5, msg="Scores do not match"
+            )
 
     def test_prediction_to_text(self):
         # Test prediction to text conversion
@@ -80,5 +88,5 @@ class TestTextProcessor(unittest.TestCase):
         self.assertEqual(result, expected_output)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

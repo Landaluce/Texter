@@ -12,7 +12,11 @@ from src.TextProcessor import TextProcessor
 from src.ErrorHandler import noalsaerr
 from src.AppState import AppState
 from src.TexterUI import TexterUI
-from src.helperFunctions import string_to_snake_case, string_to_camel_case, convert_to_spelling
+from src.helperFunctions import (
+    string_to_snake_case,
+    string_to_camel_case,
+    convert_to_spelling,
+)
 
 text_processor = TextProcessor()
 
@@ -50,7 +54,9 @@ def recognize_speech(recognizer: sr.Recognizer, timeout: int = 2) -> str or None
     return None
 
 
-def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer: sr.Recognizer):
+def live_speech_interpreter(
+    app_state: AppState, texter_ui: TexterUI, recognizer: sr.Recognizer
+):
     """
     Continuously listens for and interprets speech commands, executing corresponding actions.
 
@@ -102,7 +108,9 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
 
                 # Handle spelling mode
                 if app_state.mode == "spelling":
-                    spelling_output = convert_to_spelling(text, app_state.spelling_commands)
+                    spelling_output = convert_to_spelling(
+                        text, app_state.spelling_commands
+                    )
                     if spelling_output:
                         gui.typewrite(spelling_output)
                     else:
@@ -116,19 +124,35 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
                             gui.typewrite(text[5:])
                     else:
                         if text.startswith("camel case"):
-                            gui.write(string_to_camel_case(text[len("camel case") + 1:]))
+                            gui.write(
+                                string_to_camel_case(text[len("camel case") + 1 :])
+                            )
                             continue
                         if text.startswith("camelcase"):
-                            gui.write(string_to_camel_case(text[len("camelcase") + 1:]))
+                            gui.write(
+                                string_to_camel_case(text[len("camelcase") + 1 :])
+                            )
                             continue
                         if text.startswith("small camel case"):
-                            gui.write(string_to_camel_case(text[len("small camel case") + 1:], True))
+                            gui.write(
+                                string_to_camel_case(
+                                    text[len("small camel case") + 1 :], True
+                                )
+                            )
                             continue
                         if text.startswith("small camelcase"):
-                            gui.write(string_to_camel_case(text[len("small camelcase") + 1:], True))
+                            gui.write(
+                                string_to_camel_case(
+                                    text[len("small camelcase") + 1 :], True
+                                )
+                            )
                             continue
                         if text.startswith("snake case"):
-                            gui.write(string_to_snake_case(text[len("snake case") + 1:].strip()))
+                            gui.write(
+                                string_to_snake_case(
+                                    text[len("snake case") + 1 :].strip()
+                                )
+                            )
                             continue
 
                         # Check if termination is requested
@@ -147,7 +171,9 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
                                 gui.write(text)
 
 
-def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognizer) -> None:
+def run_live_speech_interpreter(
+    app_state: AppState, app_ui: TexterUI, recognizer
+) -> None:
     """
     This function runs the live speech interpreter in a separate thread.
     """

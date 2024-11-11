@@ -1,36 +1,12 @@
 {
-  "python_commands": [
-        {
-            "name": "print statement",
-            "key": "print statement"
-        },
-        {
-            "name": "create class",
-            "key": "create class"
-        },
-        {
-            "name": "create method",
-            "key": "create method"
-        },
-        {
-            "name": "create function",
-            "key": "create function"
-        },
-        {
-            "name": "new script",
-            "key": "new script"
-        },
-        {
-            "name": "integer",
-            "key": "integer"
-        },
-        {
-            "name": "string",
-            "key": "string"
-        },
-        {
-            "name": "double",
-            "key": "double"
-        }
+    "python_commands": [
+        {"name": "print statement", "key": "print statement"},
+        {"name": "create class", "key": "create class"},
+        {"name": "create method", "key": "create method"},
+        {"name": "create function", "key": "create function"},
+        {"name": "new script", "key": "new script"},
+        {"name": "integer", "key": "integer"},
+        {"name": "string", "key": "string"},
+        {"name": "double", "key": "double"}
     ]
 }

@@ -22,27 +22,20 @@ class TestAppState(unittest.TestCase):
         """Test loading various commands into AppState."""
         commands = {
             "keyboard_commands": [
-                {"name": "test_keyboard", "command_type": "keyboard", "key": "k", "num_key": "test_keyboard"},
-                {"name": "stop", "command_type": "start_stop", "num_key": "stop"}
+                {
+                    "name": "test_keyboard",
+                    "command_type": "keyboard",
+                    "key": "k",
+                    "num_key": "test_keyboard",
+                },
+                {"name": "stop", "command_type": "start_stop", "num_key": "stop"},
             ],
-            "info_commands": [
-                {"name": "show info", "key": "i"}
-            ],
-            "selection_commands": [
-                {"name": "select all"}
-            ],
-            "python_commands": [
-                {"name": "print statement", "key": "print()"}
-            ],
-            "linux_commands": [
-                {"name": "ls", "key": "ls"}
-            ],
-            "spelling_commands": [
-                {"name": "alpha", "key": "a"}
-            ],
-            "git_commands": [
-                {"name": "git status", "key": "status"}
-            ]
+            "info_commands": [{"name": "show info", "key": "i"}],
+            "selection_commands": [{"name": "select all"}],
+            "python_commands": [{"name": "print statement", "key": "print()"}],
+            "linux_commands": [{"name": "ls", "key": "ls"}],
+            "spelling_commands": [{"name": "alpha", "key": "a"}],
+            "git_commands": [{"name": "git status", "key": "status"}],
         }
         self.app_state.load_commands(commands)
 
@@ -80,9 +73,7 @@ class TestAppState(unittest.TestCase):
     @patch("pyautogui.write")
     def test_handle_terminal_command(self, mock_write):
         """Test handling of terminal commands."""
-        self.app_state.terminal_commands = [
-            Command("ls", CommandType.TERMINAL, "ls")
-        ]
+        self.app_state.terminal_commands = [Command("ls", CommandType.TERMINAL, "ls")]
         handled = self.app_state._handle_terminal_command("ls")
         self.assertTrue(handled)
         mock_write.assert_called_with("ls")
@@ -90,9 +81,7 @@ class TestAppState(unittest.TestCase):
     @patch("pyautogui.write")
     def test_handle_spelling_command(self, mock_write):
         """Test handling of spelling commands."""
-        self.app_state.spelling_commands = [
-            Command("alpha", CommandType.SPELLING, "a")
-        ]
+        self.app_state.spelling_commands = [Command("alpha", CommandType.SPELLING, "a")]
         handled = self.app_state._handle_spelling_command("alpha")
         self.assertTrue(handled)
         mock_write.assert_called_with("a")

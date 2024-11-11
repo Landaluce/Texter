@@ -10,14 +10,16 @@ class TestCommandClasses(unittest.TestCase):
         self.mock_app_state.programming_language = "python"
         self.mock_app_state.terminal_os = "linux"
 
-        self.command = Command(name="print statement",
-                               command_type=CommandType.PROGRAMMING,
-                               key="print statement")
+        self.command = Command(
+            name="print statement",
+            command_type=CommandType.PROGRAMMING,
+            key="print statement",
+        )
 
         self.spelling_commands = [
             Mock(name="alpha", key="a"),
             Mock(name="bravo", key="b"),
-            Mock(name="charlie", key="c")
+            Mock(name="charlie", key="c"),
         ]
 
     @patch("pyautogui.write")

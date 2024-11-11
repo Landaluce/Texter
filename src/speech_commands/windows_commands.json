@@ -1,8 +1,1 @@
-{
-  "windows_commands": [
-        {
-            "name": "go to",
-            "key": "dir "
-        }
-  ]
-}
+{"windows_commands": [{"name": "go to", "key": "dir "}]}

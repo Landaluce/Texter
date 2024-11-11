@@ -55,9 +55,13 @@ class AppState:
         self.commands = commands
         for i in commands["keyboard_commands"]:
             if i["command_type"] == "keyboard":
-                self.keyboard_commands.append(Command(i["name"], CommandType.KEYBOARD, i["key"], i["num_key"]))
+                self.keyboard_commands.append(
+                    Command(i["name"], CommandType.KEYBOARD, i["key"], i["num_key"])
+                )
             elif i["command_type"] == "start_stop":
-                self.keyboard_commands.append(Command(i["name"], CommandType.START_STOP))
+                self.keyboard_commands.append(
+                    Command(i["name"], CommandType.START_STOP)
+                )
         try:
             self.info_commands = [
                 Command(cmd["name"], CommandType.INFO, cmd["key"])
@@ -87,7 +91,12 @@ class AppState:
             return
 
         self.programming_commands = [
-            Command(cmd.get("name", ""), CommandType.PROGRAMMING, cmd["key"], cmd.get("num_key", ""))
+            Command(
+                cmd.get("name", ""),
+                CommandType.PROGRAMMING,
+                cmd["key"],
+                cmd.get("num_key", ""),
+            )
             for cmd in self.commands[self.programming_language + "_commands"]
         ]
         self.print_status()
@@ -103,7 +112,9 @@ class AppState:
             return
 
         self.terminal_commands = [
-            Command(cmd.get("name", ""), CommandType.TERMINAL, cmd["key"])  #, cmd.get("num_key", ""))
+            Command(
+                cmd.get("name", ""), CommandType.TERMINAL, cmd["key"]
+            )  # , cmd.get("num_key", ""))
             for cmd in self.commands[self.terminal_os + "_commands"]
         ]
         self.print_status()
@@ -113,7 +124,12 @@ class AppState:
         Loads spelling commands the commands file.
         """
         self.spelling_commands = [
-            Command(cmd.get("name", ""), CommandType.SPELLING, cmd["key"], cmd.get("num_key", ""))
+            Command(
+                cmd.get("name", ""),
+                CommandType.SPELLING,
+                cmd["key"],
+                cmd.get("num_key", ""),
+            )
             for cmd in self.commands["spelling_commands"]
         ]
         self.print_status()
@@ -123,7 +139,12 @@ class AppState:
         Loads spelling commands the commands file.
         """
         self.git_commands = [
-            Command(cmd.get("name", ""), CommandType.SPELLING, cmd["key"], cmd.get("num_key", ""))
+            Command(
+                cmd.get("name", ""),
+                CommandType.SPELLING,
+                cmd["key"],
+                cmd.get("num_key", ""),
+            )
             for cmd in self.commands["git_commands"]
         ]
         self.print_status()
@@ -290,9 +311,17 @@ class AppState:
         """
         status_message = f"Typing: {'started' if self.typing_active else 'stopped'}\n"
         status_message += f"mode: {self.mode}\n"
-        status_message += f"{self.programming_language} Programming: On\n" if self.programming else "Programming: Off\n"
-        status_message += f"{self.terminal_os} Terminal: On\n" if self.terminal else "Terminal: Off\n"
-        status_message += f"Punctuation: On  " if self.punctuation else "Punctuation: Off "
+        status_message += (
+            f"{self.programming_language} Programming: On\n"
+            if self.programming
+            else "Programming: Off\n"
+        )
+        status_message += (
+            f"{self.terminal_os} Terminal: On\n" if self.terminal else "Terminal: Off\n"
+        )
+        status_message += (
+            f"Punctuation: On  " if self.punctuation else "Punctuation: Off "
+        )
         status_message += f"| Caps: On" if self.capitalize else "| Caps: Off\n"
 
         # Check if app_ui is available and update UI

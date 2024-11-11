@@ -24,11 +24,11 @@ def get_commands(directory: str):
 
     commands = {}
     # Find all JSON files ending with commands in the specified directory
-    json_files = glob.glob(os.path.join(directory, '*commands.json'))
+    json_files = glob.glob(os.path.join(directory, "*commands.json"))
 
     for file in json_files:
         try:
-            with open(file, 'r') as f:
+            with open(file, "r") as f:
                 file_commands = json.load(f)
                 # Merge commands from each file
                 commands.update(file_commands)
@@ -52,7 +52,7 @@ def numeric_str_to_int(numeric_str):
     """
     numeric_str = numeric_str.split(" ")
     nums = [str(w2n.word_to_num(w)) for w in numeric_str]
-    return int(''.join(nums))
+    return int("".join(nums))
 
 
 def convert_to_spelling(text: str, spelling_commands: list) -> str:
@@ -74,18 +74,18 @@ def convert_to_spelling(text: str, spelling_commands: list) -> str:
             if command.name == word:
                 output.append(command.key)
                 break
-    return ''.join(output)
+    return "".join(output)
 
 
-def string_to_camel_case(input_str: str, lower: bool=False) -> str:
+def string_to_camel_case(input_str: str, lower: bool = False) -> str:
     """Capitalizes the first letter of each word in a string.
 
-      Parameters:
-        input_str: The input string.
-        lower (bool): indicates if the first word should be capitalized
-      Returns:
-        The string with the first letter of each word capitalized.
-      """
+    Parameters:
+      input_str: The input string.
+      lower (bool): indicates if the first word should be capitalized
+    Returns:
+      The string with the first letter of each word capitalized.
+    """
     words = input_str.split()
     capitalized_words = [word.capitalize() for word in words]
     if lower:
@@ -93,7 +93,6 @@ def string_to_camel_case(input_str: str, lower: bool=False) -> str:
     result = "".join(capitalized_words)
 
     return result
-
 
 
 def string_to_snake_case(input_str):

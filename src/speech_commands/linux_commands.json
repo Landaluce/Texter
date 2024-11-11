@@ -1,20 +1,8 @@
 {
-  "linux_commands": [
-        {
-            "name": "go to desktop",
-            "key": "cd ~/Desktop"
-        },
-        {
-            "name": "go to documents",
-            "key": "cd ~/Documents"
-        },
-        {
-            "name": "go to downloads",
-            "key": "cd ~/Downloads"
-        },
-        {
-            "name": "go to",
-            "key": "cd "
-        }
+    "linux_commands": [
+        {"name": "go to desktop", "key": "cd ~/Desktop"},
+        {"name": "go to documents", "key": "cd ~/Documents"},
+        {"name": "go to downloads", "key": "cd ~/Downloads"},
+        {"name": "go to", "key": "cd "}
     ]
 }

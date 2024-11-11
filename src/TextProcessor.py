@@ -25,27 +25,21 @@ class TextProcessor:
 
     @staticmethod
     def capitalize_sentences(text):
-        text = re.sub(r'(?<=[.!?]) +', '##SPLIT##', text)  # Split sentences
-        sentences = text.split('##SPLIT##')
+        text = re.sub(r"(?<=[.!?]) +", "##SPLIT##", text)  # Split sentences
+        sentences = text.split("##SPLIT##")
 
         # Capitalize the first character of each sentence
         sentences = [sentence.strip().capitalize() for sentence in sentences]
 
         # Reassemble the text with proper sentence endings
-        return ' '.join(sentences)
-
-
-        # I
-        # I'm
-        # I'll
-        # I've
-        # I'd
+        return " ".join(sentences)
+        # TODO detect: I,  I'm, I'll, I've, I'd
 
     @staticmethod
     def overlap_chunks(lst, n, stride=0):
         """Yield successive n-sized chunks from lst with stride length of overlap."""
         for i in range(0, len(lst), n - stride):
-            yield lst[i:i + n]
+            yield lst[i : i + n]
             if i + n >= len(lst):
                 break
 
@@ -70,8 +64,10 @@ class TextProcessor:
                 char_index += len(word) + 1  # Account for the space after each word
 
                 # Determine the appropriate label and score
-                while (result_index < len(result) and
-                       char_index > result[result_index]["end"]):
+                while (
+                    result_index < len(result)
+                    and char_index > result[result_index]["end"]
+                ):
                     result_index += 1
 
                 # Default label to "0" and score to None

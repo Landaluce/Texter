@@ -7,7 +7,12 @@ import pyautogui as gui
 import speech_recognition as sr
 
 # Local application imports
-from src.helperFunctions import string_to_snake_case, string_to_camel_case, numeric_str_to_int, convert_to_spelling
+from src.helperFunctions import (
+    string_to_snake_case,
+    string_to_camel_case,
+    numeric_str_to_int,
+    convert_to_spelling,
+)
 
 
 class CommandType(Enum):
@@ -22,6 +27,7 @@ class CommandType(Enum):
         SELECTION (auto): Commands related to text selection actions.
         GIT (auto): Commands related to git
     """
+
     KEYBOARD = auto()
     START_STOP = auto()
     PROGRAMMING = auto()
@@ -49,6 +55,7 @@ class Command:
         _extract_num(text): Extracts and returns a numeric value from the text.
         numeric_str_to_int(numeric_str): Converts a numeric string to an integer.
     """
+
     def __init__(self, name: str, command_type: CommandType, key=None, num_key=None):
         """
         Initializes a new Command instance.
@@ -95,7 +102,7 @@ class Command:
             self._execute_selection_command(text)
 
         elif self.command_type == CommandType.SPELLING:
-            self.execute_spelling_command(app_state)
+            self.execute_spelling_command(app_state, text)
 
         elif self.command_type == CommandType.GIT:
             self.execute_git_command()
@@ -127,7 +134,7 @@ class Command:
         elif text == "terminal off":
             app_state.terminal = False
         elif text == "switch mode":
-             app_state.switch_mode()
+            app_state.switch_mode()
 
         app_state.print_status()
 
@@ -153,7 +160,7 @@ class Command:
         This method extracts a numeric value from the text (if present) to determine
         how many times to press the associated key.
         """
-        n = text[len(self.num_key):]
+        n = text[len(self.num_key) :]
 
         if ":" in n:
             try:
@@ -161,11 +168,11 @@ class Command:
             except ValueError:
                 num = 1
         else:
-            if text[len(self.num_key):].isdigit():
-                num = int(text[len(self.num_key):])
+            if text[len(self.num_key) :].isdigit():
+                num = int(text[len(self.num_key) :])
             else:
                 try:
-                    num = self._extract_num(text[len(self.num_key):])
+                    num = self._extract_num(text[len(self.num_key) :])
                 except Error as e:
                     print(e)
                     num = 1
@@ -184,19 +191,19 @@ class Command:
         copying, or pasting based on the recognized command.
         """
         if text == "select line":
-            gui.hotkey('home')
-            gui.hotkey('shift', 'end')
+            gui.hotkey("home")
+            gui.hotkey("shift", "end")
         elif text == "select all":
-            gui.hotkey('ctrl', 'a')
+            gui.hotkey("ctrl", "a")
         elif text == "delete line":
-            gui.hotkey('home')  # Assuming Home key will go to the beginning of the line
-            gui.hotkey('shift', 'end', 'backspace')
+            gui.hotkey("home")  # Assuming Home key will go to the beginning of the line
+            gui.hotkey("shift", "end", "backspace")
         elif text == "delete all":
-            gui.hotkey('ctrl', 'a', 'backspace')
+            gui.hotkey("ctrl", "a", "backspace")
         elif text == "copy":
-            gui.hotkey('ctrl', 'c')
+            gui.hotkey("ctrl", "c")
         elif text == "paste":
-            gui.hotkey('ctrl', 'v')
+            gui.hotkey("ctrl", "v")
 
     def execute_programming_command(self, text: str, app_state) -> None:
         """
@@ -225,7 +232,7 @@ class Command:
                 gui.write("print()")
                 gui.hotkey("left")
             elif self.key.startswith("create class"):
-                class_name = text[len(self.key):]
+                class_name = text[len(self.key) :]
                 class_name = string_to_camel_case(class_name)
                 gui.write("class :")
                 gui.hotkey("enter")
@@ -236,7 +243,7 @@ class Command:
                 if len(class_name):
                     gui.write(class_name)
             elif self.key.startswith("create method"):
-                method_name = text[len(self.key):].strip()
+                method_name = text[len(self.key) :].strip()
                 method_name = string_to_snake_case(method_name)
                 gui.write("def (self):")
                 for _ in range(0, 7):
@@ -244,7 +251,7 @@ class Command:
                 if len(method_name):
                     gui.write(method_name)
             elif self.key.startswith("create function"):
-                function_name = string_to_snake_case(text[len(self.key):].strip())
+                function_name = string_to_snake_case(text[len(self.key) :].strip())
                 gui.write("def :()")
                 for _ in range(0, 3):
                     gui.hotkey("left")
@@ -254,7 +261,7 @@ class Command:
                 gui.write("main():")
                 gui.hotkey("enter")
                 gui.hotkey("enter")
-                gui.write("if __name__ == \"__main__\":")
+                gui.write('if __name__ == "__main__":')
                 gui.hotkey("enter")
                 gui.write("main")
             elif self.key == "integer":
@@ -272,7 +279,7 @@ class Command:
                 gui.hotkey("left")
                 gui.hotkey("left")
             elif self.key.startswith("create class"):
-                class_name = text[len(self.key):]
+                class_name = text[len(self.key) :]
                 class_name = string_to_camel_case(class_name)
                 gui.write("public class  {")
                 gui.hotkey("enter")
@@ -282,17 +289,23 @@ class Command:
                 gui.hotkey("left")
                 if len(class_name):
                     gui.write(class_name)
-            elif (self.key.startswith("create method") or self.key.startswith("create public method") or
-                  self.key.startswith("create function") or self.key.startswith("create public function")):
-                method_name = text[len(self.key):].strip()
+            elif (
+                self.key.startswith("create method")
+                or self.key.startswith("create public method")
+                or self.key.startswith("create function")
+                or self.key.startswith("create public function")
+            ):
+                method_name = text[len(self.key) :].strip()
                 method_name = string_to_snake_case(method_name)
                 gui.write("public void () {}")
                 for _ in range(0, 5):
                     gui.hotkey("left")
                 if len(method_name):
                     gui.write(method_name)
-            elif self.key.startswith("create private method") or self.key.startswith("create private function"):
-                method_name = text[len(self.key):].strip()
+            elif self.key.startswith("create private method") or self.key.startswith(
+                "create private function"
+            ):
+                method_name = text[len(self.key) :].strip()
                 method_name = string_to_snake_case(method_name)
                 gui.write("private void () {}")
                 for _ in range(0, 5):
@@ -321,7 +334,7 @@ class Command:
         if app_state.terminal_os == "linux":
             if self.name.startswith("go to"):
                 gui.write(self.key)
-        elif app_state. terminal_os == "windows":
+        elif app_state.terminal_os == "windows":
             if self.name == "go to":
                 gui.write(self.key)
 
@@ -353,5 +366,3 @@ class Command:
                 return numeric_str_to_int(text)
         except (ValueError, sr.UnknownValueError):
             return 1
-
-

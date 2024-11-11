@@ -2,8 +2,13 @@ import json
 import os
 import unittest
 
-from src.helperFunctions import (get_commands, numeric_str_to_int, convert_to_spelling,
-                                 string_to_camel_case, string_to_snake_case)
+from src.helperFunctions import (
+    get_commands,
+    numeric_str_to_int,
+    convert_to_spelling,
+    string_to_camel_case,
+    string_to_snake_case,
+)
 
 
 class TestHelperFunction(unittest.TestCase):
@@ -25,7 +30,6 @@ class TestHelperFunction(unittest.TestCase):
         # Create an invalid JSON file
         with open(os.path.join(self.test_dir, "invalid_commands.json"), "w") as f:
             f.write("{invalid json}")
-
 
     def tearDown(self):
         # Clean up by removing files and directory
@@ -62,11 +66,12 @@ class TestHelperFunction(unittest.TestCase):
                 self.name = name
                 self.key = key
 
-        spelling_commands = [Command("alpha", "a"),
-                             Command("beta", "b")]
+        spelling_commands = [Command("alpha", "a"), Command("beta", "b")]
         self.assertEqual(convert_to_spelling("beta", spelling_commands), "b")
         self.assertEqual(convert_to_spelling("alpha beta", spelling_commands), "ab")
-        self.assertEqual(convert_to_spelling("alpha gamma", spelling_commands), "a")  # Gamma ignored
+        self.assertEqual(
+            convert_to_spelling("alpha gamma", spelling_commands), "a"
+        )  # Gamma ignored
 
     def test_string_to_camel_case(self):
         self.assertEqual(string_to_camel_case("hello"), "Hello")
@@ -75,6 +80,7 @@ class TestHelperFunction(unittest.TestCase):
     def test_string_to_snake_case_single_input(self):
         self.assertEqual(string_to_snake_case("hello"), "hello")
         self.assertEqual(string_to_snake_case("hello world"), "hello_world")
+
 
 if __name__ == "__main__":
     unittest.main()

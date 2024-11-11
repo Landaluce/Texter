@@ -1,166 +1,37 @@
 {
-  "spelling_commands": [
-        {
-            "name": "arch",
-            "key": "a",
-            "num_key": "alpha ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "alpha",
-            "key": "a",
-            "num_key": "alpha ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "beta",
-            "key": "b",
-            "num_key": "beta ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "charlie",
-            "key": "c",
-            "num_key": "charlie ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "delta",
-            "key": "d",
-            "num_key": "delta ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "echo",
-            "key": "e",
-            "num_key": "echo ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "fox",
-            "key": "f",
-            "num_key": "fox ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "golf",
-            "key": "g",
-            "num_key": "golf ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "hotel",
-            "key": "h",
-            "num_key": "hotel ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "india",
-            "key": "i",
-            "num_key": "india ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "julia",
-            "key": "j",
-            "num_key": "julia ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "kilo",
-            "key": "k",
-            "num_key": "k ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "line",
-            "key": "l",
-            "num_key": "line ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "mike",
-            "key": "m",
-            "num_key": "mike ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "november",
-            "key": "n",
-            "num_key": "november ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "oscar",
-            "key": "o",
-            "num_key": "oscar ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "papa",
-            "key": "p",
-            "num_key": "papa ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "queen",
-            "key": "q",
-            "num_key": "queen ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "romeo",
-            "key": "r",
-            "num_key": "romeo ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "snake",
-            "key": "s",
-            "num_key": "snake ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "tango",
-            "key": "t",
-            "num_key": "tango ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "uniform",
-            "key": "u",
-            "num_key": "uniform ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "victor",
-            "key": "v",
-            "num_key": "victor ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "whiskey",
-            "key": "w",
-            "num_key": "whiskey ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "x-ray",
-            "key": "x",
-            "num_key": "x-ray ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "yeti",
-            "key": "y",
-            "num_key": "yeti ",
-            "command_type": "spelling"
-        },
-        {
-            "name": "zebra",
-            "key": "z",
-            "num_key": "zebra ",
-            "command_type": "spelling"
-        }
-  ]
+    "spelling_commands": [
+        {"name": "arch", "key": "a", "num_key": "alpha ", "command_type": "spelling"},
+        {"name": "alpha", "key": "a", "num_key": "alpha ", "command_type": "spelling"},
+        {"name": "beta", "key": "b", "num_key": "beta ", "command_type": "spelling"},
+        {"name": "charlie", "key": "c", "num_key": "charlie ", "command_type": "spelling"},
+        {"name": "delta", "key": "d", "num_key": "delta ", "command_type": "spelling"},
+        {"name": "echo", "key": "e", "num_key": "echo ", "command_type": "spelling"},
+        {"name": "fox", "key": "f", "num_key": "fox ", "command_type": "spelling"},
+        {"name": "golf", "key": "g", "num_key": "golf ", "command_type": "spelling"},
+        {"name": "hotel", "key": "h", "num_key": "hotel ", "command_type": "spelling"},
+        {"name": "india", "key": "i", "num_key": "india ", "command_type": "spelling"},
+        {"name": "delta", "key": "d", "num_key": "delta ", "command_type": "spelling"},
+        {"name": "echo", "key": "e", "num_key": "echo ", "command_type": "spelling"},
+        {"name": "fox", "key": "f", "num_key": "fox ", "command_type": "spelling"},
+        {"name": "golf", "key": "g", "num_key": "golf ", "command_type": "spelling"},
+        {"name": "hotel", "key": "h", "num_key": "hotel ", "command_type": "spelling"},
+        {"name": "india", "key": "i", "num_key": "india ", "command_type": "spelling"},
+        {"name": "julia", "key": "j", "num_key": "julia ", "command_type": "spelling"},
+        {"name": "kilo", "key": "k", "num_key": "k ", "command_type": "spelling"},
+        {"name": "line", "key": "l", "num_key": "line ", "command_type": "spelling"},
+        {"name": "mike", "key": "m", "num_key": "mike ", "command_type": "spelling"},
+        {"name": "november", "key": "n", "num_key": "november ", "command_type": "spelling"},
+        {"name": "oscar", "key": "o", "num_key": "oscar ", "command_type": "spelling"},
+        {"name": "papa", "key": "p", "num_key": "papa ", "command_type": "spelling"},
+        {"name": "queen", "key": "q", "num_key": "queen ", "command_type": "spelling"},
+        {"name": "romeo", "key": "r", "num_key": "romeo ", "command_type": "spelling"},
+        {"name": "snake", "key": "s", "num_key": "snake ", "command_type": "spelling"},
+        {"name": "tango", "key": "t", "num_key": "tango ", "command_type": "spelling"},
+        {"name": "uniform", "key": "u", "num_key": "uniform ", "command_type": "spelling"},
+        {"name": "victor", "key": "v", "num_key": "victor ", "command_type": "spelling" },
+        {"name": "whiskey", "key": "w", "num_key": "whiskey ", "command_type": "spelling"},
+        {"name": "x-ray", "key": "x", "num_key": "x-ray ", "command_type": "spelling"},
+        {"name": "yeti", "key": "y", "num_key": "yeti ", "command_type": "spelling"},
+        {"name": "zebra", "key": "z", "num_key": "zebra ", "command_type": "spelling"}
+    ]
 }
