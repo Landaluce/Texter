@@ -41,23 +41,23 @@ class TestCommandClasses(unittest.TestCase):
         mock_write.assert_called_once()
 
     # TODO: fix test_execute_spelling_command
-    # @patch("pyautogui.write")
-    # def test_execute_spelling_command(self, mock_write):
-    #     # Set up the test scenario
-    #     self.command.key = "alpha"
-    #     self.command.command_type = CommandType.SPELLING
-    #     self.command.num_key = "alpha"
-    #     expected_output = "a"  # Replace with the actual expected output
-    #
-    #     # Execute the command
-    #     self.command.execute_spelling_command(self.mock_app_state, "alpha", self.spelling_commands)
-    #
-    #     # Assertions
-    #     mock_write.assert_has_calls([
-    #         call("alpha")
-    #     ])
-    #     mock_write.assert_called_with(expected_output)  # Ensure the last call is the expected output
-    #     self.mock_app_state.append_text.assert_not_called()
+    @patch("pyautogui.write")
+    def test_execute_spelling_command(self, mock_write):
+        # Set up the test scenario
+        self.command.key = "alpha"
+        self.command.command_type = CommandType.SPELLING
+        self.command.num_key = "alpha"
+        expected_output = "a"  # Replace with the actual expected output
+
+        # Execute the command
+        self.command.execute_spelling_command(self.mock_app_state, "alpha")
+
+        # Assertions
+        mock_write.assert_has_calls([
+            call("alpha")
+        ])
+        mock_write.assert_called_with(expected_output)  # Ensure the last call is the expected output
+        self.mock_app_state.append_text.assert_not_called()
 
     def test_extract_num(self):
         self.assertEqual(self.command._extract_num("five"), 5)
