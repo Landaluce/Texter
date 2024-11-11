@@ -280,7 +280,7 @@ class AppState:
         # if self.mode == "spelling":
         for command in self.spelling_commands:
             if text.startswith(command.name):
-                command.execute_spelling_command(self, text, self.spelling_commands)
+                command.execute_spelling_command(self, text)
                 return True
         return False
 
