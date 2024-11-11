@@ -325,9 +325,9 @@ class Command:
             if self.name == "go to":
                 gui.write(self.key)
 
-    def execute_spelling_command(self, app_state, text, spelling_commands):
+    def execute_spelling_command(self, app_state, text):
         gui.write(self.key)
-        spelling_output = convert_to_spelling(text, spelling_commands)
+        spelling_output = convert_to_spelling(text, app_state.spelling_commands)
         if spelling_output:
             gui.write(spelling_output)
         else:
