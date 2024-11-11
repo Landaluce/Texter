@@ -252,7 +252,7 @@ class AppState:
             return False
         for command in self.terminal_commands:
             if text.startswith(command.name):
-                command.execute_terminal_command(text, self)
+                command.execute_terminal_command(self)
                 return True
         return False
 

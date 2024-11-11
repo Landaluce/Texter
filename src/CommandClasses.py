@@ -51,7 +51,7 @@ class Command:
     Methods:
         execute(text, state): Executes the command based on its type.
         _execute_keyboard_command(text): Handles the execution of keyboard commands.
-        _execute_selection_command(text): Handles the execution of selection commands.
+        _execute_selection_command(): Handles the execution of selection commands.
         _extract_num(text): Extracts and returns a numeric value from the text.
         numeric_str_to_int(numeric_str): Converts a numeric string to an integer.
     """
@@ -84,22 +84,22 @@ class Command:
         """
 
         if self.command_type == CommandType.KEYBOARD:
-            self._execute_keyboard_command(text)
+            self._execute_keyboard_command()
 
         elif self.command_type == CommandType.START_STOP:
-            self._execute_switch_commands(text, app_state)
+            self._execute_switch_commands(app_state)
 
         elif self.command_type == CommandType.INFO:
             self._execute_info_command()
 
         elif self.command_type == CommandType.PROGRAMMING:
-            self.execute_programming_command(text, app_state)
+            self.execute_programming_command(app_state)
 
         elif self.command_type == CommandType.TERMINAL:
-            self.execute_terminal_command(text, app_state)
+            self.execute_terminal_command(app_state)
 
         elif self.command_type == CommandType.SELECTION:
-            self._execute_selection_command(text)
+            self._execute_selection_command()
 
         elif self.command_type == CommandType.SPELLING:
             self.execute_spelling_command(app_state, text)
@@ -107,33 +107,32 @@ class Command:
         elif self.command_type == CommandType.GIT:
             self.execute_git_command()
 
-    @staticmethod
-    def _execute_switch_commands(text: str, app_state) -> None:
+    # @staticmethod
+    def _execute_switch_commands(self, app_state) -> None:
         """
         Executes switch commands based on the recognized text input.
 
         Parameters:
-            text (str): The recognized text input.
             app_state (AppState): The current application state.
 
         This method handles various switch commands like toggling typing activity, restarting the script,
         enabling or disabling programming mode, and prints the current status of the application state.
         """
-        if text == "go to sleep":
+        if self.name == "go to sleep":
             app_state.typing_active = False
-        elif text == "wake up":
+        elif self.name == "wake up":
             app_state.typing_active = True
-        elif text == "refresh texter":
+        elif self.name == "refresh texter":
             app_state.restart_script()
-        elif text == "programming on":
+        elif self.name == "programming on":
             app_state.programming = True
-        elif text == "programming off":
+        elif self.name == "programming off":
             app_state.programming = False
-        elif text == "terminal on":
+        elif self.name == "terminal on":
             app_state.terminal = True
-        elif text == "terminal off":
+        elif self.name == "terminal off":
             app_state.terminal = False
-        elif text == "switch mode":
+        elif self.name == "switch mode":
             app_state.switch_mode()
 
         app_state.print_status()
@@ -150,17 +149,15 @@ class Command:
     def _execute_info_command(self) -> None:
         self._type_command_key()
 
-    def _execute_keyboard_command(self, text: str) -> None:
+    def _execute_keyboard_command(self) -> None:
         """
         Handles the execution of a keyboard command.
-
-        Parameters:
-            text (str): The command text.
 
         This method extracts a numeric value from the text (if present) to determine
         how many times to press the associated key.
         """
-        n = text[len(self.num_key) :]
+
+        n = self.name[len(self.num_key) :]
 
         if ":" in n:
             try:
@@ -168,50 +165,45 @@ class Command:
             except ValueError:
                 num = 1
         else:
-            if text[len(self.num_key) :].isdigit():
-                num = int(text[len(self.num_key) :])
+            if self.name[len(self.num_key) :].isdigit():
+                num = int(self.name[len(self.num_key) :])
             else:
                 try:
-                    num = self._extract_num(text[len(self.num_key) :])
+                    num = self._extract_num(self.name[len(self.num_key) :])
                 except Error as e:
                     print(e)
                     num = 1
         for _ in range(num):
             gui.hotkey(self.key)
 
-    @staticmethod
-    def _execute_selection_command(text: str) -> None:
+    # @staticmethod
+    def _execute_selection_command(self) -> None:
         """
         Handles the execution of a selection command.
-
-        Parameters:
-            text (str): The command text.
 
         This method performs actions such as selecting a line, selecting all text, deleting text,
         copying, or pasting based on the recognized command.
         """
-        if text == "select line":
+        if self.name == "select line":
             gui.hotkey("home")
             gui.hotkey("shift", "end")
-        elif text == "select all":
+        elif self.name == "select all":
             gui.hotkey("ctrl", "a")
-        elif text == "delete line":
+        elif self.name == "delete line":
             gui.hotkey("home")  # Assuming Home key will go to the beginning of the line
             gui.hotkey("shift", "end", "backspace")
-        elif text == "delete all":
+        elif self.name == "delete all":
             gui.hotkey("ctrl", "a", "backspace")
-        elif text == "copy":
+        elif self.name == "copy":
             gui.hotkey("ctrl", "c")
-        elif text == "paste":
+        elif self.name == "paste":
             gui.hotkey("ctrl", "v")
 
-    def execute_programming_command(self, text: str, app_state) -> None:
+    def execute_programming_command(self, app_state) -> None:
         """
         Execute programming-related commands based on the user's selected programming language.
 
         Parameters:
-        - text (str): The input text that may contain specific commands or additional details
-            (e.g., class or method names).
         - app_state (object): An object containing the current state, including the selected programming language.
 
         This method performs different actions based on the `programming_language` attribute in the `state` object:
@@ -232,7 +224,7 @@ class Command:
                 gui.write("print()")
                 gui.hotkey("left")
             elif self.key.startswith("create class"):
-                class_name = text[len(self.key) :]
+                class_name = self.name[len(self.key):]
                 class_name = string_to_camel_case(class_name)
                 gui.write("class :")
                 gui.hotkey("enter")
@@ -243,7 +235,7 @@ class Command:
                 if len(class_name):
                     gui.write(class_name)
             elif self.key.startswith("create method"):
-                method_name = text[len(self.key) :].strip()
+                method_name = self.name[len(self.key):].strip()
                 method_name = string_to_snake_case(method_name)
                 gui.write("def (self):")
                 for _ in range(0, 7):
@@ -251,7 +243,7 @@ class Command:
                 if len(method_name):
                     gui.write(method_name)
             elif self.key.startswith("create function"):
-                function_name = string_to_snake_case(text[len(self.key) :].strip())
+                function_name = string_to_snake_case(self.name[len(self.key):].strip())
                 gui.write("def :()")
                 for _ in range(0, 3):
                     gui.hotkey("left")
@@ -279,7 +271,7 @@ class Command:
                 gui.hotkey("left")
                 gui.hotkey("left")
             elif self.key.startswith("create class"):
-                class_name = text[len(self.key) :]
+                class_name = self.name[len(self.key):]
                 class_name = string_to_camel_case(class_name)
                 gui.write("public class  {")
                 gui.hotkey("enter")
@@ -290,12 +282,12 @@ class Command:
                 if len(class_name):
                     gui.write(class_name)
             elif (
-                self.key.startswith("create method")
-                or self.key.startswith("create public method")
-                or self.key.startswith("create function")
-                or self.key.startswith("create public function")
+                    self.key.startswith("create method")
+                    or self.key.startswith("create public method")
+                    or self.key.startswith("create function")
+                    or self.key.startswith("create public function")
             ):
-                method_name = text[len(self.key) :].strip()
+                method_name = self.name[len(self.key):].strip()
                 method_name = string_to_snake_case(method_name)
                 gui.write("public void () {}")
                 for _ in range(0, 5):
@@ -303,9 +295,9 @@ class Command:
                 if len(method_name):
                     gui.write(method_name)
             elif self.key.startswith("create private method") or self.key.startswith(
-                "create private function"
+                    "create private function"
             ):
-                method_name = text[len(self.key) :].strip()
+                method_name = self.name[len(self.key):].strip()
                 method_name = string_to_snake_case(method_name)
                 gui.write("private void () {}")
                 for _ in range(0, 5):
@@ -316,7 +308,7 @@ class Command:
             else:
                 gui.write(self.key)
 
-    def execute_terminal_command(self, text, app_state):
+    def execute_terminal_command(self, app_state):
         """
         Execute terminal commands based on the user's selected operating system (OS).
 
@@ -338,9 +330,9 @@ class Command:
             if self.name == "go to":
                 gui.write(self.key)
 
-    def execute_spelling_command(self, app_state, text):
+    def execute_spelling_command(self, app_state, text=None):
         gui.write(self.key)
-        spelling_output = convert_to_spelling(text, app_state.spelling_commands)
+        spelling_output = convert_to_spelling(self.name, app_state.spelling_commands)
         if spelling_output:
             gui.write(spelling_output)
         else:
