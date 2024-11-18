@@ -234,7 +234,7 @@ class AppState:
             return False
         for command in self.programming_commands:
             if text.startswith(command.name):
-                command.execute_programming_command(text, self)
+                command.execute_programming_command(self)
                 return True
         return False
 

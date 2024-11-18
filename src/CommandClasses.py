@@ -133,24 +133,19 @@ class Command:
         This method handles various switch commands like toggling typing activity, restarting the script,
         enabling or disabling programming mode, and prints the current status of the application state.
         """
-        if self.name == "go to sleep":
-            app_state.typing_active = False
-        elif self.name == "wake up":
-            app_state.typing_active = True
-        elif self.name == "refresh texter":
-            app_state.restart_script()
-        elif self.name == "programming on":
-            app_state.programming = True
-        elif self.name == "programming off":
-            app_state.programming = False
-        elif self.name == "terminal on":
-            app_state.terminal = True
-        elif self.name == "terminal off":
-            app_state.terminal = False
-        elif self.name == "switch mode":
-            app_state.switch_mode()
-
-        app_state.print_status()
+        command_map = {
+            "go to sleep": lambda: setattr(app_state, "typing_active", False),
+            "wake up": lambda: setattr(app_state, "typing_active", True),
+            "refresh texter": app_state.restart_script,
+            "programming on": lambda: setattr(app_state, "programming", True),
+            "programming off": lambda: setattr(app_state, "programming", False),
+            "terminal on": lambda: setattr(app_state, "terminal", True),
+            "terminal off": lambda: setattr(app_state, "terminal", False),
+            "switch mode": app_state.switch_mode,
+        }
+        if self.name in command_map:
+            command_map[self.name]()
+            app_state.print_status()
 
     def _type_command_key(self) -> None:
         """
@@ -222,7 +217,7 @@ class Command:
         - app_state (object): An object containing the current state, including the selected programming language.
 
         This method performs different actions based on the `programming_language` attribute in the `state` object:
-        - For Python, it can generate print statements, classes, methods, functions, variable declarations
+        - For Python, it can gener ate print statements, classes, methods, functions, variable declarations
             (int, str, float), and main script structures.
         - For Java, it supports creating print statements, classes, public/private methods, and functions.
 
@@ -235,93 +230,116 @@ class Command:
         structure in the editor.
         """
         if app_state.programming_language == "python":
-            if self.key == "print statement":
-                gui.write("print()")
-                gui.hotkey("left")
-            elif self.key.startswith("create class"):
-                class_name = self.name[len(self.key):]
-                class_name = string_to_camel_case(class_name)
-                gui.write("class :")
-                gui.hotkey("enter")
-                gui.hotkey("tab")
-                gui.write("def __init__(self):")
-                gui.hotkey("up")
-                gui.hotkey("left")
-                if len(class_name):
-                    gui.write(class_name)
-            elif self.key.startswith("create method"):
-                method_name = self.name[len(self.key):].strip()
-                method_name = string_to_snake_case(method_name)
-                gui.write("def (self):")
-                for _ in range(0, 7):
-                    gui.hotkey("left")
-                if len(method_name):
-                    gui.write(method_name)
-            elif self.key.startswith("create function"):
-                function_name = string_to_snake_case(self.name[len(self.key):].strip())
-                gui.write("def :()")
-                for _ in range(0, 3):
-                    gui.hotkey("left")
-                if len(function_name):
-                    gui.write(function_name)
-            elif self.key.startswith("new script"):
-                gui.write("main():")
-                gui.hotkey("enter")
-                gui.hotkey("enter")
-                gui.write('if __name__ == "__main__":')
-                gui.hotkey("enter")
-                gui.write("main")
-            elif self.key == "integer":
-                gui.write("int")
-            elif self.key == "string":
-                gui.write("str")
-            elif self.key == "double":
-                gui.write("float")
-            else:
-                gui.write(self.key)
+            self._execute_python_command()
 
         elif app_state.programming_language == "java":
-            if self.key == "print statement":
-                gui.write("System.out.println();")
-                gui.hotkey("left")
-                gui.hotkey("left")
-            elif self.key.startswith("create class"):
-                class_name = self.name[len(self.key):]
-                class_name = string_to_camel_case(class_name)
-                gui.write("public class  {")
-                gui.hotkey("enter")
-                gui.hotkey("up")
-                gui.hotkey("end")
-                gui.hotkey("left")
-                gui.hotkey("left")
-                if len(class_name):
-                    gui.write(class_name)
-            elif (
-                    self.key.startswith("create method")
-                    or self.key.startswith("create public method")
-                    or self.key.startswith("create function")
-                    or self.key.startswith("create public function")
-            ):
-                method_name = self.name[len(self.key):].strip()
-                method_name = string_to_snake_case(method_name)
-                gui.write("public void () {}")
-                for _ in range(0, 5):
-                    gui.hotkey("left")
-                if len(method_name):
-                    gui.write(method_name)
-            elif self.key.startswith("create private method") or self.key.startswith(
-                    "create private function"
-            ):
-                method_name = self.name[len(self.key):].strip()
-                method_name = string_to_snake_case(method_name)
-                gui.write("private void () {}")
-                for _ in range(0, 5):
-                    gui.hotkey("left")
-                if len(method_name):
-                    gui.write(method_name)
+            self._execute_java_command()
 
-            else:
-                gui.write(self.key)
+    def _execute_python_command(self):
+        if self.key == "print statement":
+            gui.write("print()")
+            gui.hotkey("left")
+        elif self.key.startswith("create class"):
+            self._create_python_class()
+        elif self.key.startswith("create method"):
+            self._create_python_method()
+        elif self.key.startswith("create function"):
+            self._create_python_function()
+        elif self.key.startswith("new script"):
+            self._create_new_python_script()
+        elif self.key == "integer":
+            gui.write("int")
+        elif self.key == "string":
+            gui.write("str")
+        elif self.key == "double":
+            gui.write("float")
+        else:
+            gui.write(self.key)
+
+    def _execute_java_command(self):
+        if self.key == "print statement":
+            gui.write("System.out.println();")
+            gui.hotkey("left")
+            gui.hotkey("left")
+        elif self.key.startswith("create class"):
+            self._create_java_class()
+        elif (
+                self.key.startswith("create method")
+                or self.key.startswith("create public method")
+                or self.key.startswith("create function")
+                or self.key.startswith("create public function")
+        ):
+            method_name = self.name[len(self.key):].strip()
+            method_name = string_to_snake_case(method_name)
+            gui.write("public void () {}")
+            for _ in range(0, 5):
+                gui.hotkey("left")
+            if len(method_name):
+                gui.write(method_name)
+        elif self.key.startswith("create private method") or self.key.startswith(
+                "create private function"
+        ):
+            method_name = self.name[len(self.key):].strip()
+            method_name = string_to_snake_case(method_name)
+            gui.write("private void () {}")
+            for _ in range(0, 5):
+                gui.hotkey("left")
+            if len(method_name):
+                gui.write(method_name)
+
+        else:
+            gui.write(self.key)
+
+    def _create_python_class(self):
+        class_name = self.name[len(self.key):]
+        class_name = string_to_camel_case(class_name)
+        gui.write("class :")
+        gui.hotkey("enter")
+        gui.hotkey("tab")
+        gui.write("def __init__(self):")
+        gui.hotkey("up")
+        gui.hotkey("left")
+        if len(class_name):
+            gui.write(class_name)
+
+    def _create_python_method(self):
+        method_name = self.name[len(self.key):].strip()
+        method_name = string_to_snake_case(method_name)
+        gui.write("def (self):")
+        for _ in range(0, 7):
+            gui.hotkey("left")
+        if len(method_name):
+            gui.write(method_name)
+
+    def _create_python_function(self):
+        function_name = string_to_snake_case(self.name[len(self.key):].strip())
+        gui.write("def :()")
+        for _ in range(0, 3):
+            gui.hotkey("left")
+        if len(function_name):
+            gui.write(function_name)
+
+    @staticmethod
+    def _create_new_python_script():
+        gui.write("main():")
+        gui.hotkey("enter")
+        gui.hotkey("enter")
+        gui.write('if __name__ == "__main__":')
+        gui.hotkey("enter")
+        gui.write("main")
+
+    def _create_java_class(self):
+        class_name = self.name[len(self.key):]
+        class_name = string_to_camel_case(class_name)
+        gui.write("public class  {")
+        gui.hotkey("enter")
+        gui.hotkey("up")
+        gui.hotkey("end")
+        gui.hotkey("left")
+        gui.hotkey("left")
+        if len(class_name):
+            gui.write(class_name)
+
 
     def execute_terminal_command(self, app_state):
         """
