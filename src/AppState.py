@@ -149,7 +149,7 @@ class AppState:
         ]
         self.print_status()
 
-    def handle_command(self, text):
+    def handle_command(self, text: str):
         """
         Processes a given text command by checking it against different command types.
 
@@ -159,31 +159,22 @@ class AppState:
         Returns:
         - bool: True if a command was successfully handled, False otherwise.
         """
-        # Try to handle as a keyboard command first
-        if self._handle_keyboard_command(text):
-            return True
-        # Handle programming commands if applicable
-        elif self._handle_programming_command(text):
-            return True
-        # Handle terminal commands if applicable
-        elif self._handle_terminal_command(text):
-            return True
-        # Handle info commands if applicable
-        elif self._handle_info_command(text):
-            return True
-        # Handle selection commands if applicable
-        elif self._handle_selection_command(text):
-            return True
-        # Handle spelling commands if applicable
-        elif self._handle_spelling_command(text):
-            return True
-        # Handle git commands if applicable
-        elif self._handle_git_command(text):
-            return True
-        # Return False if no command matches
+        command_handlers = [
+            self._handle_keyboard_command,
+            self._handle_programming_command,
+            self._handle_terminal_command,
+            self._handle_info_command,
+            self._handle_selection_command,
+            self._handle_spelling_command,
+            self._handle_git_command,
+        ]
+
+        for handler in command_handlers:
+            if handler(text):
+                return True
         return False
 
-    def _handle_keyboard_command(self, text):
+    def _handle_keyboard_command(self, text: str):
         """
         Handles a keyboard command if the text matches any of the available keyboard commands.
 
@@ -256,7 +247,7 @@ class AppState:
                 return True
         return False
 
-    def _handle_info_command(self, text):
+    def _handle_info_command(self, text: str):
         """
         Handles an info command if the text matches any of the available info commands.
 
