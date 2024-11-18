@@ -217,7 +217,7 @@ class Command:
         - app_state (object): An object containing the current state, including the selected programming language.
 
         This method performs different actions based on the `programming_language` attribute in the `state` object:
-        - For Python, it can gener ate print statements, classes, methods, functions, variable declarations
+        - For Python, it can generate print statements, classes, methods, functions, variable declarations
             (int, str, float), and main script structures.
         - For Java, it supports creating print statements, classes, public/private methods, and functions.
 
@@ -235,7 +235,8 @@ class Command:
         elif app_state.programming_language == "java":
             self._execute_java_command()
 
-    def _execute_python_command(self):
+    def _execute_python_command(self) -> None:
+        """Handles Python-specific commands."""
         if self.key == "print statement":
             gui.write("print()")
             gui.hotkey("left")
@@ -257,6 +258,7 @@ class Command:
             gui.write(self.key)
 
     def _execute_java_command(self):
+        """Handles Java-specific commands."""
         if self.key == "print statement":
             gui.write("System.out.println();")
             gui.hotkey("left")
@@ -269,28 +271,15 @@ class Command:
                 or self.key.startswith("create function")
                 or self.key.startswith("create public function")
         ):
-            method_name = self.name[len(self.key):].strip()
-            method_name = string_to_snake_case(method_name)
-            gui.write("public void () {}")
-            for _ in range(0, 5):
-                gui.hotkey("left")
-            if len(method_name):
-                gui.write(method_name)
-        elif self.key.startswith("create private method") or self.key.startswith(
-                "create private function"
-        ):
-            method_name = self.name[len(self.key):].strip()
-            method_name = string_to_snake_case(method_name)
-            gui.write("private void () {}")
-            for _ in range(0, 5):
-                gui.hotkey("left")
-            if len(method_name):
-                gui.write(method_name)
-
+            self._create_java_public_method()
+        elif (self.key.startswith("create private method") or
+              self.key.startswith("create private function")):
+            self._create_java_private_method()
         else:
             gui.write(self.key)
 
     def _create_python_class(self):
+        """Generates a Python class structure."""
         class_name = self.name[len(self.key):]
         class_name = string_to_camel_case(class_name)
         gui.write("class :")
@@ -303,6 +292,7 @@ class Command:
             gui.write(class_name)
 
     def _create_python_method(self):
+        """Generates a Python method structure."""
         method_name = self.name[len(self.key):].strip()
         method_name = string_to_snake_case(method_name)
         gui.write("def (self):")
@@ -312,6 +302,7 @@ class Command:
             gui.write(method_name)
 
     def _create_python_function(self):
+        """Generates a Python function structure."""
         function_name = string_to_snake_case(self.name[len(self.key):].strip())
         gui.write("def :()")
         for _ in range(0, 3):
@@ -321,6 +312,7 @@ class Command:
 
     @staticmethod
     def _create_new_python_script():
+        """Generates a Python script structure."""
         gui.write("main():")
         gui.hotkey("enter")
         gui.hotkey("enter")
@@ -329,6 +321,7 @@ class Command:
         gui.write("main")
 
     def _create_java_class(self):
+        """Generates a Java class structure."""
         class_name = self.name[len(self.key):]
         class_name = string_to_camel_case(class_name)
         gui.write("public class  {")
@@ -340,6 +333,20 @@ class Command:
         if len(class_name):
             gui.write(class_name)
 
+    def _create_java_public_method(self) -> None:
+        self._create_java_method("public")
+
+    def _create_java_private_method(self) -> None:
+        self._create_java_method("private")
+
+    def _create_java_method(self, access_level) -> None:
+        method_name = self.name[len(self.key):].strip()
+        method_name = string_to_snake_case(method_name)
+        gui.write(access_level + " void () {}")
+        for _ in range(0, 5):
+            gui.hotkey("left")
+        if len(method_name):
+            gui.write(method_name)
 
     def execute_terminal_command(self, app_state):
         """
