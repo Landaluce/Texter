@@ -1,6 +1,8 @@
 # Standard library imports
+import json
 import sys
 import tkinter as tk
+from threading import active_count
 
 # Local application imports
 from src.helperFunctions import get_commands
@@ -145,7 +147,7 @@ class TexterUI:
 
         # Create a non-editable text box: commands
         self.commands_text_box = tk.Text(self.root, height=10, width=40)
-        self.print_all_commands(commands)
+        self.print_all_commands()
         self.commands_text_box.config(state=tk.DISABLED)
         self.commands_text_box.place(x=10, y=330, width=280, height=255)
 
@@ -161,7 +163,7 @@ class TexterUI:
         commands = get_commands(self.command_files_directory)
 
         # Re-display the commands
-        self.print_all_commands(commands)
+        self.print_all_commands()
         self.commands_text_box.commands(state=tk.DISABLED)
 
     def toggle_status_textbox(self):
@@ -220,24 +222,70 @@ class TexterUI:
         self.app_state.typing_active = False
         self.app_state.print_status()
 
-    def print_all_commands(
-        self, commands
-    ) -> None:  # TODO: DISPLAY ONLY ACTIVE COMMANDS
+    def get_active_commands(self):
+        active_commands = {}
+        lst = []
+        for command in self.app_state.info_commands:
+            temp_dict = command.terminal_commands_to_dict()
+            temp_json = json.dumps(temp_dict)
+            lst.append(temp_json)
+        active_commands["info commands"] = lst
+        lst = []
+        for command in self.app_state.selection_commands:
+            temp_dict = command.terminal_commands_to_dict()
+            temp_json = json.dumps(temp_dict)
+            lst.append(temp_json)
+        active_commands["selection commands"] = lst
+        lst = []
+        for command in self.app_state.keyboard_commands:
+            temp_dict = command.terminal_commands_to_dict()
+            temp_json = json.dumps(temp_dict)
+            lst.append(temp_json)
+        active_commands["keyboard commands"] = lst
+        lst = []
+        for command in self.app_state.git_commands:
+            temp_dict = command.terminal_commands_to_dict()
+            temp_json = json.dumps(temp_dict)
+            lst.append(temp_json)
+        active_commands["git commands"] = lst
+
+        if self.app_state.programming:
+            lst = []
+            for command in self.app_state.programming_commands:
+                temp_dict = command.programming_commands_to_dict()
+                temp_json = json.dumps(temp_dict)
+                lst.append(temp_json)
+            active_commands["programming commands"] = lst
+        if self.app_state.terminal:
+            lst = []
+            for command in self.app_state.terminal_commands:
+                temp_dict = command.terminal_commands_to_dict()
+                temp_json = json.dumps(temp_dict)
+                lst.append(temp_json)
+            active_commands["terminal commands"] = lst
+
+        lst = []
+        for command in self.app_state.spelling_commands:
+            temp_dict = command.terminal_commands_to_dict()
+            temp_json = json.dumps(temp_dict)
+            lst.append(temp_json)
+        active_commands["spelling commands"] = lst
+        return active_commands
+
+    def print_all_commands(self) -> None:  # TODO: DISPLAY ONLY ACTIVE COMMANDS
         """
         Display the active commands in the user interface based on the provided commands.
-
-        Parameters:
-            commands: A dictionary containing the commands.
 
         Returns:
             None
         """
+        commands = self.get_active_commands()
         for command_type in commands:
             self.commands_text_box.insert(tk.END, "┌────────────────────────────┐\n")
             self.commands_text_box.insert(tk.END, f"│ {command_type}:\n")
             self.commands_text_box.insert(tk.END, "├────────────────────────────┤\n")
             for command in commands[command_type]:
-                for key, val in command.items():
+                for key, val in json.loads(command).items():
                     if key == "name":
                         self.commands_text_box.insert(tk.END, f" {val}")
                 self.commands_text_box.insert(tk.END, "\n")

@@ -71,6 +71,21 @@ class Command:
         self.key = key
         self.num_key = num_key
 
+    def programming_commands_to_dict(self):
+        return {
+            "name": self.name,
+            "command_type": self.command_type.name,
+            "key": self.key,
+            "num_key": self.num_key
+        }
+
+    def terminal_commands_to_dict(self):
+        return {
+            "name": self.name,
+            "command_type": self.command_type.name,
+            "key": self.key,
+        }
+
     def execute(self, text: str, app_state) -> None:
         """
         Executes the command based on its type.
