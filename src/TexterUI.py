@@ -224,52 +224,26 @@ class TexterUI:
 
     def get_active_commands(self):
         active_commands = {}
-        lst = []
-        for command in self.app_state.info_commands:
-            temp_dict = command.terminal_commands_to_dict()
-            temp_json = json.dumps(temp_dict)
-            lst.append(temp_json)
-        active_commands["info commands"] = lst
-        lst = []
-        for command in self.app_state.selection_commands:
-            temp_dict = command.terminal_commands_to_dict()
-            temp_json = json.dumps(temp_dict)
-            lst.append(temp_json)
-        active_commands["selection commands"] = lst
-        lst = []
-        for command in self.app_state.keyboard_commands:
-            temp_dict = command.terminal_commands_to_dict()
-            temp_json = json.dumps(temp_dict)
-            lst.append(temp_json)
-        active_commands["keyboard commands"] = lst
-        lst = []
-        for command in self.app_state.git_commands:
-            temp_dict = command.terminal_commands_to_dict()
-            temp_json = json.dumps(temp_dict)
-            lst.append(temp_json)
-        active_commands["git commands"] = lst
-
-        if self.app_state.programming:
+        def process_commands(commands, type_name):
             lst = []
-            for command in self.app_state.programming_commands:
-                temp_dict = command.programming_commands_to_dict()
-                temp_json = json.dumps(temp_dict)
-                lst.append(temp_json)
-            active_commands["programming commands"] = lst
-        if self.app_state.terminal:
-            lst = []
-            for command in self.app_state.terminal_commands:
+            for command in commands:
                 temp_dict = command.terminal_commands_to_dict()
                 temp_json = json.dumps(temp_dict)
                 lst.append(temp_json)
-            active_commands["terminal commands"] = lst
+            active_commands[type_name] = lst
 
-        lst = []
-        for command in self.app_state.spelling_commands:
-            temp_dict = command.terminal_commands_to_dict()
-            temp_json = json.dumps(temp_dict)
-            lst.append(temp_json)
-        active_commands["spelling commands"] = lst
+        process_commands(self.app_state.info_commands, "info commands")
+        process_commands(self.app_state.selection_commands, "selection commands")
+        process_commands(self.app_state.keyboard_commands, "keyboard commands")
+        process_commands(self.app_state.git_commands, "git commands")
+        process_commands(self.app_state.spelling_commands, "spelling commands")
+
+        if self.app_state.programming:
+            process_commands(self.app_state.programming_commands, "programming commands")
+
+        if self.app_state.terminal:
+            process_commands(self.app_state.terminal_commands, "terminal commands")
+
         return active_commands
 
     def print_all_commands(self) -> None:  # TODO: DISPLAY ONLY ACTIVE COMMANDS
