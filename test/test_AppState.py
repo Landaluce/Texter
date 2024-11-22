@@ -69,7 +69,7 @@ class TestAppState(unittest.TestCase):
         self.assertTrue(handled)
         mock_write.assert_called_with("==print()==")
 
-    # TODO: fix test_handle_terminal_command
+    # TODO: fix this
     @patch("pyautogui.write")
     def test_handle_terminal_command(self, mock_write):
         """Test handling of terminal commands."""

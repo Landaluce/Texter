@@ -26,7 +26,7 @@ class TestSpeechRecognitionUtils(unittest.TestCase):
         result = recognize_speech(recognizer)
         self.assertIsNone(result)
 
-    # TODO: fix this test
+    # TODO: fix this
     @patch("src.SpeechRecognitionUtils.recognize_speech")
     def test_live_speech_interpreter(self, mock_recognize_speech):
         mock_recognize_speech.return_value = "switch mode"

@@ -40,7 +40,7 @@ class TestCommandClasses(unittest.TestCase):
         mock_write.assert_called_with("print()")
         mock_write.assert_called_once()
 
-    # TODO: fix test_execute_spelling_command
+    # TODO: fix this
     @patch("pyautogui.write")
     def test_execute_spelling_command(self, mock_write):
         # Set up the test scenario
