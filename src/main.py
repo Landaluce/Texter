@@ -14,22 +14,17 @@ def main():
     command_files_directory = "speech_commands"
 
     app = TexterUI(command_files_directory)
+    recognizer = sr.Recognizer()
     app_state = AppState(app)
-
-    # Get commands from all relevant JSON files in the directory
     commands = get_commands(command_files_directory)
     app_state.load_commands(commands)
-    recognizer = sr.Recognizer()
 
-    # Create a thread for the live speech interpreter
     speech_thread = threading.Thread(
         target=run_live_speech_interpreter, args=(app_state, app, recognizer)
     )
-    # Initialize live speech interpreter thread
     app.speech_thread = speech_thread
     speech_thread.start()
 
-    # Initialize TexterUI
     app.init_ui(app_state, commands)
 
 
