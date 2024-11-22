@@ -12,13 +12,19 @@ class TextProcessor:
 
     @staticmethod
     def preprocess(text):
-        # remove markers except for markers in numbers
-        text = re.sub(r"(?<!\d)[.,;:!?](?!\d)", "", text)
-        # todo: match acronyms https://stackoverflow.com/questions/35076016/regex-to-match-acronyms
+        acronyms = re.findall(r"(?:\b[A-Z]\.){2,}\b", text)  # Find all acronyms
+        text = re.sub(r"(?<!\d)[.,;:!?](?!\d)", "", text)  # Remove other punctuation
+
+        # Reinsert acronyms if they were modified
+        for acronym in acronyms:
+            text = text.replace(acronym.replace(".", ""), acronym)
+
         text = text.split()
         return text
 
     def restore_punctuation(self, text):
+        if not text.strip():
+            return ""
         result = self.predict(self.preprocess(text))
         return self.prediction_to_text(result)
 
@@ -42,9 +48,7 @@ class TextProcessor:
             if i + n >= len(lst):
                 break
 
-    def predict(self, words):
-        overlap = 5
-        chunk_size = 230
+    def predict(self, words, chunk_size=230, overlap=5):
         if len(words) <= chunk_size:
             overlap = 0
 
