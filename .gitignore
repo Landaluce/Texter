@@ -13,6 +13,7 @@ build/
 
 # private command files
 commands.json
+findTodos.py
 src/add_sensitive_data_to_commands.py
 src/speech_commands/info_commands.json
 
