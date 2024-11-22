@@ -38,7 +38,6 @@ class TextProcessor:
 
         # Reassemble the text with proper sentence endings
         return " ".join(sentences)
-        # TODO detect: I,  I'm, I'll, I've, I'd
 
     @staticmethod
     def overlap_chunks(lst, n, stride=0):

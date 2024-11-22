@@ -246,7 +246,8 @@ class TexterUI:
 
         return active_commands
 
-    def print_all_commands(self) -> None:  # TODO: DISPLAY ONLY ACTIVE COMMANDS
+    # TODO: DISPLAY ONLY ACTIVE COMMANDS
+    def print_all_commands(self) -> None:
         """
         Display the active commands in the user interface based on the provided commands.
 
