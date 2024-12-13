@@ -12,6 +12,11 @@ from src.helperFunctions import (
     string_to_camel_case,
     numeric_str_to_int,
     convert_to_spelling,
+    text_to_speech,
+    get_current_time,
+    get_current_date,
+    month_number_to_name,
+    day_number_to_name
 )
 
 
@@ -35,7 +40,8 @@ class CommandType(Enum):
     SELECTION = auto()
     TERMINAL = auto()
     SPELLING = auto()
-    GIT = auto
+    GIT = auto()
+    INTERACTIVE = auto()
 
 
 class Command:
@@ -121,6 +127,9 @@ class Command:
 
         elif self.command_type == CommandType.GIT:
             self.execute_git_command()
+
+        elif self.command_type == CommandType.INTERACTIVE:
+            self.execute_interactive_command()
 
     # @staticmethod
     def _execute_switch_commands(self, app_state) -> None:
@@ -377,6 +386,20 @@ class Command:
             gui.write(spelling_output)
         else:
             app_state.append_text("No valid spelling commands found.")
+
+    def execute_interactive_command(self, app_state, text=None):
+        if self.name.startswith("what time is it") or self.name.startswith("what's the time"):
+            current_time = get_current_time()
+            text_to_speech("it's " + current_time)
+        elif self.name.startswith("what's the date"):
+            current_date = get_current_date()
+            date = current_date.split("-")
+            month = month_number_to_name(int(date[0]))
+            day = day_number_to_name(int(date[1]))
+            current_date = month + " " + day
+            text_to_speech(current_date)
+        else:
+            text_to_speech("no input")
 
     @staticmethod
     def _extract_num(text):

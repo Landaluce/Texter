@@ -46,6 +46,8 @@ class AppState:
 
         self.git_commands = []
 
+        self.interactive_commands = []
+
         self.app_ui = app_ui
 
     def load_commands(self, commands):
@@ -79,6 +81,7 @@ class AppState:
         self.load_terminal_commands()
         self.load_spelling_commands()
         self.load_git_commands()
+        self.load_interactive_commands()
 
     def load_programming_commands(self):
         """
@@ -149,6 +152,20 @@ class AppState:
         ]
         self.print_status()
 
+    def load_interactive_commands(self) -> None:
+        """
+        Loads spelling commands the commands file.
+        """
+        self.interactive_commands = [
+            Command(
+                cmd.get("name"),
+                CommandType.INTERACTIVE,
+                cmd["key"]
+            )
+            for cmd in self.commands["interactive_commands"]
+        ]
+        self.print_status()
+
     def handle_command(self, text: str):
         """
         Processes a given text command by checking it against different command types.
@@ -167,6 +184,7 @@ class AppState:
             self._handle_selection_command,
             self._handle_spelling_command,
             self._handle_git_command,
+            self._handle_interactive_command
         ]
 
         for handler in command_handlers:
@@ -289,10 +307,25 @@ class AppState:
         Returns:
             bool: True if a spelling command was handled, False otherwise.
         """
-        # if self.mode == "spelling":
         for command in self.spelling_commands:
             if text.startswith(command.name):
                 command.execute_spelling_command(self, text)
+                return True
+        return False
+
+    def _handle_interactive_command(self, text: str) -> bool:
+        """
+        Handles a interactive command if the text matches any of the available interactive commands.
+
+        Parameters:
+            text (str): The command text to process.
+
+        Returns:
+            bool: True if a spelling command was handled, False otherwise.
+        """
+        for command in self.interactive_commands:
+            if text.startswith(command.name):
+                command.execute_interactive_command(self, text)
                 return True
         return False
 

@@ -56,3 +56,4 @@ word2number==1.1
 xlib==0.21
 setuptools==68.2.2
 unittest2==1.1.0
+gTTS~=2.5.4

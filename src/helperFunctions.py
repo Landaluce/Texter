@@ -1,9 +1,10 @@
-# Standard library imports
+import datetime
 import glob
 import json
 import os
+import subprocess
 
-# Third-party imports
+from gtts import gTTS
 from word2number import w2n
 
 
@@ -106,3 +107,42 @@ def string_to_snake_case(input_str):
     - str: The converted string in snake_case format, where spaces are replaced by underscores.
     """
     return input_str.replace(" ", "_")
+
+def text_to_speech(text="testing"):
+    tts = gTTS(text, lang='en')
+    tts.save("output.mp3")
+    # os.system("mpg321 -q output.mp3")
+    with open("log.txt", "w") as log:
+        subprocess.run(["mpg321", "output.mp3"], stdout=log, stderr=log)
+
+def get_current_time() -> str:
+    now = datetime.datetime.now()
+    return now.strftime("%H:%M")
+
+def get_current_date() -> str:
+    now = datetime.datetime.now()
+    return now.strftime("%m-%d")
+
+
+def month_number_to_name(month_number):
+    # List of month names, indexed from 0 (January)
+    months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ]
+
+    # Check if the month_number is valid (between 1 and 12)
+    if 1 <= month_number <= 12:
+        return months[month_number - 1]
+    else:
+        return "Invalid month number"
+
+def day_number_to_name(day_number):
+    # Determine the suffix for the day number
+    if 10 <= day_number % 100 <= 20:
+        suffix = "th"
+    else:
+        suffix = {1: "st", 2: "nd", 3: "rd"}.get(day_number % 10, "th")
+
+    # Return the day number with its ordinal suffix
+    return f"{day_number}{suffix}"

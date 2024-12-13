@@ -1,0 +1,7 @@
+{
+    "interactive_commands": [
+        {"name": "what time is it", "key": "what time is it", "command_type": "interactive"},
+        {"name": "what's the time", "key": "what's the time", "command_type": "interactive"},
+        {"name": "what's the date", "key": "what's the date", "command_type": "interactive"}
+    ]
+}
