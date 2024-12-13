@@ -1,0 +1,7 @@
+{
+    "browser_commands": [
+        {"name": "browser", "key": "browser", "command_type": "browser"},
+        {"name": "browser right", "key": "browser right", "command_type": "browser"},
+        {"name": "browser left", "key": "browser left", "command_type": "browser"}
+    ]
+}

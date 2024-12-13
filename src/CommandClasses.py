@@ -1,12 +1,9 @@
-# Standard library imports
 from enum import Enum, auto
 from wave import Error
 
-# Third-party imports
 import pyautogui as gui
 import speech_recognition as sr
 
-# Local application imports
 from src.helperFunctions import (
     string_to_snake_case,
     string_to_camel_case,
@@ -16,7 +13,7 @@ from src.helperFunctions import (
     get_current_time,
     get_current_date,
     month_number_to_name,
-    day_number_to_name
+    day_number_to_name,
 )
 
 
@@ -42,6 +39,7 @@ class CommandType(Enum):
     SPELLING = auto()
     GIT = auto()
     INTERACTIVE = auto()
+    BROWSER = auto()
 
 
 class Command:
@@ -400,6 +398,25 @@ class Command:
             text_to_speech(current_date)
         else:
             text_to_speech("no input")
+
+    def execute_browser_command(self, text:str) -> None:
+        if self.name.startswith("browser"):
+            if "right" in text:
+                gui.hotkey("Ctrl", "Tab")
+            elif "left" in text or "lyft" in text:
+                gui.hotkey("Ctrl", "Shift", "Tab")
+            else:
+                try:
+                    num_str = text.split(" ")[1].strip()
+                    if not num_str.isdigit():
+                        num_str = str(numeric_str_to_int(num_str))
+                    gui.hotkey("ctrl", num_str)
+                except IndexError:
+                    print(f"Error: Unable to parse tab number from text '{text}'.")
+                except ValueError as e:
+                    print(f"Error during numeric conversion: {e}")
+        else:
+                text_to_speech("no input")
 
     @staticmethod
     def _extract_num(text):

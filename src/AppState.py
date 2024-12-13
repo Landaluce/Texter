@@ -48,6 +48,8 @@ class AppState:
 
         self.interactive_commands = []
 
+        self.browser_commands = []
+
         self.app_ui = app_ui
 
     def load_commands(self, commands):
@@ -82,6 +84,7 @@ class AppState:
         self.load_spelling_commands()
         self.load_git_commands()
         self.load_interactive_commands()
+        self.load_browser_commands()
 
     def load_programming_commands(self):
         """
@@ -166,6 +169,19 @@ class AppState:
         ]
         self.print_status()
 
+    def load_browser_commands(self) -> None:
+        """
+                Loads spelling commands the commands file.
+                """
+        self.browser_commands = [
+            Command(
+                cmd.get("name"),
+                CommandType.BROWSER,
+                cmd["key"]
+            )
+            for cmd in self.commands["browser_commands"]
+        ]
+
     def handle_command(self, text: str):
         """
         Processes a given text command by checking it against different command types.
@@ -184,7 +200,8 @@ class AppState:
             self._handle_selection_command,
             self._handle_spelling_command,
             self._handle_git_command,
-            self._handle_interactive_command
+            self._handle_interactive_command,
+            self._handle_browser_command
         ]
 
         for handler in command_handlers:
@@ -315,7 +332,7 @@ class AppState:
 
     def _handle_interactive_command(self, text: str) -> bool:
         """
-        Handles a interactive command if the text matches any of the available interactive commands.
+        Handles an interactive command if the text matches any of the available interactive commands.
 
         Parameters:
             text (str): The command text to process.
@@ -326,6 +343,22 @@ class AppState:
         for command in self.interactive_commands:
             if text.startswith(command.name):
                 command.execute_interactive_command(self, text)
+                return True
+        return False
+
+    def _handle_browser_command(self, text: str) -> bool:
+        """
+        Handles a browser command if the text matches any of the available interactive commands.
+
+        Parameters:
+            text (str): The command text to process.
+
+        Returns:
+            bool: True if a spelling command was handled, False otherwise.
+        """
+        for command in self.browser_commands:
+            if text.startswith(command.name):
+                command.execute_browser_command(text)
                 return True
         return False
 
