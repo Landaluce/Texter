@@ -115,7 +115,7 @@ class Command:
             self.execute_programming_command(app_state)
 
         elif self.command_type == CommandType.TERMINAL:
-            self.execute_terminal_command(app_state)
+            self._execute_terminal_command(app_state)
 
         elif self.command_type == CommandType.SELECTION:
             self._execute_selection_command()
@@ -355,7 +355,7 @@ class Command:
         if len(method_name):
             gui.write(method_name)
 
-    def execute_terminal_command(self, app_state):
+    def _execute_terminal_command(self, app_state):
         """
         Execute terminal commands based on the user's selected operating system (OS).
 
