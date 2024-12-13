@@ -31,12 +31,14 @@ yarn-error.log
 
 # Logs
 *.log
+src/log.txt
 
 # Temporary files
 *.tmp
 *.temp
 *.bak
 *.swp
+*.mp3
 
 # macOS
 .DS_Store
