@@ -2,6 +2,12 @@
     "browser_commands": [
         {"name": "browser", "key": "browser", "command_type": "browser"},
         {"name": "browser right", "key": "browser right", "command_type": "browser"},
-        {"name": "browser left", "key": "browser left", "command_type": "browser"}
+        {"name": "browser left", "key": "browser left", "command_type": "browser"},
+        {"name": "new chrome window", "key": "new chrome window", "command_type": "browser"},
+        {"name": "new firefox window", "key": "new firefox window", "command_type": "browser"},
+        {"name": "new chrome incognito window", "key": "new chrome incognito window", "command_type": "browser"},
+        {"name": "new firefox incognito window", "key": "new firefox incognito window", "command_type": "browser"},
+        {"name": "focus chrome", "key": "focus chrome", "command_type": "browser"},
+        {"name": "focus firefox", "key": "focus firefox", "command_type": "browser"}
     ]
 }

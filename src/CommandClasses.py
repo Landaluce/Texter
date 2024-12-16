@@ -1,3 +1,4 @@
+import subprocess
 from enum import Enum, auto
 from wave import Error
 
@@ -415,8 +416,67 @@ class Command:
                     print(f"Error: Unable to parse tab number from text '{text}'.")
                 except ValueError as e:
                     print(f"Error during numeric conversion: {e}")
+        elif self.name.startswith("new"):
+            if "chrome window" in text or "firefox" in text:
+                gui.hotkey("Ctrl", "n")
+            elif "incognito" in text:
+                gui.hotkey("Ctrl", "n")
+        elif text.startswith("focus chrome"):
+            self.focus_browser_window()
+        elif text.startswith("focus firefox"):
+            self.focus_browser_window("Firefox")
         else:
-                text_to_speech("no input")
+                gui.write(text)
+
+    @staticmethod
+    def start_browser(browser="chrome", url=None):
+        """
+        Starts Chrome or Firefox browser. Optionally opens a specific URL.
+
+        Args:
+            browser (str): Either "chrome" or "firefox".
+            url (str): Optional URL to open in the browser.
+        """
+        try:
+            if browser.lower() == "chrome":
+                command = ["google-chrome"]
+            elif browser.lower() == "firefox":
+                command = ["firefox"]
+            else:
+                print("Unsupported browser. Use 'chrome' or 'firefox'.")
+                return
+
+            # Add URL to command if provided
+            if url:
+                command.append(url)
+
+            # Run the command
+            subprocess.Popen(command)
+            print(f"Started {browser} successfully.")
+        except FileNotFoundError:
+            print(f"Error: {browser.capitalize()} is not installed or not in PATH.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+    def focus_browser_window(self, browser="Chrome"):
+        try:
+            # Search for the browser window
+            result = subprocess.run(
+                ["xdotool", "search", "--name", browser],
+                capture_output=True,
+                text=True
+            )
+            window_id = result.stdout.splitlines()[0]  # Get the first matching window ID
+
+            # Focus the window
+            subprocess.run(["xdotool", "windowactivate", window_id])
+            # print(f"Focused on {browser} window with ID {window_id}")
+        except IndexError:
+            text_to_speech(f"No open {browser} window found. starting {browser}")
+            self.start_browser(browser)
+            # print(f"No open {browser} window found.")
+        except Exception as e:
+            print(f"Error: {e}")
 
     @staticmethod
     def _extract_num(text):
