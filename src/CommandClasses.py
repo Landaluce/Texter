@@ -15,6 +15,7 @@ from src.helperFunctions import (
     get_current_date,
     month_number_to_name,
     day_number_to_name,
+    get_day_of_week,
 )
 
 
@@ -391,11 +392,17 @@ class Command:
             current_time = get_current_time()
             text_to_speech("it's " + current_time)
         elif self.name.startswith("what's the date"):
-            current_date = get_current_date()
-            date = current_date.split("-")
+            current_date_time = get_current_date()
+
+            month_day = current_date_time.strftime("%m-%d")
+            date = month_day.split("-")
             month = month_number_to_name(int(date[0]))
             day = day_number_to_name(int(date[1]))
-            current_date = month + " " + day
+
+            y_m_d = str(current_date_time.strftime("%Y-%m-%d"))
+            week_day = get_day_of_week(y_m_d)
+
+            current_date = f"{week_day}, {month} {day}"
             text_to_speech(current_date)
         else:
             text_to_speech("no input")

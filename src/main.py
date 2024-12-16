@@ -1,4 +1,3 @@
-# Local application imports
 from src.helperFunctions import get_commands
 from src.SpeechRecognitionUtils import *
 
