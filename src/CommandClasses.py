@@ -188,7 +188,7 @@ class Command:
                 num = int(self.name[len(self.num_key) :])
             else:
                 try:
-                    num = self._extract_num(self.name[len(self.num_key) :])
+                    num = self._extract_number_from_string(self.name[len(self.num_key):])
                 except Error as e:
                     print(e)
                     num = 1
@@ -486,7 +486,7 @@ class Command:
             print(f"Error: {e}")
 
     @staticmethod
-    def _extract_num(text):
+    def _extract_number_from_string(text):
         """
         Extracts and returns a numeric value from the command text.
 

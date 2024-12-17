@@ -60,9 +60,9 @@ class TestCommandClasses(unittest.TestCase):
         self.mock_app_state.append_text.assert_not_called()
 
     def test_extract_num(self):
-        self.assertEqual(self.command._extract_num("five"), 5)
-        self.assertEqual(self.command._extract_num("ten"), 10)
-        self.assertEqual(self.command._extract_num("invalid"), 1)
+        self.assertEqual(self.command._extract_number_from_string("five"), 5)
+        self.assertEqual(self.command._extract_number_from_string("ten"), 10)
+        self.assertEqual(self.command._extract_number_from_string("invalid"), 1)
 
 
 if __name__ == "__main__":
