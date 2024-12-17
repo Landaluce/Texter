@@ -432,8 +432,60 @@ class Command:
             self.focus_browser_window()
         elif text.startswith("focus firefox"):
             self.focus_browser_window("Firefox")
+
+        elif text.startswith("go back"):
+            gui.hotkey('alt', 'left')
+        elif text.startswith("go forward"):
+            gui.hotkey('alt', 'right')
+        elif text.startswith("refresh page"):
+            gui.hotkey('ctrl', 'r')
+        elif text.startswith("stop refreshing"):
+            gui.press('esc')
+        elif text.startswith("scroll down"):
+            gui.scroll(-100)
+        elif text.startswith("scroll up"):
+            gui.scroll(100)
+        elif text.startswith("scroll to top"):
+            gui.hotkey('ctrl', 'home')
+        elif text.startswith("scroll to bottom"):
+            gui.hotkey('ctrl', 'end')
+        elif text.startswith("new tab"):
+            gui.hotkey('ctrl', 't')
+        elif text.startswith("close tab"):
+            gui.hotkey('ctrl', 'w')
+        elif text.startswith("next tab"):
+            gui.hotkey('ctrl', 'tab')
+        elif text.startswith("previous tab"):
+            gui.hotkey('ctrl', 'shift', 'tab')
+        elif text.startswith("reopen closed tab"):
+            gui.hotkey('ctrl', 'shift', 't')
+        elif text.startswith("close window"):
+            gui.hotkey('alt', 'f4')
+        elif text.startswith("minimize window"):
+            gui.hotkey('win', 'down')
+        elif text.startswith("maximize window"):
+            gui.hotkey('win', 'up')
+        elif text.startswith("open downloads"):
+            gui.hotkey('ctrl', 'j')
+        elif text.startswith("open history"):
+            gui.hotkey('ctrl', 'h')
+        elif text.startswith("open settings"):
+            gui.hotkey('alt', 'e')
+            gui.press('s')
+        elif text.startswith("zoom in"):
+            gui.hotkey('ctrl', '+')
+        elif text.startswith("zoom out"):
+            gui.hotkey('ctrl', '-')
+        elif text.startswith("reset zoom"):
+            gui.hotkey('ctrl', '0')
+        elif text.startswith("bookmark page"):
+            gui.hotkey('ctrl', 'd')
+        elif text.startswith("print page"):
+            gui.hotkey('ctrl', 'p')
+        elif text.startswith("save page"):
+            gui.hotkey('ctrl', 's')
         else:
-                gui.write(text)
+            gui.write(text)
 
     @staticmethod
     def start_browser(browser="chrome", url=None):
