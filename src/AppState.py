@@ -1,8 +1,5 @@
-# Standard library imports
 import subprocess
 import sys
-
-# Local application imports
 from src.CommandClasses import CommandType, Command
 
 
@@ -327,7 +324,7 @@ class AppState:
         """
         for command in self.spelling_commands:
             if text.startswith(command.name):
-                command.execute_spelling_command(self, text)
+                command.execute_spelling_command(self)
                 return True
         return False
 
@@ -343,7 +340,7 @@ class AppState:
         """
         for command in self.interactive_commands:
             if text.startswith(command.name):
-                command.execute_interactive_command(self, text)
+                command.execute_interactive_command()
                 return True
         return False
 

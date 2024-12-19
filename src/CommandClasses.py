@@ -1,10 +1,8 @@
 import subprocess
 from enum import Enum, auto
 from wave import Error
-
 import pyautogui as gui
 import speech_recognition as sr
-
 from src.helperFunctions import (
     string_to_snake_case,
     string_to_camel_case,
@@ -123,7 +121,7 @@ class Command:
             self._execute_selection_command()
 
         elif self.command_type == CommandType.SPELLING:
-            self.execute_spelling_command(app_state, text)
+            self.execute_spelling_command(app_state)
 
         elif self.command_type == CommandType.GIT:
             self.execute_git_command()
@@ -379,7 +377,7 @@ class Command:
             if self.name == "go to":
                 gui.write(self.key)
 
-    def execute_spelling_command(self, app_state, text=None):
+    def execute_spelling_command(self, app_state):
         gui.write(self.key)
         spelling_output = convert_to_spelling(self.name, app_state.spelling_commands)
         if spelling_output:
@@ -387,7 +385,7 @@ class Command:
         else:
             app_state.append_text("No valid spelling commands found.")
 
-    def execute_interactive_command(self, app_state, text=None):
+    def execute_interactive_command(self):
         if self.name.startswith("what time is it") or self.name.startswith("what's the time"):
             current_time = get_current_time()
             text_to_speech("it's " + current_time)

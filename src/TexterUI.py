@@ -1,10 +1,6 @@
-# Standard library imports
 import json
 import sys
 import tkinter as tk
-from threading import active_count
-
-# Local application imports
 from src.helperFunctions import get_commands
 
 
@@ -234,15 +230,18 @@ class TexterUI:
 
         process_commands(self.app_state.info_commands, "info commands")
         process_commands(self.app_state.selection_commands, "selection commands")
-        process_commands(self.app_state.keyboard_commands, "keyboard commands")
         process_commands(self.app_state.git_commands, "git commands")
-        process_commands(self.app_state.spelling_commands, "spelling commands")
+        process_commands(self.app_state.interactive_commands, "interactive commands")
+        process_commands(self.app_state.interactive_commands, "browser commands")
 
         if self.app_state.programming:
             process_commands(self.app_state.programming_commands, "programming commands")
 
         if self.app_state.terminal:
             process_commands(self.app_state.terminal_commands, "terminal commands")
+
+        process_commands(self.app_state.spelling_commands, "spelling commands")
+        process_commands(self.app_state.keyboard_commands, "keyboard commands")
 
         return active_commands
 

@@ -1,13 +1,7 @@
-# Standard library imports
 from __future__ import annotations
-import threading  # don't delete
-import json  # don't delete
-
-# Third-party imports
+import threading  # noqa: F401
 import pyautogui as gui
 import speech_recognition as sr
-
-# Local application imports
 from src.TextProcessor import TextProcessor
 from src.ErrorHandler import noalsaerr
 from src.AppState import AppState
