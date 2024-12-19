@@ -22,6 +22,8 @@ Here's a step-by-step guide to extend the app's functionality:
    * Create a new method, `_handle_new_command(text)`, to check if the recognized text matches any of the new commands.
    * Implement the logic for handling the new command within this method.
 
+5. **Add new commands to `get_active_commands` in `TexterUI` so they are listed in the UI (Optional)
+
 ### Example
 
 Suppose you want to add a new command type for controlling media playback:
