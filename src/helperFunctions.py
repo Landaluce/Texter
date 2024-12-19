@@ -125,6 +125,8 @@ def text_to_speech(text:str="testing") -> None:
     # os.system("mpg321 -q output.mp3")
     with open("log.txt", "w") as log:
         subprocess.run(["mpg321", "output.mp3"], stdout=log, stderr=log)
+    os.remove("log.txt")
+    os.remove("output.mp3")
 
 def get_current_time() -> str:
     """
