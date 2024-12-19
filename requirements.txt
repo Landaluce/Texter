@@ -54,6 +54,6 @@ typing_extensions==4.12.2
 urllib3==2.2.3
 word2number==1.1
 xlib==0.21
-setuptools==68.2.2
+setuptools==75.3.0
 unittest2==1.1.0
 gTTS~=2.5.4
