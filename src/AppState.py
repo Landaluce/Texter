@@ -205,6 +205,7 @@ class AppState:
         ]
 
         for handler in command_handlers:
+            # noinspection PyArgumentList
             if handler(text):
                 return True
         return False
