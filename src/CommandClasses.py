@@ -364,7 +364,7 @@ class Command:
         Parameters:
         - text (str): The input text that contains terminal commands or details
             (e.g., file paths or navigation commands).
-        - app_state (object): An object containing the current state, including the selected terminal operating system (OS).
+        - app_state (object): An object containing the current state, including the selected terminal operating system.
 
         This method checks the `terminal_os` attribute in the `state` object to determine the current OS:
         - If the OS is "linux", it will execute Linux-specific terminal commands.
