@@ -65,9 +65,6 @@ def live_speech_interpreter(
     """
     with noalsaerr():
         while not app_state.terminate:
-            # with sr.Microphone():
-            app_state.print_status()
-            texter_ui.print_status()
             text = recognize_speech(recognizer)  # , source)
             if text:
                 # Hardcoded check to always output "Texter"

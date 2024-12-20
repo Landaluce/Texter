@@ -245,7 +245,6 @@ class TexterUI:
 
         return active_commands
 
-    # TODO: DISPLAY ONLY ACTIVE COMMANDS
     def print_all_commands(self) -> None:
         """
         Display the active commands in the user interface based on the provided commands.
@@ -301,3 +300,18 @@ class TexterUI:
         self.status_text_box.insert(tk.END, status_message)  # Insert new status
         # self.status_text_box.see(tk.END)  # Scroll to the end
         self.status_text_box.config(state=tk.DISABLED)  # Disable editing again
+
+    def update_commands(self) -> None:
+        """
+        Thread-safe update to the status_text_box.
+        """
+        self.root.after(0, self._update_commands_ui, "")
+
+    def _update_commands_ui(self, foo: str) -> None:
+        """
+        Updates the status_text_box with the latest status message.
+        """
+        self.commands_text_box.config(state=tk.NORMAL)  # Enable editing to insert text
+        self.commands_text_box.delete(1.0, tk.END)  # Clear the current content
+        self.print_all_commands()
+        self.commands_text_box.config(state=tk.DISABLED)  # Disable editing again

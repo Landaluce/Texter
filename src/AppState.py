@@ -200,7 +200,6 @@ class AppState:
             self._handle_interactive_command,
             self._handle_browser_command
         ]
-
         for handler in command_handlers:
             # noinspection PyArgumentList
             if handler(text):
@@ -382,6 +381,7 @@ class AppState:
         # Check if app_ui is available and update UI
         if self.app_ui:
             self.app_ui.update_status(status_message)
+            self.app_ui.update_commands()
         else:
             print(status_message)
 
