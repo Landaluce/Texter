@@ -193,7 +193,6 @@ class Command:
         for _ in range(num):
             gui.hotkey(self.key)
 
-    # @staticmethod
     def _execute_selection_command(self) -> None:
         """
         Handles the execution of a selection command.
