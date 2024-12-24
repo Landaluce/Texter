@@ -2,7 +2,7 @@ import json
 import os
 import sys
 import tkinter as tk
-from src.utils.commandUtils import get_commands
+from src.utils.command_utils import get_commands
 
 
 class TexterUI:

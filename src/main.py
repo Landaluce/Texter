@@ -1,5 +1,5 @@
-from utils.commandUtils import get_commands
-from src.utils.SpeechRecognitionUtils import *
+from utils.command_utils import get_commands
+from src.utils.speech_recognition_utils import *
 
 
 def main():

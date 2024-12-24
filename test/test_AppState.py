@@ -2,7 +2,7 @@ import sys
 import unittest
 from unittest.mock import patch
 
-from src.state.AppState import AppState, CommandType, Command
+from src.state.app_state import AppState, CommandType, Command
 
 
 class TestAppState(unittest.TestCase):

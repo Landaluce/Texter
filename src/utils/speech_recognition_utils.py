@@ -2,11 +2,11 @@ from __future__ import annotations
 import threading  # noqa: F401
 import pyautogui as gui
 import speech_recognition as sr
-from src.commands.TextProcessor import TextProcessor
-from src.utils.ErrorHandler import noalsaerr
-from src.state.AppState import AppState
-from src.ui.TexterUI import TexterUI
-from src.utils.stringUtils import string_to_snake_case, string_to_camel_case, convert_to_spelling
+from src.commands.text_processor import TextProcessor
+from src.utils.error_handler import noalsaerr
+from src.state.app_state import AppState
+from src.ui.texter_ui import TexterUI
+from src.utils.string_utils import string_to_snake_case, string_to_camel_case, convert_to_spelling
 
 text_processor = TextProcessor()
 

@@ -3,10 +3,10 @@ from wave import Error
 import pyautogui as gui
 import speech_recognition as sr
 from src.commands.command_type import CommandType
-from src.utils.textToSpeech import text_to_speech
-from src.utils.stringUtils import string_to_snake_case, string_to_camel_case, numeric_str_to_int, convert_to_spelling
-from src.utils.dateTimeUtils import (get_current_time,get_current_date, month_number_to_name, day_number_to_name,
-                                     get_day_of_week)
+from src.utils.text_to_speech import text_to_speech
+from src.utils.string_utils import string_to_snake_case, string_to_camel_case, numeric_str_to_int, convert_to_spelling
+from src.utils.date_time_utils import (get_current_time, get_current_date, month_number_to_name, day_number_to_name,
+                                       get_day_of_week)
 
 
 class Command:
