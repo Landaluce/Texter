@@ -1,3 +1,5 @@
+from word2number import w2n
+
 def numeric_str_to_int(numeric_str:str) -> int:
     """
     Converts a numeric string to an integer.

@@ -6,7 +6,7 @@ from TextProcessor import TextProcessor
 from ErrorHandler import noalsaerr
 from AppState import AppState
 from TexterUI import TexterUI
-from stringUtils import string_to_snake_case, string_to_camel_case, convert_to_spelling
+from src.utils.stringUtils import string_to_snake_case, string_to_camel_case, convert_to_spelling
 
 text_processor = TextProcessor()
 
