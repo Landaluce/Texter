@@ -225,7 +225,7 @@ class TexterUI:
         def process_commands(commands, type_name):
             lst = []
             for command in commands:
-                temp_dict = command.terminal_commands_to_dict()
+                temp_dict = command.commands_to_dict()
                 temp_json = json.dumps(temp_dict)
                 lst.append(temp_json)
             active_commands[type_name] = lst

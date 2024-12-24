@@ -2,6 +2,8 @@ import subprocess
 import sys
 from src.commands.command import Command
 from src.commands.command_type import CommandType
+from src.commands.programming_language import ProgrammingLanguage
+from src.commands.terminal_type import TerminalType
 
 
 class AppState:
@@ -30,11 +32,11 @@ class AppState:
         self.selection_commands = []
 
         self.programming = True
-        self.programming_language = "python"  # None
+        self.programming_language = ProgrammingLanguage.PYTHON
         self.programming_commands = []
 
         self.terminal = True
-        self.terminal_os = "linux"
+        self.terminal_os = TerminalType.LINUX
         self.terminal_commands = []
 
         self.spelling_commands = None
@@ -101,7 +103,7 @@ class AppState:
                 cmd["key"],
                 cmd.get("num_key", ""),
             )
-            for cmd in self.commands[self.programming_language + "_commands"]
+            for cmd in self.commands[self.programming_language.value + "_commands"]
         ]
         self.print_status()
 
@@ -119,7 +121,7 @@ class AppState:
             Command(
                 cmd.get("name", ""), CommandType.TERMINAL, cmd["key"]
             )  # , cmd.get("num_key", ""))
-            for cmd in self.commands[self.terminal_os + "_commands"]
+            for cmd in self.commands[self.terminal_os.value + "_commands"]
         ]
         self.print_status()
 
@@ -220,20 +222,20 @@ class AppState:
             if text.startswith(command.name):
                 if command.name.startswith("switch to"):
                     language = command.name.split(" ")[-1]
-                    if language == "java":
-                        self.programming_language = "java"
+                    if language == ProgrammingLanguage.JAVA:
+                        self.programming_language = ProgrammingLanguage.JAVA
                         self.load_programming_commands()
-                    elif language == "python":
-                        self.programming_language = "python"
+                    elif language == ProgrammingLanguage.PYTHON:
+                        self.programming_language = ProgrammingLanguage.PYTHON
                         self.load_programming_commands()
-                    elif language == "linux":
-                        self.terminal_os = "linux"
+                    elif language == TerminalType.LINUX:
+                        self.terminal_os = TerminalType.LINUX
                         self.load_terminal_commands()
-                    elif language == "windows":
-                        self.terminal_os = "windows"
+                    elif language == TerminalType.WINDOWS:
+                        self.terminal_os = TerminalType.WINDOWS
                         self.load_terminal_commands()
                 else:
-                    command.execute(text, self)
+                    command.execute(self)
                 return True
         return False
 
@@ -367,7 +369,7 @@ class AppState:
         status_message = f"Typing: {'started' if self.typing_active else 'stopped'}\n"
         status_message += f"mode: {self.mode}\n"
         status_message += (
-            f"{self.programming_language} Programming: On\n"
+            f"{self.programming_language.value} Programming: On\n"
             if self.programming
             else "Programming: Off\n"
         )
