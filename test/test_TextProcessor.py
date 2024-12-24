@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
-from src.TextProcessor import TextProcessor
+from src.commands.TextProcessor import TextProcessor
 
 
 class TestTextProcessor(unittest.TestCase):

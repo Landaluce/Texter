@@ -1,7 +1,8 @@
 import json
+import os
 import sys
 import tkinter as tk
-from src.utils.textToSpeech import get_commands
+from src.utils.commandUtils import get_commands
 
 
 class TexterUI:
@@ -35,15 +36,16 @@ class TexterUI:
         self.commands = None
         self.background_color = "#1f618d"
         self.font_color = "white"
-        self.wakeup_button_image = tk.PhotoImage(file="imgs/play.png")
+        self.imgs_path = f"{os.path.abspath('../src/imgs/')}/"
+        self.wakeup_button_image = tk.PhotoImage(file=f"{self.imgs_path}play.png")
         self.wakeup_button_image.configure(width=25, height=25)
-        self.go_to_sleep_button_image = tk.PhotoImage(file="imgs/pause.png")
+        self.go_to_sleep_button_image = tk.PhotoImage(file=f"{self.imgs_path}pause.png")
         self.go_to_sleep_button_image.configure(width=25, height=25)
-        self.terminate_button_image = tk.PhotoImage(file="imgs/stop.png")
+        self.terminate_button_image = tk.PhotoImage(file=f"{self.imgs_path}stop.png")
         self.terminate_button_image.configure(width=25, height=25)
-        self.collapse_button_image = tk.PhotoImage(file="imgs/collapse.png")
+        self.collapse_button_image = tk.PhotoImage(file=f"{self.imgs_path}collapse.png")
         self.collapse_button_image.configure(width=25, height=25)
-        self.expand_button_image = tk.PhotoImage(file="imgs/expand.png")
+        self.expand_button_image = tk.PhotoImage(file=f"{self.imgs_path}expand.png")
         self.expand_button_image.configure(width=25, height=25)
 
     def init_ui(self, app_state, commands: dict) -> None:

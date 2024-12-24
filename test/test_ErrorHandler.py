@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 import sys
 sys.path.append('/home/alvaro/Desktop/Texter/src/')
-from src.ErrorHandler import noalsaerr, c_error_handler
+from src.utils.ErrorHandler import noalsaerr, c_error_handler
 
 # TODO: fix this
 class TestErrorHandler(unittest.TestCase):
