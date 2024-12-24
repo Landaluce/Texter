@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, Mock, call
 
-from src.commands.CommandClasses import Command, CommandType
+from src.commands.command import Command, CommandType
 
 
 class TestCommandClasses(unittest.TestCase):

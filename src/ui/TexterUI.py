@@ -307,9 +307,10 @@ class TexterUI:
         """
         Thread-safe update to the status_text_box.
         """
-        self.root.after(0, self._update_commands_ui, "")
+        # noinspection PyTypeChecker
+        self.root.after(0, self._update_commands_ui)
 
-    def _update_commands_ui(self, foo: str) -> None:
+    def _update_commands_ui(self) -> None:
         """
         Updates the status_text_box with the latest status message.
         """

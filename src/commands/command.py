@@ -1,37 +1,12 @@
 import subprocess
-from enum import Enum, auto
 from wave import Error
 import pyautogui as gui
 import speech_recognition as sr
+from src.commands.command_type import CommandType
 from src.utils.textToSpeech import text_to_speech
 from src.utils.stringUtils import string_to_snake_case, string_to_camel_case, numeric_str_to_int, convert_to_spelling
 from src.utils.dateTimeUtils import (get_current_time,get_current_date, month_number_to_name, day_number_to_name,
                                      get_day_of_week)
-
-
-class CommandType(Enum):
-    """
-    Enum representing the different types of commands that can be processed.
-
-    Attributes:
-        KEYBOARD (auto): Commands related to keyboard inputs.
-        START_STOP (auto): Commands for starting or stopping typing activity.
-        PROGRAMMING (auto): Commands related to programming actions.
-        INFO (auto): Commands related to informational actions.
-        SELECTION (auto): Commands related to text selection actions.
-        GIT (auto): Commands related to git
-    """
-
-    KEYBOARD = auto()
-    START_STOP = auto()
-    PROGRAMMING = auto()
-    INFO = auto()
-    SELECTION = auto()
-    TERMINAL = auto()
-    SPELLING = auto()
-    GIT = auto()
-    INTERACTIVE = auto()
-    BROWSER = auto()
 
 
 class Command:

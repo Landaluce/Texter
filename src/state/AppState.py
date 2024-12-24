@@ -1,6 +1,7 @@
 import subprocess
 import sys
-from src.commands.CommandClasses import CommandType, Command
+from src.commands.command import Command
+from src.commands.command_type import CommandType
 
 
 class AppState:

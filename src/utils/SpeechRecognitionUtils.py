@@ -3,10 +3,10 @@ import threading  # noqa: F401
 import pyautogui as gui
 import speech_recognition as sr
 from src.commands.TextProcessor import TextProcessor
-from ErrorHandler import noalsaerr
-from state.AppState import AppState
-from ui.TexterUI import TexterUI
-from utils.stringUtils import string_to_snake_case, string_to_camel_case, convert_to_spelling
+from src.utils.ErrorHandler import noalsaerr
+from src.state.AppState import AppState
+from src.ui.TexterUI import TexterUI
+from src.utils.stringUtils import string_to_snake_case, string_to_camel_case, convert_to_spelling
 
 text_processor = TextProcessor()
 
