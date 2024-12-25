@@ -1,9 +1,7 @@
 import subprocess
 import sys
 from src.commands.command import Command
-from src.commands.command_type import CommandType
-from src.commands.programming_language import ProgrammingLanguage
-from src.commands.terminal_type import TerminalType
+from src.utils.constants import CommandType, ProgrammingLanguage, TerminalOS
 
 
 class AppState:
@@ -36,7 +34,7 @@ class AppState:
         self.programming_commands = []
 
         self.terminal = True
-        self.terminal_os = TerminalType.LINUX
+        self.terminal_os = TerminalOS.LINUX
         self.terminal_commands = []
 
         self.spelling_commands = None
@@ -228,11 +226,11 @@ class AppState:
                     elif language == ProgrammingLanguage.PYTHON:
                         self.programming_language = ProgrammingLanguage.PYTHON
                         self.load_programming_commands()
-                    elif language == TerminalType.LINUX:
-                        self.terminal_os = TerminalType.LINUX
+                    elif language == TerminalOS.LINUX:
+                        self.terminal_os = TerminalOS.LINUX
                         self.load_terminal_commands()
-                    elif language == TerminalType.WINDOWS:
-                        self.terminal_os = TerminalType.WINDOWS
+                    elif language == TerminalOS.WINDOWS:
+                        self.terminal_os = TerminalOS.WINDOWS
                         self.load_terminal_commands()
                 else:
                     command.execute(self)
