@@ -26,5 +26,8 @@ class ProgrammingLanguage(Enum):
     JAVA = "java"
 
 class TerminalOS(Enum):
+    """
+    Enum representing the different OS that can be processed.
+    """
     LINUX = "linux"
     WINDOWS = "windows"
