@@ -51,7 +51,7 @@ class Command:
         """
         gui.write(self.key)
 
-    def press_keys(*keys):
+    def press_keys(*keys) -> None:
         gui.hotkey(*keys)
 
     def execute(self, app_state) -> None:
@@ -221,27 +221,6 @@ class Command:
         else:
             gui.write(self.key)
 
-    def _execute_java_command(self):
-        """Handles Java-specific commands."""
-        if self.key == "print statement":
-            gui.write("System.out.println();")
-            self.press_keys("left")
-            self.press_keys("left")
-        elif self.key.startswith("create class"):
-            self._create_java_class()
-        elif (
-                self.key.startswith("create method")
-                or self.key.startswith("create public method")
-                or self.key.startswith("create function")
-                or self.key.startswith("create public function")
-        ):
-            self._create_java_public_method()
-        elif (self.key.startswith("create private method") or
-              self.key.startswith("create private function")):
-            self._create_java_private_method()
-        else:
-            gui.write(self.key)
-
     def _create_python_class(self):
         """Generates a Python class structure."""
         class_name = self.name[len(self.key):]
@@ -274,7 +253,6 @@ class Command:
         if len(function_name):
             gui.write(function_name)
 
-
     def _create_new_python_script(self):
         """Generates a Python script structure."""
         gui.write("main():")
@@ -283,6 +261,28 @@ class Command:
         gui.write('if __name__ == "__main__":')
         self.press_keys("enter")
         gui.write("main")
+
+
+    def _execute_java_command(self):
+        """Handles Java-specific commands."""
+        if self.key == "print statement":
+            gui.write("System.out.println();")
+            self.press_keys("left")
+            self.press_keys("left")
+        elif self.key.startswith("create class"):
+            self._create_java_class()
+        elif (
+                self.key.startswith("create method")
+                or self.key.startswith("create public method")
+                or self.key.startswith("create function")
+                or self.key.startswith("create public function")
+        ):
+            self._create_java_public_method()
+        elif (self.key.startswith("create private method") or
+              self.key.startswith("create private function")):
+            self._create_java_private_method()
+        else:
+            gui.write(self.key)
 
     def _create_java_class(self):
         """Generates a Java class structure."""
