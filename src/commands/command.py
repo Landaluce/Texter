@@ -51,12 +51,6 @@ class Command:
         """
         gui.write(self.key)
 
-    def press_keys(*keys) -> None:
-        try:
-            gui.hotkey(*keys)
-        except TypeError:
-            pass
-
     def execute(self, app_state) -> None:
         """
         Executes the command based on its type.
@@ -151,7 +145,7 @@ class Command:
                     print(e)
                     num = 1
         for _ in range(num):
-            self.press_keys(self.key)
+            gui.hotkey(self.key)
 
     def _execute_selection_command(self) -> None:
         """
@@ -161,12 +155,12 @@ class Command:
         copying, or pasting based on the recognized command.
         """
         commands = {
-            "select line": lambda: self.press_keys("home", "shift", "end"),
-            "select all": lambda: self.press_keys("ctrl", "a"),
-            "delete line": lambda: self.press_keys("home", "shift", "end", "backspace"),
-            "delete all": lambda: self.press_keys("ctrl", "a", "backspace"),
-            "copy": lambda: self.press_keys("ctrl", "c"),
-            "paste": lambda: self.press_keys("ctrl", "v"),
+            "select line": lambda: gui.hotkey("home", "shift", "end"),
+            "select all": lambda: gui.hotkey("ctrl", "a"),
+            "delete line": lambda: gui.hotkey("home", "shift", "end", "backspace"),
+            "delete all": lambda: gui.hotkey("ctrl", "a", "backspace"),
+            "copy": lambda: gui.hotkey("ctrl", "c"),
+            "paste": lambda: gui.hotkey("ctrl", "v"),
         }
 
         # Execute the command if it exists in the dictionary
@@ -206,7 +200,7 @@ class Command:
         """Handles Python-specific commands."""
         if self.key == "print statement":
             gui.write("print()")
-            self.press_keys("left")
+            gui.hotkey("left")
         elif self.key.startswith("create class"):
             self._create_python_class()
         elif self.key.startswith("create method"):
@@ -229,11 +223,11 @@ class Command:
         class_name = self.name[len(self.key):]
         class_name = string_to_camel_case(class_name)
         gui.write("class :")
-        self.press_keys("enter")
-        self.press_keys("tab")
+        gui.hotkey("enter")
+        gui.hotkey("tab")
         gui.write("def __init__(self):")
-        self.press_keys("up")
-        self.press_keys("left")
+        gui.hotkey("up")
+        gui.hotkey("left")
         if len(class_name):
             gui.write(class_name)
 
@@ -243,7 +237,7 @@ class Command:
         method_name = string_to_snake_case(method_name)
         gui.write("def (self):")
         for _ in range(0, 7):
-            self.press_keys("left")
+            gui.hotkey("left")
         if len(method_name):
             gui.write(method_name)
 
@@ -252,17 +246,18 @@ class Command:
         function_name = string_to_snake_case(self.name[len(self.key):].strip())
         gui.write("def :()")
         for _ in range(0, 3):
-            self.press_keys("left")
+            gui.hotkey("left")
         if len(function_name):
             gui.write(function_name)
 
-    def _create_new_python_script(self):
+    @staticmethod
+    def _create_new_python_script():
         """Generates a Python script structure."""
         gui.write("main():")
-        self.press_keys("enter")
-        self.press_keys("enter")
+        gui.hotkey("enter")
+        gui.hotkey("enter")
         gui.write('if __name__ == "__main__":')
-        self.press_keys("enter")
+        gui.hotkey("enter")
         gui.write("main")
 
 
@@ -270,8 +265,8 @@ class Command:
         """Handles Java-specific commands."""
         if self.key == "print statement":
             gui.write("System.out.println();")
-            self.press_keys("left")
-            self.press_keys("left")
+            gui.hotkey("left")
+            gui.hotkey("left")
         elif self.key.startswith("create class"):
             self._create_java_class()
         elif (
@@ -292,11 +287,11 @@ class Command:
         class_name = self.name[len(self.key):]
         class_name = string_to_camel_case(class_name)
         gui.write("public class  {")
-        self.press_keys("enter")
-        self.press_keys("up")
-        self.press_keys("end")
-        self.press_keys("left")
-        self.press_keys("left")
+        gui.hotkey("enter")
+        gui.hotkey("up")
+        gui.hotkey("end")
+        gui.hotkey("left")
+        gui.hotkey("left")
         if len(class_name):
             gui.write(class_name)
 
@@ -311,7 +306,7 @@ class Command:
         method_name = string_to_snake_case(method_name)
         gui.write(access_level + " void () {}")
         for _ in range(0, 5):
-            self.press_keys("left")
+            gui.hotkey("left")
         if len(method_name):
             gui.write(method_name)
 
@@ -368,35 +363,35 @@ class Command:
     def execute_browser_command(self, text: str) -> None:
         if self.name.startswith("browser"):
             if "right" in text:
-                self.press_keys("Ctrl", "Tab")
+                gui.hotkey("Ctrl", "Tab")
             elif "left" in text or "lyft" in text:
-                self.press_keys("Ctrl", "Shift", "Tab")
+                gui.hotkey("Ctrl", "Shift", "Tab")
             else:
                 try:
                     num_str = text.split(" ")[1].strip()
                     if not num_str.isdigit():
                         num_str = str(numeric_str_to_int(num_str))
-                    self.press_keys("ctrl", num_str)
+                    gui.hotkey("ctrl", num_str)
                 except IndexError:
                     print(f"Error: Unable to parse tab number from text '{text}'.")
                 except ValueError as e:
                     print(f"Error during numeric conversion: {e}")
         elif self.name.startswith("new"):
             if "chrome window" in text or "firefox" in text:
-                self.press_keys("Ctrl", "n")
+                gui.hotkey("Ctrl", "n")
             elif "incognito" in text:
-                self.press_keys("Ctrl", "n")
+                gui.hotkey("Ctrl", "n")
         elif text.startswith("focus chrome"):
             self.focus_browser_window()
         elif text.startswith("focus firefox"):
             self.focus_browser_window("Firefox")
 
         elif text.startswith("go back"):
-            self.press_keys('alt', 'left')
+            gui.hotkey('alt', 'left')
         elif text.startswith("go forward"):
-            self.press_keys('alt', 'right')
+            gui.hotkey('alt', 'right')
         elif text.startswith("refresh page"):
-            self.press_keys('ctrl', 'r')
+            gui.hotkey('ctrl', 'r')
         elif text.startswith("stop refreshing"):
             gui.press('esc')
         elif text.startswith("scroll down"):
@@ -404,44 +399,44 @@ class Command:
         elif text.startswith("scroll up"):
             gui.scroll(100)
         elif text.startswith("scroll to top"):
-            self.press_keys('ctrl', 'home')
+            gui.hotkey('ctrl', 'home')
         elif text.startswith("scroll to bottom"):
-            self.press_keys('ctrl', 'end')
+            gui.hotkey('ctrl', 'end')
         elif text.startswith("new tab"):
-            self.press_keys('ctrl', 't')
+            gui.hotkey('ctrl', 't')
         elif text.startswith("close tab"):
-            self.press_keys('ctrl', 'w')
+            gui.hotkey('ctrl', 'w')
         elif text.startswith("next tab"):
-            self.press_keys('ctrl', 'tab')
+            gui.hotkey('ctrl', 'tab')
         elif text.startswith("previous tab"):
-            self.press_keys('ctrl', 'shift', 'tab')
+            gui.hotkey('ctrl', 'shift', 'tab')
         elif text.startswith("reopen closed tab"):
-            self.press_keys('ctrl', 'shift', 't')
+            gui.hotkey('ctrl', 'shift', 't')
         elif text.startswith("close window"):
-            self.press_keys('alt', 'f4')
+            gui.hotkey('alt', 'f4')
         elif text.startswith("minimize window"):
-            self.press_keys('win', 'down')
+            gui.hotkey('win', 'down')
         elif text.startswith("maximize window"):
-            self.press_keys('win', 'up')
+            gui.hotkey('win', 'up')
         elif text.startswith("open downloads"):
-            self.press_keys('ctrl', 'j')
+            gui.hotkey('ctrl', 'j')
         elif text.startswith("open history"):
-            self.press_keys('ctrl', 'h')
+            gui.hotkey('ctrl', 'h')
         elif text.startswith("open settings"):
-            self.press_keys('alt', 'e')
+            gui.hotkey('alt', 'e')
             gui.press('s')
         elif text.startswith("zoom in"):
-            self.press_keys('ctrl', '+')
+            gui.hotkey('ctrl', '+')
         elif text.startswith("zoom out"):
-            self.press_keys('ctrl', '-')
+            gui.hotkey('ctrl', '-')
         elif text.startswith("reset zoom"):
-            self.press_keys('ctrl', '0')
+            gui.hotkey('ctrl', '0')
         elif text.startswith("bookmark page"):
-            self.press_keys('ctrl', 'd')
+            gui.hotkey('ctrl', 'd')
         elif text.startswith("print page"):
-            self.press_keys('ctrl', 'p')
+            gui.hotkey('ctrl', 'p')
         elif text.startswith("save page"):
-            self.press_keys('ctrl', 's')
+            gui.hotkey('ctrl', 's')
         else:
             gui.write(text)
 
