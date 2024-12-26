@@ -292,7 +292,7 @@ class AppState:
         """
         for command in self.info_commands:
             if text.startswith(command.name):
-                command.execute(text, self)
+                command.execute(self)
                 return True
         return False
 
@@ -308,7 +308,7 @@ class AppState:
         """
         for command in self.selection_commands:
             if text.startswith(command.name):
-                command.execute(text, self)
+                command.execute(self)
                 return True
         return False
 
