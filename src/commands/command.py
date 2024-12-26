@@ -52,7 +52,10 @@ class Command:
         gui.write(self.key)
 
     def press_keys(*keys) -> None:
-        gui.hotkey(*keys)
+        try:
+            gui.hotkey(*keys)
+        except TypeError:
+            pass
 
     def execute(self, app_state) -> None:
         """
