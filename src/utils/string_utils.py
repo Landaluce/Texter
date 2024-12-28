@@ -1,4 +1,5 @@
 from word2number import w2n
+import speech_recognition as sr
 
 def numeric_str_to_int(numeric_str:str) -> int:
     """
@@ -13,7 +14,6 @@ def numeric_str_to_int(numeric_str:str) -> int:
     numeric_str = numeric_str.split(" ")
     nums = [str(w2n.word_to_num(w)) for w in numeric_str]
     return int("".join(nums))
-
 
 def convert_to_spelling(text: str, spelling_commands: list) -> str:
     """
@@ -36,7 +36,6 @@ def convert_to_spelling(text: str, spelling_commands: list) -> str:
                 break
     return "".join(output)
 
-
 def string_to_camel_case(input_str: str, lower: bool = False) -> str:
     """Capitalizes the first letter of each word in a string.
 
@@ -54,7 +53,6 @@ def string_to_camel_case(input_str: str, lower: bool = False) -> str:
 
     return result
 
-
 def string_to_snake_case(input_str:str) -> str:
     """
     Convert a given string to snake_case format.
@@ -66,3 +64,23 @@ def string_to_snake_case(input_str:str) -> str:
     - str: The converted string in snake_case format, where spaces are replaced by underscores.
     """
     return input_str.replace(" ", "_")
+
+def extract_number_from_string(text):
+    """
+    Extracts and returns a numeric value from the command text.
+
+    Parameters:
+    - text (str): The command text from which to extract the number.
+
+    Returns:
+    - int: The extracted numeric value, or 1 if extraction fails due to parsing errors.
+    """
+    try:
+        if ":" in text:
+            return int(text.split(":")[0])
+        elif text.isdigit():
+            return int(text)
+        else:
+            return numeric_str_to_int(text)
+    except (ValueError, sr.UnknownValueError):
+        return 1

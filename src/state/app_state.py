@@ -1,6 +1,6 @@
 import subprocess
 import sys
-from src.commands.command import Command
+from src.commands.command_manager import CommandManager
 from src.utils.constants import CommandType, ProgrammingLanguage, TerminalOS
 
 
@@ -58,22 +58,22 @@ class AppState:
         for i in commands["keyboard_commands"]:
             if i["command_type"] == "keyboard":
                 self.keyboard_commands.append(
-                    Command(i["name"], CommandType.KEYBOARD, i["key"], i["num_key"])
+                    CommandManager(i["name"], CommandType.KEYBOARD, i["key"], i["num_key"])
                 )
             elif i["command_type"] == "start_stop":
                 self.keyboard_commands.append(
-                    Command(i["name"], CommandType.START_STOP)
+                    CommandManager(i["name"], CommandType.START_STOP)
                 )
         try:
             self.info_commands = [
-                Command(cmd["name"], CommandType.INFO, cmd["key"])
+                CommandManager(cmd["name"], CommandType.INFO, cmd["key"])
                 for cmd in commands["info_commands"]
             ]
         except KeyError:
             print("Could not find info commands")
 
         self.selection_commands = [
-            Command(cmd["name"], CommandType.SELECTION)
+            CommandManager(cmd["name"], CommandType.SELECTION)
             for cmd in commands["selection_commands"]
         ]
 
@@ -95,7 +95,7 @@ class AppState:
             return
 
         self.programming_commands = [
-            Command(
+            CommandManager(
                 cmd.get("name", ""),
                 CommandType.PROGRAMMING,
                 cmd["key"],
@@ -116,7 +116,7 @@ class AppState:
             return
 
         self.terminal_commands = [
-            Command(
+            CommandManager(
                 cmd.get("name", ""), CommandType.TERMINAL, cmd["key"]
             )  # , cmd.get("num_key", ""))
             for cmd in self.commands[self.terminal_os.value + "_commands"]
@@ -128,7 +128,7 @@ class AppState:
         Loads spelling commands the commands file.
         """
         self.spelling_commands = [
-            Command(
+            CommandManager(
                 cmd.get("name", ""),
                 CommandType.SPELLING,
                 cmd["key"],
@@ -143,7 +143,7 @@ class AppState:
         Loads spelling commands the commands file.
         """
         self.git_commands = [
-            Command(
+            CommandManager(
                 cmd.get("name", ""),
                 CommandType.SPELLING,
                 cmd["key"],
@@ -158,7 +158,7 @@ class AppState:
         Loads spelling commands the commands file.
         """
         self.interactive_commands = [
-            Command(
+            CommandManager(
                 cmd.get("name"),
                 CommandType.INTERACTIVE,
                 cmd["key"]
@@ -172,7 +172,7 @@ class AppState:
                 Loads spelling commands the commands file.
                 """
         self.browser_commands = [
-            Command(
+            CommandManager(
                 cmd.get("name"),
                 CommandType.BROWSER,
                 cmd["key"]
@@ -240,7 +240,7 @@ class AppState:
     def _handle_git_command(self, text: str) -> bool:
         for command in self.git_commands:
             if text.startswith(command.name):
-                command.execute_git_command()
+                command.git_command_executor.execute()
                 return True
         return False
 
@@ -258,7 +258,7 @@ class AppState:
             return False
         for command in self.programming_commands:
             if text.startswith(command.name):
-                command.execute_programming_command(self)
+                command.programming_command_executor.execute(self)
                 return True
         return False
 
@@ -276,7 +276,7 @@ class AppState:
             return False
         for command in self.terminal_commands:
             if text.startswith(command.name):
-                command.execute_terminal_command(self)
+                command.terminal_command_executor.execute(self)
                 return True
         return False
 
@@ -340,7 +340,7 @@ class AppState:
         """
         for command in self.interactive_commands:
             if text.startswith(command.name):
-                command.execute_interactive_command()
+                command.terminal_command_executor.execute()
                 return True
         return False
 
@@ -356,7 +356,7 @@ class AppState:
         """
         for command in self.browser_commands:
             if text.startswith(command.name):
-                command.execute_browser_command(text)
+                command.browser_command_executor.execute()
                 return True
         return False
 
@@ -386,6 +386,7 @@ class AppState:
         else:
             print(status_message)
 
+    # TODO: fix to enable termination and maybe other commands
     def switch_mode(self):
         """Toggle between dictation and spelling modes."""
         if self.mode == "dictation":

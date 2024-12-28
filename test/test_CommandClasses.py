@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, Mock, call
 
-from src.commands.command import Command, CommandType
+from src.commands.command_manager import CommandManager, CommandType
 
 
 class TestCommandClasses(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestCommandClasses(unittest.TestCase):
         self.mock_app_state.programming_language = "python"
         self.mock_app_state.terminal_os = "linux"
 
-        self.command = Command(
+        self.command = CommandManager(
             name="print statement",
             command_type=CommandType.PROGRAMMING,
             key="print statement",

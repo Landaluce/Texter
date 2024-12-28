@@ -2,7 +2,7 @@ import sys
 import unittest
 from unittest.mock import patch
 
-from src.state.app_state import AppState, CommandType, Command
+from src.state.app_state import AppState, CommandType, CommandManager
 
 
 class TestAppState(unittest.TestCase):
@@ -52,7 +52,7 @@ class TestAppState(unittest.TestCase):
     def test_handle_keyboard_command(self, mock_write):
         """Test handling of keyboard commands."""
         self.app_state.keyboard_commands = [
-            Command("test_keyboard", CommandType.KEYBOARD, "k", "test_keyboard")
+            CommandManager("test_keyboard", CommandType.KEYBOARD, "k", "test_keyboard")
         ]
         handled = self.app_state._handle_keyboard_command("test_keyboard")
 
@@ -63,7 +63,7 @@ class TestAppState(unittest.TestCase):
     def test_handle_programming_command(self, mock_write):
         """Test handling of programming commands."""
         self.app_state.programming_commands = [
-            Command("print statement", CommandType.PROGRAMMING, "==print()==")
+            CommandManager("print statement", CommandType.PROGRAMMING, "==print()==")
         ]
         handled = self.app_state._handle_programming_command("print statement")
         self.assertTrue(handled)
@@ -73,7 +73,7 @@ class TestAppState(unittest.TestCase):
     @patch("pyautogui.write")
     def test_handle_terminal_command(self, mock_write):
         """Test handling of terminal commands."""
-        self.app_state.terminal_commands = [Command("ls", CommandType.TERMINAL, "ls")]
+        self.app_state.terminal_commands = [CommandManager("ls", CommandType.TERMINAL, "ls")]
         handled = self.app_state._handle_terminal_command("ls")
         self.assertTrue(handled)
         mock_write.assert_called_with("ls")
@@ -81,7 +81,7 @@ class TestAppState(unittest.TestCase):
     @patch("pyautogui.write")
     def test_handle_spelling_command(self, mock_write):
         """Test handling of spelling commands."""
-        self.app_state.spelling_commands = [Command("alpha", CommandType.SPELLING, "a")]
+        self.app_state.spelling_commands = [CommandManager("alpha", CommandType.SPELLING, "a")]
         handled = self.app_state._handle_spelling_command("alpha")
         self.assertTrue(handled)
         mock_write.assert_called_with("a")
