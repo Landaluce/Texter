@@ -31,3 +31,10 @@ class TerminalOS(Enum):
     """
     LINUX = "linux"
     WINDOWS = "windows"
+
+class Mode(Enum):
+    """
+    Enum representing the different modes that can be processed.
+    """
+    DICTATION = "dictation"
+    SPELLING = "spelling"

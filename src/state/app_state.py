@@ -1,7 +1,7 @@
 import sys
 import subprocess
 from src.commands.command_manager import CommandManager
-from src.utils.constants import CommandType, ProgrammingLanguage, TerminalOS
+from src.utils.constants import CommandType, ProgrammingLanguage, TerminalOS, Mode
 
 
 class AppState:
@@ -20,7 +20,7 @@ class AppState:
         """
         Initializes a new instance of the AppState class with default settings.
         """
-        self.mode = "dictation"
+        self.mode = Mode.DICTATION
         self.spelling = False
         self.typing_active = True
         self.terminate = False
@@ -388,13 +388,13 @@ class AppState:
         else:
             print(status_message)
 
-    # TODO: fix to enable termination and maybe other commands
+    # TODO: fix to enable termination and maybe other commands in spelling mode
     def switch_mode(self) -> None:
         """Toggle between dictation and spelling modes."""
-        if self.mode == "dictation":
-            self.mode = "spelling"
-        elif self.mode == "spelling":
-            self.mode = "dictation"
+        if self.mode == Mode.DICTATION:
+            self.mode = Mode.SPELLING
+        elif self.mode == Mode.SPELLING:
+            self.mode = Mode.DICTATION
         self.print_status()
 
     @staticmethod
