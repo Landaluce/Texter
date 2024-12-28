@@ -1,5 +1,5 @@
-import subprocess
 import sys
+import subprocess
 from src.commands.command_manager import CommandManager
 from src.utils.constants import CommandType, ProgrammingLanguage, TerminalOS
 
@@ -13,6 +13,7 @@ class AppState:
         typing_active (bool): Indicates whether typing is currently active.
         programming_language (str): The currently selected programming language.
         programming_commands (list): A list of commands associated with the selected programming language.
+        ...
     """
 
     def __init__(self, app_ui=None):
@@ -43,14 +44,12 @@ class AppState:
         self.capitalize = False
 
         self.git_commands = []
-
         self.interactive_commands = []
-
         self.browser_commands = []
 
         self.app_ui = app_ui
 
-    def load_commands(self, commands):
+    def load_commands(self, commands: dict) -> None:
         """
         Loads all command from the given dictionary
         """
@@ -84,12 +83,9 @@ class AppState:
         self.load_interactive_commands()
         self.load_browser_commands()
 
-    def load_programming_commands(self):
+    def load_programming_commands(self) -> None:
         """
         Loads programming commands for the specified language from the commands file and sets the current language.
-
-        Returns:
-        - None: If programming in False
         """
         if not self.programming:
             return
@@ -108,9 +104,6 @@ class AppState:
     def load_terminal_commands(self) -> None:
         """
         Loads terminal commands for the specified operating system from the commands file and sets the current os.
-
-        Returns:
-        - None: If terminal in False
         """
         if not self.terminal:
             return
@@ -125,7 +118,7 @@ class AppState:
 
     def load_spelling_commands(self) -> None:
         """
-        Loads spelling commands the commands file.
+        Loads spelling commands from the commands file.
         """
         self.spelling_commands = [
             CommandManager(
@@ -140,7 +133,7 @@ class AppState:
 
     def load_git_commands(self) -> None:
         """
-        Loads spelling commands the commands file.
+        Loads spelling commands from the commands file.
         """
         self.git_commands = [
             CommandManager(
@@ -155,7 +148,7 @@ class AppState:
 
     def load_interactive_commands(self) -> None:
         """
-        Loads spelling commands the commands file.
+        Loads spelling commands from the commands file.
         """
         self.interactive_commands = [
             CommandManager(
@@ -169,8 +162,8 @@ class AppState:
 
     def load_browser_commands(self) -> None:
         """
-                Loads spelling commands the commands file.
-                """
+        Loads spelling commands from the commands file.
+        """
         self.browser_commands = [
             CommandManager(
                 cmd.get("name"),
@@ -180,7 +173,7 @@ class AppState:
             for cmd in self.commands["browser_commands"]
         ]
 
-    def handle_command(self, text: str):
+    def handle_command(self, text: str) -> bool:
         """
         Processes a given text command by checking it against different command types.
 
@@ -207,7 +200,7 @@ class AppState:
                 return True
         return False
 
-    def _handle_keyboard_command(self, text: str):
+    def _handle_keyboard_command(self, text: str) -> bool:
         """
         Handles a keyboard command if the text matches any of the available keyboard commands.
 
@@ -238,6 +231,15 @@ class AppState:
         return False
 
     def _handle_git_command(self, text: str) -> bool:
+        """
+        Handles a git command if the text matches any of the available git commands.
+
+        Parameters:
+            text (str): The command text to process.
+
+        Returns:
+            bool: True if a programming command was handled, False otherwise.
+        """
         for command in self.git_commands:
             if text.startswith(command.name):
                 command.git_command_executor.execute()
@@ -280,7 +282,7 @@ class AppState:
                 return True
         return False
 
-    def _handle_info_command(self, text: str):
+    def _handle_info_command(self, text: str) -> bool:
         """
         Handles an info command if the text matches any of the available info commands.
 
@@ -360,7 +362,7 @@ class AppState:
                 return True
         return False
 
-    def print_status(self):
+    def print_status(self) -> None:
         """
         Prints the current status of typing activity, mode, terminal and programming language.
         """
@@ -387,7 +389,7 @@ class AppState:
             print(status_message)
 
     # TODO: fix to enable termination and maybe other commands
-    def switch_mode(self):
+    def switch_mode(self) -> None:
         """Toggle between dictation and spelling modes."""
         if self.mode == "dictation":
             self.mode = "spelling"
@@ -397,5 +399,6 @@ class AppState:
 
     @staticmethod
     def restart_script() -> None:
+        """Restart the currently running script."""
         subprocess.Popen([sys.executable, sys.argv[0]])
         sys.exit()

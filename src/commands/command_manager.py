@@ -37,7 +37,7 @@ class CommandManager:
         self.interactive_command_executor = InteractiveCommandExecutor(self.name)
         self.browser_command_executor = BrowserCommandExecutor(self.name)
 
-    def commands_to_dict(self, include_num_key=True):
+    def commands_to_dict(self, include_num_key: bool=True) -> dict:
         command_dict = {
             "name": self.name,
             "command_type": self.command_type.name,

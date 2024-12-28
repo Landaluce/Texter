@@ -57,7 +57,7 @@ class ProgrammingCommandExecutor:
         else:
             gui.write(self.key)
 
-    def _create_python_class(self):
+    def _create_python_class(self) -> None:
         """Generates a Python class structure."""
         class_name = self.key[len("create class"):].strip()  # Extract class name
         class_name = string_to_camel_case(class_name)
@@ -70,7 +70,7 @@ class ProgrammingCommandExecutor:
         if len(class_name):
             gui.write(class_name)
 
-    def _create_python_method(self):
+    def _create_python_method(self) -> None:
         """Generates a Python method structure."""
         method_name = self.key[len("create method"):].strip()  # Extract method name
         method_name = string_to_snake_case(method_name)
@@ -80,7 +80,7 @@ class ProgrammingCommandExecutor:
         if len(method_name):
             gui.write(method_name)
 
-    def _create_python_function(self):
+    def _create_python_function(self) -> None:
         """Generates a Python function structure."""
         function_name = self.key[len("create function"):].strip()  # Extract function name
         function_name = string_to_snake_case(function_name)
@@ -91,7 +91,7 @@ class ProgrammingCommandExecutor:
             gui.write(function_name)
 
     @staticmethod
-    def _create_new_python_script():
+    def _create_new_python_script() -> None:
         """Generates a Python script structure."""
         gui.write("main():")
         gui.hotkey("enter")
@@ -100,7 +100,7 @@ class ProgrammingCommandExecutor:
         gui.hotkey("enter")
         gui.write("main")
 
-    def _execute_java_command(self):
+    def _execute_java_command(self) -> None:
         """Handles Java-specific commands."""
         if self.key == "print statement":
             gui.write("System.out.println();")
@@ -123,7 +123,7 @@ class ProgrammingCommandExecutor:
         else:
             gui.write(self.key)
 
-    def _create_java_class(self):
+    def _create_java_class(self) -> None:
         """Generates a Java class structure."""
         class_name = self.key[len("create class"):].strip()  # Extract class name
         class_name = string_to_camel_case(class_name)
@@ -142,7 +142,7 @@ class ProgrammingCommandExecutor:
     def _create_java_private_method(self) -> None:
         self._create_java_method("private")
 
-    def _create_java_method(self, access_level) -> None:
+    def _create_java_method(self, access_level: str) -> None:
         method_name = self.key[len("create " + access_level + " "):].strip()  # Extract method name
         method_name = string_to_snake_case(method_name)
         gui.write(access_level + " void () {}")
@@ -154,8 +154,8 @@ class ProgrammingCommandExecutor:
 
 class KeyboardCommandExecutor:
     """
-        Represents a keyboard command.
-        """
+    Represents a keyboard command.
+    """
 
     def __init__(self, key: str, name, num_key: str = None):
         """
@@ -231,29 +231,29 @@ class SwitchCommandExecutor:
 
 class InfoCommandExecutor:
 
-    def __init__(self, key):
+    def __init__(self, key: str):
         self.key = key
 
-    def execute(self):
+    def execute(self) -> None:
         gui.write(self.key)
 
 
 class GitCommandExecutor:
 
-    def __init__(self, key):
+    def __init__(self, key: str):
         self.key = key
 
-    def execute(self):
+    def execute(self) -> None:
         gui.write(self.key)
 
 
 class TerminalCommandExecutor:
 
-    def __init__(self, key, name):
+    def __init__(self, key: str, name: str):
         self.key = key
         self.name = name
 
-    def execute(self, app_state):
+    def execute(self, app_state) -> None:
         if app_state.terminal_os == "linux":
             if self.name.startswith("go to"):
                 gui.write(self.key)
@@ -264,10 +264,10 @@ class TerminalCommandExecutor:
 
 class SelectionCommandExecutor:
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
-    def execute(self):
+    def execute(self) -> None:
         """
         Handles the execution of a selection command.
 
@@ -293,11 +293,11 @@ class SelectionCommandExecutor:
 
 class SpellingCommandExecutor:
 
-    def __init__(self, key, name):
+    def __init__(self, key: str, name: str):
         self.key = key
         self.name = name
 
-    def execute(self, app_state):
+    def execute(self, app_state) -> None:
         gui.write(self.key)
         spelling_output = convert_to_spelling(self.name, app_state.spelling_commands)
         if spelling_output:
@@ -308,10 +308,10 @@ class SpellingCommandExecutor:
 
 class InteractiveCommandExecutor:
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
-    def execute(self):
+    def execute(self) -> None:
         if self.name.startswith("what time is it") or self.name.startswith("what's the time"):
             current_time = get_current_time()
             text_to_speech("it's " + current_time)
@@ -334,10 +334,10 @@ class InteractiveCommandExecutor:
 
 class BrowserCommandExecutor:
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
-    def execute(self):
+    def execute(self) -> None:
         if self.name.startswith("browser"):
             if "right" in self.name:
                 gui.hotkey("Ctrl", "Tab")
@@ -418,7 +418,7 @@ class BrowserCommandExecutor:
             gui.write(self.name)
 
     @staticmethod
-    def start_browser(browser="chrome", url=None):
+    def start_browser(browser="chrome", url=None) -> None:
         """
             Starts Chrome or Firefox browser. Optionally opens a specific URL.
 
@@ -447,7 +447,7 @@ class BrowserCommandExecutor:
         except Exception as e:
             print(f"An error occurred: {e}")
 
-    def focus_browser_window(self, browser="Chrome"):
+    def focus_browser_window(self, browser="Chrome") -> None:
         try:
             # Search for the browser window
             result = subprocess.run(

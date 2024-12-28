@@ -65,7 +65,7 @@ def string_to_snake_case(input_str:str) -> str:
     """
     return input_str.replace(" ", "_")
 
-def extract_number_from_string(text):
+def extract_number_from_string(text: str) -> int:
     """
     Extracts and returns a numeric value from the command text.
 
