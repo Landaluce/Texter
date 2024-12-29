@@ -388,7 +388,6 @@ class AppState:
         else:
             print(status_message)
 
-    # TODO: fix to enable termination and maybe other commands in spelling mode
     def switch_mode(self) -> None:
         """Toggle between dictation and spelling modes."""
         if self.mode == Mode.DICTATION:

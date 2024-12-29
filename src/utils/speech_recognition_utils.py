@@ -93,7 +93,8 @@ def live_speech_interpreter(
                     app_state.print_status()
                     continue
 
-                # Handle spelling mode
+                # Handle spelling
+                # TODO: fix to enable termination and maybe other commands in spelling mode
                 if app_state.mode == "spelling":
                     spelling_output = convert_to_spelling(
                         text, app_state.spelling_commands
