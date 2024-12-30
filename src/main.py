@@ -4,11 +4,10 @@ from src.utils.speech_recognition_utils import *
 
 def main():
     """
-        Initializes the application app_state and starts the live speech interpreter.
-    __init__
-        This function sets up the application by creating an instance of `AppState`, loading
-        the necessary commands, and initializing the speech recognizer. It then
-        begins the live speech interpretation process, which listens for and handles voice commands.
+    Initializes the application app_state and starts the live speech interpreter.
+    This function sets up the application by creating an instance of `AppState`, loading
+    the necessary commands, and initializing the speech recognizer. It then
+    begins the live speech interpretation process, which listens for and handles voice commands.
     """
     command_files_directory = "speech_commands"
 
