@@ -154,7 +154,7 @@ class ProgrammingCommandExecutor:
 
 class KeyboardCommandExecutor:
     """
-    Represents a keyboard command.
+    Represents a command that can be executed to generate keyboard code.
     """
 
     def __init__(self, key: str, name, num_key: str = None):
