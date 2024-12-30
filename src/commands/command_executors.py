@@ -215,8 +215,8 @@ class SwitchCommandExecutor:
             app_state (AppState): The current application state.
         """
         command_map = {
-            "go to sleep": lambda: setattr(app_state, "typing_active", False),
-            "wake up": lambda: setattr(app_state, "typing_active", True),
+            "go to sleep": app_state.switch_typing,  # lambda: setattr(app_state, "typing_active", False),
+            "wake up": app_state.switch_typing,  # lambda: setattr(app_state, "typing_active", True),
             "refresh texter": app_state.restart_script,
             "programming on": lambda: setattr(app_state, "programming", True),
             "programming off": lambda: setattr(app_state, "programming", False),

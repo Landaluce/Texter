@@ -367,14 +367,19 @@ class AppState:
         Prints the current status of typing activity, mode, terminal and programming language.
         """
         status_message = f"Typing: {'started' if self.typing_active else 'stopped'}\n"
-        status_message += f"mode: {self.mode}\n"
+        status_message += f"Mode: {self.mode.value}\n"
+        programming_status = "Programming: Off |"
+        if self.programming:
+            programming_status = "Programming: On | "
+        programming_status += f"{self.programming_language.value.capitalize()}\n"
+        status_message += programming_status
+        # status_message += (
+        #     f"Programming: On | {self.programming_language.value.capitalize()}\n"
+        #     if self.programming
+        #     else "Programming: Off\n"
+        # )
         status_message += (
-            f"{self.programming_language.value} Programming: On\n"
-            if self.programming
-            else "Programming: Off\n"
-        )
-        status_message += (
-            f"{self.terminal_os} Terminal: On\n" if self.terminal else "Terminal: Off\n"
+            f"Terminal: On | {self.terminal_os.value}\n" if self.terminal else "Terminal: Off\n"
         )
         status_message += (
             f"Punctuation: On  " if self.punctuation else "Punctuation: Off "
@@ -394,6 +399,14 @@ class AppState:
             self.mode = Mode.SPELLING
         elif self.mode == Mode.SPELLING:
             self.mode = Mode.DICTATION
+        self.print_status()
+
+    def switch_typing(self) -> None:
+        """Toggle typing On/OFF."""
+        if self.typing_active:
+            self.typing_active = False
+        else:
+            self.typing_active = True
         self.print_status()
 
     @staticmethod

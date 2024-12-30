@@ -7,6 +7,7 @@ from src.utils.error_handler import noalsaerr
 from src.state.app_state import AppState
 from src.ui.texter_ui import TexterUI
 from src.utils.string_utils import string_to_snake_case, string_to_camel_case, convert_to_spelling
+from src.utils.constants import Mode
 
 text_processor = TextProcessor()
 
@@ -79,7 +80,7 @@ def live_speech_interpreter(
 
                 if text == "switch mode":
                     app_state.switch_mode()
-                    texter_ui.append_text(f"Switched to {app_state.mode} mode.")
+                    # texter_ui.append_text(f"Switched to {app_state.mode} mode.")
                     continue  # Skip further processing after switching modes
                 if text == "switch punctuation":
                     app_state.punctuation = not app_state.punctuation
@@ -95,7 +96,7 @@ def live_speech_interpreter(
 
                 # Handle spelling
                 # TODO: fix to enable termination and maybe other commands in spelling mode
-                if app_state.mode == "spelling":
+                if app_state.mode == Mode.SPELLING:
                     spelling_output = convert_to_spelling(
                         text, app_state.spelling_commands
                     )
@@ -106,7 +107,7 @@ def live_speech_interpreter(
                     continue
 
                 # Handle dictation mode
-                if app_state.mode == "dictation":
+                if app_state.mode == Mode.DICTATION:
                     if text.startswith("type"):
                         if app_state.typing_active:
                             gui.typewrite(text[5:])
