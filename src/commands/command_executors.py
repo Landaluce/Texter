@@ -1,7 +1,7 @@
 import subprocess
 from wave import Error
 import pyautogui as gui
-from src.utils.constants import ProgrammingLanguage
+from src.utils.constants import ProgrammingLanguage, TerminalOS
 from src.utils.text_to_speech import text_to_speech
 from src.utils.string_utils import (string_to_snake_case, string_to_camel_case, extract_number_from_string,
     numeric_str_to_int, convert_to_spelling)
@@ -254,10 +254,16 @@ class TerminalCommandExecutor:
         self.name = name
 
     def execute(self, app_state) -> None:
-        if app_state.terminal_os == "linux":
-            if self.name.startswith("go to"):
+        simple_command_names = ["view current directory", "list directory contents", "show network information",
+                                "show system information", "check active processes", "show system information",
+                                "clear terminal screen"]
+        if app_state.terminal_os == TerminalOS.LINUX:
+            if self.name.startswith("go to") or self.name in simple_command_names:
                 gui.write(self.key)
-        elif app_state.terminal_os == "windows":
+                gui.hotkey("enter")
+            else:
+                pass
+        elif app_state.terminal_os == TerminalOS.WINDOWS:
             if self.name == "go to":
                 gui.write(self.key)
 
@@ -285,7 +291,8 @@ class SelectionCommandExecutor:
 
         # Execute the command if it exists in the dictionary
         command_executed = commands.get(self.name)
-        if command_executed:
+        if self.name in commands:
+        # if command_executed:  TODO check equivalence
             command_executed()
         else:
             print(f"Unknown command: {self.name}")

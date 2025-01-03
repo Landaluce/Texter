@@ -3,6 +3,29 @@
         {"name": "go to desktop", "key": "cd ~/Desktop"},
         {"name": "go to documents", "key": "cd ~/Documents"},
         {"name": "go to downloads", "key": "cd ~/Downloads"},
-        {"name": "go to", "key": "cd "}
+        {"name": "go to", "key": "cd "},
+
+        {"name": "view current directory", "key": "pwd"},
+        {"name": "change directory", "key": "cd "},
+        {"name": "list directory contents", "key": "ls"},
+        {"name": "create a file", "key": "touch filename"},
+        {"name": "create a directory", "key": "mkdir directory_name"},
+        {"name": "delete a file", "key": "rm filename"},
+        {"name": "delete a directory", "key": "rm -r directory_name"},
+        {"name": "copy a file", "key": "cp source_file destination"},
+        {"name": "move a file", "key": "mv source_file destination"},
+        {"name": "rename a file", "key": "mv source_file destination"},
+        {"name": "view file contents", "key": "cat filename"},
+        {"name": "edit a text file", "key": "nano filename or vi filename"},
+        {"name": "search for text in files", "key": "grep \"text\" filename"},
+        {"name": "find location of a command", "key": "which command_name"},
+        {"name": "show network information", "key": "ifconfig or ip addr"},
+        {"name": "ping a host", "key": "ping hostname"},
+        {"name": "check active processes", "key": "ps aux"},
+        {"name": "kill a process", "key": "kill pid_number or kill -9 pid_number"},
+        {"name": "show system information", "key": "uname -a"},
+        {"name": "change permissions", "key": "chmod [permissions] filename"},
+        {"name": "clear terminal screen", "key": "clear"},
+        {"name": "set environment variable", "key": "export VAR_NAME=value"}
     ]
 }

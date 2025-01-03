@@ -1,1 +1,27 @@
-{"windows_commands": [{"name": "go to", "key": "dir "}]}
+{
+    "windows_commands": [
+        {"name": "go to", "key": "dir "},
+
+        {"name": "view current directory", "key": "cd"},
+        {"name": "change directory", "key": "cd [path]"},
+        {"name": "list directory contents", "key": "dir"},
+        {"name": "create a file", "key": "echo. > filename or New-Item filename"},
+        {"name": "create a directory", "key": "mkdir directory_name"},
+        {"name": "delete a file", "key": "del filename"},
+        {"name": "delete a directory", "key": "rmdir /s /q directory_name"},
+        {"name": "copy a file", "key": "copy source_file destination"},
+        {"name": "move a file", "key": "move source_file destination"},
+        {"name": "rename a file", "key": "move source_file destination"},
+        {"name": "view file contents", "key": "type filename"},
+        {"name": "edit a text file", "key": "notepad filename"},
+        {"name": "search for text in files", "key": "find \"text\" filename"},
+        {"name": "find location of a command", "key": "where command_name"},
+        {"name": "show network information", "key": "ipconfig"},
+        {"name": "ping a host", "key": "ping hostname"},
+        {"name": "check active processes", "key": "tasklist"},
+        {"name": "kill a process", "key": "taskkill /PID pid_number"},
+        {"name": "show system information", "key": "systeminfo"},
+        {"name": "clear terminal screen", "key": "cls"},
+        {"name": "set environment variable", "key": "setx VAR_NAME value"}
+  ]
+}

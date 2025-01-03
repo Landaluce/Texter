@@ -47,12 +47,6 @@ class CommandManager:
             command_dict["num_key"] = self.num_key
         return command_dict
 
-    def _type_command_key(self) -> None:
-        """
-        Types the stored key.
-        """
-        gui.write(self.key)
-
     def execute(self, app_state) -> None:
         """
         Executes the command based on its type.
