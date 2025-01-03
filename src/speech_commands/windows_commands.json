@@ -5,7 +5,7 @@
         {"name": "view current directory", "key": "cd"},
         {"name": "change directory", "key": "cd [path]"},
         {"name": "list directory contents", "key": "dir"},
-        {"name": "create a file", "key": "echo. > filename or New-Item filename"},
+        {"name": "create a file", "key": "echo. > filename"},
         {"name": "create a directory", "key": "mkdir directory_name"},
         {"name": "delete a file", "key": "del filename"},
         {"name": "delete a directory", "key": "rmdir /s /q directory_name"},
