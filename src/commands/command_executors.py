@@ -228,7 +228,6 @@ class SwitchCommandExecutor:
             command_map[self.name]()
             app_state.print_status()
 
-
 class InfoCommandExecutor:
 
     def __init__(self, key: str):
@@ -257,18 +256,14 @@ class TerminalCommandExecutor:
         simple_command_names = ["view current directory", "list directory contents", "show network information",
                                 "show system information", "check active processes", "show system information",
                                 "clear terminal screen"]
-        # if app_state.terminal_os == TerminalOS.LINUX:
-        print("app_state.terminal_os")
-        if self.name.startswith("go to"):
+        if ((self.name.startswith("change permissions") and app_state.terminal_os == TerminalOS.LINUX) or
+                self.name.startswith("go to")):
             gui.write(self.key)
         elif self.name in simple_command_names:
             gui.write(self.key)
             gui.hotkey("enter")
         else:
-            pass
-        # elif app_state.terminal_os == TerminalOS.WINDOWS:
-        #     if self.name == "go to":
-        #         gui.write(self.key)
+            gui.write(self.key)
 
 
 class SelectionCommandExecutor:
