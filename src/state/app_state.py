@@ -26,6 +26,7 @@ class AppState:
         self.terminate = False
         self.commands = None
 
+        self.switch_commands = []
         self.keyboard_commands = []
         self.info_commands = []
         self.selection_commands = []
@@ -59,29 +60,34 @@ class AppState:
                 self.keyboard_commands.append(
                     CommandManager(i["name"], CommandType.KEYBOARD, i["key"], i["num_key"])
                 )
-            elif i["command_type"] == "start_stop":
-                self.keyboard_commands.append(
-                    CommandManager(i["name"], CommandType.START_STOP)
-                )
-        try:
-            self.info_commands = [
-                CommandManager(cmd["name"], CommandType.INFO, cmd["key"])
-                for cmd in commands["info_commands"]
-            ]
-        except KeyError:
-            print("Could not find info commands")
 
-        self.selection_commands = [
-            CommandManager(cmd["name"], CommandType.SELECTION)
-            for cmd in commands["selection_commands"]
-        ]
-
+        self.load_info_commands()
+        self.load_selection_commands()
+        self.load_switch_commands()
         self.load_programming_commands()
         self.load_terminal_commands()
         self.load_spelling_commands()
         self.load_git_commands()
         self.load_interactive_commands()
         self.load_browser_commands()
+
+    def load_keyboard_commands(self):
+        """
+        Loads keyboard commands for the specified language from the commands file.
+        """
+        self.keyboard_commands = self._load_commands(self.commands["keyboard_commands"], CommandType.KEYBOARD)
+
+    def load_info_commands(self) -> None:
+        """
+        Loads info commands for the specified language from the commands file.
+        """
+        self.info_commands = self._load_commands(self.commands["info_commands"], CommandType.INFO)
+
+    def load_selection_commands(self) -> None:
+        """
+        Loads selection commands for the specified language from the commands file.
+        """
+        self.selection_commands = self._load_commands(self.commands["selection_commands"], CommandType.SELECTION)
 
     def load_programming_commands(self) -> None:
         """
@@ -90,15 +96,8 @@ class AppState:
         if not self.programming:
             return
 
-        self.programming_commands = [
-            CommandManager(
-                cmd.get("name", ""),
-                CommandType.PROGRAMMING,
-                cmd["key"],
-                cmd.get("num_key", ""),
-            )
-            for cmd in self.commands[self.programming_language.value + "_commands"]
-        ]
+        self.programming_commands = self._load_commands(self.commands[self.programming_language.value + "_commands"],
+                                                        CommandType.PROGRAMMING)
         self.print_status()
 
     def load_terminal_commands(self) -> None:
@@ -107,70 +106,57 @@ class AppState:
         """
         if not self.terminal:
             return
-
-        self.terminal_commands = [
-            CommandManager(
-                cmd.get("name", ""), CommandType.TERMINAL, cmd["key"]
-            )  # , cmd.get("num_key", ""))
-            for cmd in self.commands[self.terminal_os.value + "_commands"]
-        ]
+        self.terminal_commands = self._load_commands(self.commands[self.terminal_os.value + "_commands"],
+                                                     CommandType.TERMINAL)
         self.print_status()
 
     def load_spelling_commands(self) -> None:
         """
         Loads spelling commands from the commands file.
         """
-        self.spelling_commands = [
-            CommandManager(
-                cmd.get("name", ""),
-                CommandType.SPELLING,
-                cmd["key"],
-                cmd.get("num_key", ""),
-            )
-            for cmd in self.commands["spelling_commands"]
-        ]
+        self.spelling_commands = self._load_commands(self.commands["spelling_commands"], CommandType.SPELLING)
         self.print_status()
 
     def load_git_commands(self) -> None:
         """
-        Loads spelling commands from the commands file.
+        Loads git commands from the commands file.
         """
-        self.git_commands = [
-            CommandManager(
-                cmd.get("name", ""),
-                CommandType.SPELLING,
-                cmd["key"],
-                cmd.get("num_key", ""),
-            )
-            for cmd in self.commands["git_commands"]
-        ]
+        self.git_commands = self._load_commands(self.commands["git_commands"], CommandType.GIT)
         self.print_status()
 
     def load_interactive_commands(self) -> None:
         """
-        Loads spelling commands from the commands file.
+        Loads interactive commands from the commands file.
         """
-        self.interactive_commands = [
-            CommandManager(
-                cmd.get("name"),
-                CommandType.INTERACTIVE,
-                cmd["key"]
-            )
-            for cmd in self.commands["interactive_commands"]
-        ]
+        self.interactive_commands = self._load_commands(self.commands["interactive_commands"], CommandType.INTERACTIVE)
         self.print_status()
 
     def load_browser_commands(self) -> None:
         """
-        Loads spelling commands from the commands file.
+        Loads browser commands from the commands file.
         """
-        self.browser_commands = [
+        self.browser_commands = self._load_commands(self.commands["browser_commands"], CommandType.BROWSER)
+
+    def load_switch_commands(self) -> None:
+        self.switch_commands = self._load_commands(self.commands["switch_commands"], CommandType.SWITCH)
+
+    @staticmethod
+    def _load_commands(commands_list: list, command_type: CommandType) -> list:
+        """
+        Helper method to load commands from a given list.
+
+        Args:
+            commands_list (list[dict]): The list of command configurations.
+            command_type (CommandType): The type of commands to initialize.
+        """
+        return [
             CommandManager(
-                cmd.get("name"),
-                CommandType.BROWSER,
-                cmd["key"]
+                cmd.get("name", ""),
+                command_type,
+                cmd.get("key", ""),
+                cmd.get("num_key", ""),
             )
-            for cmd in self.commands["browser_commands"]
+            for cmd in commands_list
         ]
 
     def handle_command(self, text: str) -> bool:
@@ -184,6 +170,7 @@ class AppState:
         - bool: True if a command was successfully handled, False otherwise.
         """
         command_handlers = [
+            self._handle_switch_commands,
             self._handle_keyboard_command,
             self._handle_programming_command,
             self._handle_terminal_command,
@@ -200,6 +187,14 @@ class AppState:
                 return True
         return False
 
+    def _handle_switch_commands(self, text: str):
+        # for command in self.switch_commands:
+        for command in self.switch_commands:
+            if text.startswith(command.name):
+                command.switch_command_executor.execute(self)
+                return True
+        return False
+
     def _handle_keyboard_command(self, text: str) -> bool:
         """
         Handles a keyboard command if the text matches any of the available keyboard commands.
@@ -211,22 +206,7 @@ class AppState:
         """
         for command in self.keyboard_commands:
             if text.startswith(command.name):
-                if command.name.startswith("switch to"):
-                    language = command.name.split(" ")[-1]
-                    if language == ProgrammingLanguage.JAVA:
-                        self.programming_language = ProgrammingLanguage.JAVA
-                        self.load_programming_commands()
-                    elif language == ProgrammingLanguage.PYTHON:
-                        self.programming_language = ProgrammingLanguage.PYTHON
-                        self.load_programming_commands()
-                    elif language == TerminalOS.LINUX:
-                        self.terminal_os = TerminalOS.LINUX
-                        self.load_terminal_commands()
-                    elif language == TerminalOS.WINDOWS:
-                        self.terminal_os = TerminalOS.WINDOWS
-                        self.load_terminal_commands()
-                else:
-                    command.execute(self)
+                command.execute(self)
                 return True
         return False
 
@@ -326,7 +306,7 @@ class AppState:
         """
         for command in self.spelling_commands:
             if text.startswith(command.name):
-                command.execute_spelling_command(self)
+                command.execute(self)
                 return True
         return False
 
@@ -342,7 +322,7 @@ class AppState:
         """
         for command in self.interactive_commands:
             if text.startswith(command.name):
-                command.terminal_command_executor.execute()
+                command.interactive_command_executor.execute()
                 return True
         return False
 
@@ -403,6 +383,15 @@ class AppState:
         else:
             self.typing_active = True
         self.print_status()
+
+    def set_programming(self, state: bool) -> None:
+        """
+        Set the programming ON/OFF.
+
+        Args:
+            state (bool): True to turn programming ON, False to turn OFF.
+        """
+        self.programming = state
 
     @staticmethod
     def restart_script() -> None:

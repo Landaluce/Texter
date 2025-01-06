@@ -1,0 +1,64 @@
+{
+    "switch_commands": [
+      {
+        "name": "wake up",
+        "key": "wake up",
+        "command_type": "switch"
+      },
+      {
+        "name": "go to sleep",
+        "key": "go to sleep",
+        "command_type": "switch"
+      },
+      {
+        "name": "refresh texter",
+        "key": "refresh texter",
+        "command_type": "switch"
+      },
+      {
+        "name": "programming on",
+        "key": "programming on",
+        "command_type": "switch"
+      },
+      {
+        "name": "programming off",
+        "key": "programming off",
+        "command_type": "switch"
+      },
+      {
+        "name": "switch to python",
+        "key": "switch to python",
+        "command_type": "switch"
+      },
+      {
+        "name": "switch to java",
+        "key": "switch to java",
+        "command_type": "switch"
+      },
+      {
+        "name": "terminal on",
+        "key": "terminal on",
+        "command_type": "switch"
+      },
+      {
+        "name": "terminal off",
+        "key": "terminal off",
+        "command_type": "switch"
+      },
+      {
+        "name": "switch to linux",
+        "key": "switch to linux",
+        "command_type": "switch"
+      },
+      {
+        "name": "switch to windows",
+        "key": "switch to windows",
+        "command_type": "switch"
+      },
+      {
+        "name": "switch mode",
+        "key": "switch mode",
+        "command_type": "switch"
+      }
+    ]
+}

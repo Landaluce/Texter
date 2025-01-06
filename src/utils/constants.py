@@ -7,7 +7,7 @@ class CommandType(Enum):
     """
 
     KEYBOARD = auto()
-    START_STOP = auto()
+    SWITCH = auto()
     PROGRAMMING = auto()
     INFO = auto()
     SELECTION = auto()

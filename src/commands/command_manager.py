@@ -1,4 +1,3 @@
-import pyautogui as gui
 from src.commands.command_executors import (ProgrammingCommandExecutor, KeyboardCommandExecutor, SwitchCommandExecutor,
                                             InfoCommandExecutor, GitCommandExecutor, TerminalCommandExecutor,
                                             SelectionCommandExecutor, SpellingCommandExecutor,
@@ -12,7 +11,7 @@ class CommandManager:
 
     Attributes:
         name (str): The name of the command.
-        command_type (CommandType): The type of command (e.g., KEYBOARD, START_STOP).
+        command_type (CommandType): The type of command (e.g., KEYBOARD, SWITCH).
         key (str, optional): The key to be pressed for keyboard or programming commands.
         num_key (str, optional): The key used for commands that can be repeated multiple times.
     """
@@ -60,7 +59,7 @@ class CommandManager:
         if self.command_type == CommandType.KEYBOARD:
             self.keyboard_command_executor.execute()
 
-        elif self.command_type == CommandType.START_STOP:
+        elif self.command_type == CommandType.SWITCH:
             self.switch_command_executor.execute(app_state)
 
         elif self.command_type == CommandType.INFO:

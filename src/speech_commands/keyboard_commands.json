@@ -1,39 +1,5 @@
 {
     "keyboard_commands": [
-        {"name": "wake up", "key": "wake up", "command_type": "start_stop"},
-        {"name": "go to sleep", "key": "go to sleep", "command_type": "start_stop"},
-        {"name": "refresh texter", "key": "refresh texter", "command_type": "start_stop"},
-        {
-            "name": "programming on",
-            "key": "programming on",
-            "command_type": "start_stop"},
-        {
-            "name": "programming off",
-            "key": "programming off",
-            "command_type": "start_stop"},
-        {
-            "name": "switch to python",
-            "key": "switch to python",
-            "command_type": "start_stop"
-        },
-        {
-            "name": "switch to java",
-            "key": "switch to java",
-            "command_type": "start_stop"
-        },
-        {"name": "terminal on", "key": "terminal on", "command_type": "start_stop"},
-        {"name": "terminal off", "key": "terminal off", "command_type": "start_stop"},
-        {
-            "name": "switch to linux",
-            "key": "switch to linux",
-            "command_type": "start_stop"
-        },
-        {
-            "name": "switch to windows",
-            "key": "switch to windows",
-            "command_type": "start_stop"
-        },
-        {"name": "switch mode", "key": "switch mode", "command_type": "start_stop"},
         {"name": "left", "key": "left", "num_key": "left ", "command_type": "keyboard"},
         {
             "name": "right",

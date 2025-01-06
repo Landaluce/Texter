@@ -215,19 +215,32 @@ class SwitchCommandExecutor:
             app_state (AppState): The current application state.
         """
         command_map = {
-            "go to sleep": app_state.switch_typing,  # lambda: setattr(app_state, "typing_active", False),
-            "wake up": app_state.switch_typing,  # lambda: setattr(app_state, "typing_active", True),
+            "go to sleep": lambda: setattr(app_state, "typing_active", False),
+            "wake up": lambda: setattr(app_state, "typing_active", True), #app_state.switch_typing,  # No need for a lambda; method reference works
             "refresh texter": app_state.restart_script,
-            "programming on": lambda: setattr(app_state, "programming", True),
-            "programming off": lambda: setattr(app_state, "programming", False),
+            "programming on": lambda: app_state.set_programming(True),  # Use lambda to defer execution
+            "programming off": lambda: app_state.set_programming(False),  # Use lambda to defer execution
             "terminal on": lambda: setattr(app_state, "terminal", True),
             "terminal off": lambda: setattr(app_state, "terminal", False),
-            "switch mode": app_state.switch_mode,
+            "switch mode": app_state.switch_mode,  # No need for a lambda; method reference works
         }
-        if self.name in command_map:
+
+        if self.name.startswith("switch to"):
+            if ProgrammingLanguage.JAVA.value in self.name:
+                app_state.programming_language = ProgrammingLanguage.JAVA
+                app_state.load_programming_commands()
+            if ProgrammingLanguage.PYTHON.value in self.name:
+                app_state.programming_language = ProgrammingLanguage.PYTHON
+                app_state.load_programming_commands()
+            if TerminalOS.LINUX.value in self.name:
+                app_state.terminal_os = TerminalOS.LINUX
+                app_state.load_terminal_commands()
+            if TerminalOS.WINDOWS.value in self.name:
+                app_state.terminal_os = TerminalOS.WINDOWS
+                app_state.load_terminal_commands()
+        elif self.name in command_map:
             command_map[self.name]()
             app_state.print_status()
-
 class InfoCommandExecutor:
 
     def __init__(self, key: str):
@@ -263,7 +276,7 @@ class TerminalCommandExecutor:
             gui.write(self.key)
             gui.hotkey("enter")
         else:
-            gui.write(self.key)
+            pass #gui.write(self.key)
 
 
 class SelectionCommandExecutor:
@@ -354,10 +367,12 @@ class BrowserCommandExecutor:
                     if not num_str.isdigit():
                         num_str = str(numeric_str_to_int(num_str))
                     gui.hotkey("ctrl", num_str)
-                except IndexError:
-                    print(f"Error: Unable to parse tab number from self.name '{self.name}'.")
-                except ValueError as e:
-                    print(f"Error during numeric conversion: {e}")
+                except:
+                    pass
+                # except IndexError:
+                #     print(f"Error: Unable to parse tab number from self.name '{self.name}'.")
+                # except ValueError as e:
+                #     print(f"Error during numeric conversion: {e}")
         elif self.name.startswith("new"):
             if "chrome window" in self.name or "firefox" in self.name:
                 gui.hotkey("Ctrl", "n")
@@ -420,7 +435,7 @@ class BrowserCommandExecutor:
         elif self.name.startswith("save page"):
             gui.hotkey('ctrl', 's')
         else:
-            gui.write(self.name)
+            pass#gui.write(self.name)
 
     @staticmethod
     def start_browser(browser="chrome", url=None) -> None:
