@@ -414,5 +414,5 @@ class AppState:
     @staticmethod
     def restart_script() -> None:
         """Restart the currently running script."""
-        subprocess.Popen([sys.executable, sys.argv[0]])
+        subprocess.Popen([sys.executable] + sys.argv)
         sys.exit()
