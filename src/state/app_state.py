@@ -393,6 +393,24 @@ class AppState:
         """
         self.programming = state
 
+    def set_programming_language(self, language: ProgrammingLanguage):
+        """
+        Set the programming language.
+
+        Args:
+            language (ProgrammingLanguage): an option in ProgrammingLanguage(Enum)
+        """
+        self.programming_language = language
+
+    def set_terminal_os(self, os: TerminalOS):
+        """
+        Set the terminal OS.
+
+        Args:
+            os (TerminalOS): an option in TerminalOS(Enum)
+        """
+        self.terminal_os = os
+
     @staticmethod
     def restart_script() -> None:
         """Restart the currently running script."""

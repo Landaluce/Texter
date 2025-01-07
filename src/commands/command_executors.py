@@ -214,33 +214,31 @@ class SwitchCommandExecutor:
         Args:
             app_state (AppState): The current application state.
         """
+        print(self.name)
         command_map = {
             "go to sleep": lambda: setattr(app_state, "typing_active", False),
-            "wake up": lambda: setattr(app_state, "typing_active", True), #app_state.switch_typing,  # No need for a lambda; method reference works
+            "wake up": lambda: setattr(app_state, "typing_active", True),
             "refresh texter": app_state.restart_script,
-            "programming on": lambda: app_state.set_programming(True),  # Use lambda to defer execution
-            "programming off": lambda: app_state.set_programming(False),  # Use lambda to defer execution
+            "programming on": lambda: app_state.set_programming(True),
+            "programming off": lambda: app_state.set_programming(False),
             "terminal on": lambda: setattr(app_state, "terminal", True),
             "terminal off": lambda: setattr(app_state, "terminal", False),
-            "switch mode": app_state.switch_mode,  # No need for a lambda; method reference works
+            "switch mode": app_state.switch_mode,
+            "switch to java": lambda: (app_state.set_programming_language(ProgrammingLanguage.JAVA),
+                                       app_state.load_programming_commands()),
+            "switch to python": lambda: (app_state.set_programming_language(ProgrammingLanguage.PYTHON),
+                                       app_state.load_programming_commands()),
+            "switch to windows": lambda: (app_state.set_terminal_os(TerminalOS.WINDOWS),
+                                       app_state.load_terminal_commands()),
+            "switch to linux": lambda: (app_state.set_terminal_os(TerminalOS.LINUX),
+                                       app_state.load_terminal_commands()),
         }
 
-        if self.name.startswith("switch to"):
-            if ProgrammingLanguage.JAVA.value in self.name:
-                app_state.programming_language = ProgrammingLanguage.JAVA
-                app_state.load_programming_commands()
-            if ProgrammingLanguage.PYTHON.value in self.name:
-                app_state.programming_language = ProgrammingLanguage.PYTHON
-                app_state.load_programming_commands()
-            if TerminalOS.LINUX.value in self.name:
-                app_state.terminal_os = TerminalOS.LINUX
-                app_state.load_terminal_commands()
-            if TerminalOS.WINDOWS.value in self.name:
-                app_state.terminal_os = TerminalOS.WINDOWS
-                app_state.load_terminal_commands()
-        elif self.name in command_map:
+        if self.name in command_map:
             command_map[self.name]()
             app_state.print_status()
+
+
 class InfoCommandExecutor:
 
     def __init__(self, key: str):
