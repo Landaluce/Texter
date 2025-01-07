@@ -181,27 +181,18 @@ class AppState:
         """
         Prints the current status of typing activity, mode, terminal and programming language.
         """
-        status_message = f"Typing: {'started' if self.typing_active else 'stopped'}\n"
-        status_message += f"Mode: {self.mode.value}\n"
-        status_message += (
-            f"Programming: On  | {self.programming_language.value.capitalize()}\n"
-            if self.programming
-            else f"Programming: Off | {self.programming_language.value.capitalize()}\n"
-        )
-        status_message += (
-            f"Terminal: On | {self.terminal_os.value}\n" if self.terminal else "Terminal: Off\n"
-        )
-        status_message += (
-            f"Punctuation: On  " if self.punctuation else "Punctuation: Off "
-        )
-        status_message += f"| Caps: On" if self.capitalize else "| Caps: Off\n"
-
+        status = \
+            f"Typing: {'started' if self.typing_active else 'stopped'}\n"\
+            f"Mode: {self.mode.value}\n"\
+            f"Programming: {'On' if self.programming else 'Off'} | {self.programming_language.value.capitalize()}\n"\
+            f"Terminal: {'On' if self.terminal else 'Off'} | {self.terminal_os.value if self.terminal else ''}\n"\
+            f"Punctuation: {'On' if self.punctuation else 'Off'} | Caps: {'On' if self.capitalize else 'Off'}\n"
         # Check if app_ui is available and update UI
         if self.app_ui:
-            self.app_ui.update_status(status_message)
+            self.app_ui.update_status(status)
             self.app_ui.update_commands()
         else:
-            print(status_message)
+            print(status)
 
     def switch_mode(self) -> None:
         """Toggle between dictation and spelling modes."""
