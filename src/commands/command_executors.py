@@ -318,8 +318,7 @@ class SpellingCommandExecutor:
         spelling_output = convert_to_spelling(self.name, app_state.spelling_commands)
         if spelling_output:
             gui.write(spelling_output)
-        else:
-            app_state.append_text("No valid spelling commands found.")
+
 
 
 class InteractiveCommandExecutor:
@@ -367,10 +366,6 @@ class BrowserCommandExecutor:
                     gui.hotkey("ctrl", num_str)
                 except:
                     pass
-                # except IndexError:
-                #     print(f"Error: Unable to parse tab number from self.name '{self.name}'.")
-                # except ValueError as e:
-                #     print(f"Error during numeric conversion: {e}")
         elif self.name.startswith("new"):
             if "chrome window" in self.name or "firefox" in self.name:
                 gui.hotkey("Ctrl", "n")
