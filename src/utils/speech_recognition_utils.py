@@ -45,8 +45,70 @@ def recognize_speech(recognizer: sr.Recognizer, timeout: int = 2) -> str or None
     return None
 
 
+def process_special_cases(text: str) -> str:
+    """Handles special case replacements in recognized text."""
+    if not isinstance(text, str):
+        raise ValueError(f"Expected 'txt' to be a string, but got {type(text)}")
+    replacements = {
+        "dexter": "texter",
+        "texture": "texter",
+        "lift": "left",
+        "wright": "right",
+    }
+    for target, replacement in replacements.items():
+        text = text.replace(target, replacement)
+    return text
+
+def handle_switch_commands(app_state, command: str) -> bool:
+    """Handles switching app state commands."""
+    if command == "switch mode":
+        app_state.switch_mode()
+        return True
+    if command == "switch punctuation":
+        app_state.punctuation = not app_state.punctuation
+        if not app_state.punctuation:
+            app_state.capitalize = False
+        app_state.update_status()
+        return True
+    if command == "switch caps":
+        app_state.capitalize = not app_state.capitalize
+        app_state.update_status()
+        return True
+    return False
+
+def handle_spelling_mode(app_state, texter_ui, text: str):
+    """Processes text in spelling mode."""
+    spelling_output = convert_to_spelling(text, app_state.spelling_commands)
+    if spelling_output:
+        gui.typewrite(spelling_output)
+    else:
+        texter_ui.append_text("No valid spelling commands found.")
+
+def handle_dictation_mode(app_state, texter_ui, text: str):
+    """Processes text in dictation mode."""
+    if text.startswith("type") and app_state.typing_active:
+        gui.typewrite(text[5:])
+    elif text.startswith("camel case"):
+        gui.write(string_to_camel_case(text[len("camel case") + 1:]))
+    elif text.startswith("small camel case"):
+        gui.write(string_to_camel_case(text[len("small camel case") + 1:], True))
+    elif text.startswith("snake case"):
+        gui.write(string_to_snake_case(text[len("snake case") + 1:].strip()))
+    elif text == "terminate texter":
+        print("Terminating Texter...")
+        app_state.terminate = True
+        texter_ui.terminate_all_threads()
+    elif not app_state.handle_command(text):
+        if app_state.typing_active:
+            if app_state.punctuation:
+                text = text_processor.restore_punctuation(text)
+                if app_state.capitalize:
+                    text = text_processor.capitalize_sentences(text)
+            gui.write(text)
+
+
 def live_speech_interpreter(
-    app_state: AppState, texter_ui: TexterUI, recognizer: sr.Recognizer
+        app_state: AppState, texter_ui: TexterUI, recognizer: sr.Recognizer
 ):
     """
     Continuously listens for and interprets speech commands, executing corresponding actions.
@@ -62,107 +124,19 @@ def live_speech_interpreter(
     """
     with noalsaerr():
         while not app_state.terminate:
-            text = recognize_speech(recognizer)  # , source)
+            text = recognize_speech(recognizer)
             if text:
-                # Hardcoded check to always output "Texter"
                 text = text.lower()
-                if "dexter" in text:
-                    text = text.replace("dexter", "texter")
-                if "texture" in text:
-                    text = text.replace("texture", "texter")
-
-                if text.endswith("lift"):
-                    text = text.replace("lift", "left")
-                if text.endswith("wright"):
-                    text = text.replace("wright", "right")
+                text = process_special_cases(text)
 
                 texter_ui.append_text("You said:" + "~" + text + "~")
 
-                if text == "switch mode":
-                    app_state.switch_mode()
-                    # texter_ui.append_text(f"Switched to {app_state.mode} mode.")
-                    continue  # Skip further processing after switching modes
-                if text == "switch punctuation":
-                    app_state.punctuation = not app_state.punctuation
-                    if not app_state.punctuation:
-                        app_state.capitalize = False
-                    app_state.update_status()
-                    continue
-                if text == "switch caps":
-                    app_state.punctuation = not app_state.capitalize
-                    app_state.capitalize = not app_state.capitalize
-                    app_state.update_status()
-                    continue
-
-                # Handle spelling
-                # TODO: fix to enable termination and maybe other commands in spelling mode
-                if app_state.mode == Mode.SPELLING:
-                    spelling_output = convert_to_spelling(
-                        text, app_state.spelling_commands
-                    )
-                    if spelling_output:
-                        gui.typewrite(spelling_output)
-                    else:
-                        texter_ui.append_text("No valid spelling commands found.")
-                    continue
-
-                # Handle dictation mode
-                if app_state.mode == Mode.DICTATION:
-                    if text.startswith("type"):
-                        if app_state.typing_active:
-                            gui.typewrite(text[5:])
-                    else:
-                        if text.startswith("camel case"):
-                            gui.write(
-                                string_to_camel_case(text[len("camel case") + 1 :])
-                            )
-                            continue
-                        if text.startswith("camelcase"):
-                            gui.write(
-                                string_to_camel_case(text[len("camelcase") + 1 :])
-                            )
-                            continue
-                        if text.startswith("small camel case"):
-                            gui.write(
-                                string_to_camel_case(
-                                    text[len("small camel case") + 1 :], True
-                                )
-                            )
-                            continue
-                        if text.startswith("small camelcase"):
-                            gui.write(
-                                string_to_camel_case(
-                                    text[len("small camelcase") + 1 :], True
-                                )
-                            )
-                            continue
-                        if text.startswith("snake case"):
-                            gui.write(
-                                string_to_snake_case(
-                                    text[len("snake case") + 1 :].strip()
-                                )
-                            )
-                            continue
-
-                        # Check if termination is requested
-                        if text == "terminate texter":
-                            print("Terminating Texter...")
-                            app_state.terminate = True
-                            texter_ui.terminate_all_threads()
-                            break  # Exit the loop to stop the thread
-
-                        if not app_state.handle_command(text):
-                            if app_state.typing_active:
-                                if app_state.punctuation:
-                                    text = text_processor.restore_punctuation(text)
-                                    if app_state.capitalize:
-                                        text = text_processor.capitalize_sentences(text)
-                                gui.write(text)
+                handle_switch_commands(app_state, text)
+                handle_spelling_mode(app_state, texter_ui, text)
+                handle_dictation_mode(app_state, texter_ui, text)
 
 
-def run_live_speech_interpreter(
-    app_state: AppState, app_ui: TexterUI, recognizer
-) -> None:
+def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognizer) -> None:
     """
     This function runs the live speech interpreter in a separate thread.
     """
