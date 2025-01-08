@@ -211,14 +211,14 @@ class TexterUI:
         Activates the typing mode by setting 'typing_active' to True in the current state and updates the UI status.
         """
         self.app_state.typing_active = True
-        self.app_state.print_status()
+        self.app_state.update_status()
 
     def on_go_to_sleep_button_click(self) -> None:
         """
         Deactivates the typing mode by setting 'typing_active' to False in the current state and updates the UI status.
         """
         self.app_state.typing_active = False
-        self.app_state.print_status()
+        self.app_state.update_status()
 
     def get_active_commands(self):
         active_commands = {}
@@ -270,7 +270,7 @@ class TexterUI:
         """
         Updates the UI to reflect the current status.
         """
-        self.app_state.print_status()
+        self.app_state.update_status()
 
     def append_text(self, text: str) -> None:
         """

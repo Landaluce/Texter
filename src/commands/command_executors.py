@@ -236,7 +236,7 @@ class SwitchCommandExecutor:
 
         if self.name in command_map:
             command_map[self.name]()
-            app_state.print_status()
+            app_state.update_status()
 
 
 class InfoCommandExecutor:

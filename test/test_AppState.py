@@ -97,7 +97,7 @@ class TestAppState(unittest.TestCase):
     @patch("builtins.print")
     def test_print_status(self, mock_print):
         """Test that print_status outputs correct application status."""
-        self.app_state.print_status()
+        self.app_state.update_status()
         mock_print.assert_called_once_with(
             "Typing: started\n"
             "mode: dictation\n"
