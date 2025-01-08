@@ -86,12 +86,12 @@ def live_speech_interpreter(
                     app_state.punctuation = not app_state.punctuation
                     if not app_state.punctuation:
                         app_state.capitalize = False
-                    app_state.print_status()
+                    app_state.update_status()
                     continue
                 if text == "switch caps":
                     app_state.punctuation = not app_state.capitalize
                     app_state.capitalize = not app_state.capitalize
-                    app_state.print_status()
+                    app_state.update_status()
                     continue
 
                 # Handle spelling

@@ -86,7 +86,7 @@ class AppState:
             return
         self.programming_commands = self._load_commands(self.commands[self.programming_language.value + "_commands"],
                                                         CommandType.PROGRAMMING)
-        self.print_status()
+        self.update_status()
 
     def load_terminal_commands(self) -> None:
         """
@@ -96,7 +96,7 @@ class AppState:
             return
         self.terminal_commands = self._load_commands(self.commands[self.terminal_os.value + "_commands"],
                                                      CommandType.TERMINAL)
-        self.print_status()
+        self.update_status()
 
     def handle_command(self, text: str) -> bool:
         """
@@ -177,17 +177,30 @@ class AppState:
     def _handle_browser_command(self, text: str) -> bool:
         return self._handle_command(text, self.browser_commands)
 
-    def print_status(self) -> None:
+    def update_status(self) -> None:
+        """Updates the UI with the current status or prints it to the console."""
+        status = self.generate_status()
+        self._update_ui_state(status)
+
+    def generate_status(self) -> str:
         """
-        Prints the current status of typing activity, mode, terminal and programming language.
+        Generates the current status string.
+
+        Returns:
+        str: A formatted string showing the current state
         """
-        status = \
-            f"Typing: {'started' if self.typing_active else 'stopped'}\n"\
-            f"Mode: {self.mode.value}\n"\
-            f"Programming: {'On' if self.programming else 'Off'} | {self.programming_language.value.capitalize()}\n"\
-            f"Terminal: {'On' if self.terminal else 'Off'} | {self.terminal_os.value if self.terminal else ''}\n"\
-            f"Punctuation: {'On' if self.punctuation else 'Off'} | Caps: {'On' if self.capitalize else 'Off'}\n"
-        # Check if app_ui is available and update UI
+        return (f"Typing: {'started' if self.typing_active else 'stopped'}\n"
+                f"Mode: {self.mode.value}\n"
+                f"Programming: {'On' if self.programming else 'Off'} | "
+                f"{self.programming_language.value.capitalize()}\n"
+                f"Terminal: {'On' if self.terminal else 'Off'} | "
+                f"{self.terminal_os.value if self.terminal else ''}\n"
+                f"Punctuation: {'On' if self.punctuation else 'Off'} | "
+                f"Caps: {'On' if self.capitalize else 'Off'}"
+        )
+
+    def _update_ui_state(self, status: str) -> None:
+        """Updates the UI state or prints the status to the console if no UI is available."""
         if self.app_ui:
             self.app_ui.update_status(status)
             self.app_ui.update_commands()
@@ -197,22 +210,22 @@ class AppState:
     def switch_mode(self) -> None:
         """Toggle between dictation and spelling modes."""
         self.mode = Mode.SPELLING if self.mode == Mode.DICTATION else Mode.DICTATION
-        self.print_status()
+        self.update_status()
 
     def switch_typing(self) -> None:
         """Toggle typing On/OFF."""
         self.typing_active = not self.typing_active
-        self.print_status()
+        self.update_status()
 
     def set_programming(self, state: bool) -> None:
         """Enable or disable programming mode."""
         self.programming = state
 
-    def set_programming_language(self, language: ProgrammingLanguage):
+    def set_programming_language(self, language: ProgrammingLanguage) -> None:
         """Set the programming language."""
         self.programming_language = language
 
-    def set_terminal_os(self, os: TerminalOS):
+    def set_terminal_os(self, os: TerminalOS) -> None:
         """Set the terminal OS."""
         self.terminal_os = os
 
