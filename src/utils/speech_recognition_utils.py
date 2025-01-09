@@ -7,7 +7,6 @@ from src.utils.error_handler import noalsaerr
 from src.state.app_state import AppState
 from src.ui.texter_ui import TexterUI
 from src.utils.string_utils import string_to_snake_case, string_to_camel_case, convert_to_spelling
-from src.utils.constants import Mode
 
 text_processor = TextProcessor()
 
@@ -59,36 +58,15 @@ def process_special_cases(text: str) -> str:
         text = text.replace(target, replacement)
     return text
 
-def handle_switch_commands(app_state, command: str) -> bool:
-    """Handles switching app state commands."""
-    if command == "switch mode":
-        app_state.switch_mode()
-        return True
-    if command == "switch punctuation":
-        app_state.punctuation = not app_state.punctuation
-        if not app_state.punctuation:
-            app_state.capitalize = False
-        app_state.update_status()
-        return True
-    if command == "switch caps":
-        app_state.capitalize = not app_state.capitalize
-        app_state.update_status()
-        return True
-    return False
-
 def handle_spelling_mode(app_state, texter_ui, text: str):
     """Processes text in spelling mode."""
     spelling_output = convert_to_spelling(text, app_state.spelling_commands)
     if spelling_output:
-        gui.typewrite(spelling_output)
-    else:
-        texter_ui.append_text("No valid spelling commands found.")
+        gui.write(spelling_output)
 
 def handle_dictation_mode(app_state, texter_ui, text: str):
     """Processes text in dictation mode."""
-    if text.startswith("type") and app_state.typing_active:
-        gui.typewrite(text[5:])
-    elif text.startswith("camel case"):
+    if text.startswith("camel case") or text.startswith("camelcase"):
         gui.write(string_to_camel_case(text[len("camel case") + 1:]))
     elif text.startswith("small camel case"):
         gui.write(string_to_camel_case(text[len("small camel case") + 1:], True))
@@ -131,9 +109,9 @@ def live_speech_interpreter(
 
                 texter_ui.append_text("You said:" + "~" + text + "~")
 
-                handle_switch_commands(app_state, text)
-                handle_spelling_mode(app_state, texter_ui, text)
                 handle_dictation_mode(app_state, texter_ui, text)
+                handle_spelling_mode(app_state, texter_ui, text)
+
 
 
 def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognizer) -> None:

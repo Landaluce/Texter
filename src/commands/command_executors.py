@@ -214,7 +214,6 @@ class SwitchCommandExecutor:
         Args:
             app_state (AppState): The current application state.
         """
-        print(self.name)
         command_map = {
             "go to sleep": lambda: setattr(app_state, "typing_active", False),
             "wake up": lambda: setattr(app_state, "typing_active", True),
@@ -224,6 +223,7 @@ class SwitchCommandExecutor:
             "terminal on": lambda: setattr(app_state, "terminal", True),
             "terminal off": lambda: setattr(app_state, "terminal", False),
             "switch mode": app_state.switch_mode,
+            "switch punctuation": lambda :(app_state.switch_punctuation()),
             "switch to java": lambda: (app_state.set_programming_language(ProgrammingLanguage.JAVA),
                                        app_state.load_programming_commands()),
             "switch to python": lambda: (app_state.set_programming_language(ProgrammingLanguage.PYTHON),

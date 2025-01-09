@@ -217,6 +217,16 @@ class AppState:
         self.typing_active = not self.typing_active
         self.update_status()
 
+    def switch_punctuation(self) -> None:
+        self.punctuation = not self.punctuation
+        if not self.punctuation:
+            self.capitalize = False
+        self.update_status()
+
+    def switch_capitalization(self) -> None:
+        self.capitalize = not self.capitalize
+        self.update_status()
+
     def set_programming(self, state: bool) -> None:
         """Enable or disable programming mode."""
         self.programming = state
