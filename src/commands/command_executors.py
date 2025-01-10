@@ -298,10 +298,8 @@ class SelectionCommandExecutor:
             "paste": lambda: gui.hotkey("ctrl", "v"),
         }
 
-        # Execute the command if it exists in the dictionary
         command_executed = commands.get(self.name)
         if self.name in commands:
-        # if command_executed:  TODO check equivalence
             command_executed()
         else:
             print(f"Unknown command: {self.name}")
