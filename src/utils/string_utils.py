@@ -1,5 +1,3 @@
-import inspect
-
 from word2number import w2n
 import speech_recognition as sr
 
