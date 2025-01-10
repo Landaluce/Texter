@@ -4,7 +4,7 @@ import pyautogui as gui
 from src.utils.constants import ProgrammingLanguage, TerminalOS
 from src.utils.text_to_speech import text_to_speech
 from src.utils.string_utils import (string_to_snake_case, string_to_camel_case, extract_number_from_string,
-    numeric_str_to_int, convert_to_spelling)
+    numeric_str_to_int)
 from src.utils.date_time_utils import (get_current_time, get_current_date, month_number_to_name, day_number_to_name,
                                        get_day_of_week)
 
