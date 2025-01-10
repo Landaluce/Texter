@@ -1,3 +1,5 @@
+import inspect
+
 from word2number import w2n
 import speech_recognition as sr
 
@@ -27,14 +29,8 @@ def convert_to_spelling(text: str, spelling_commands: list) -> str:
             input text: alpha beta
             output: ab
     """
-    words = text.split()
-    output = []
-    for word in words:
-        for command in spelling_commands:
-            if command.name == word:
-                output.append(command.key)
-                break
-    return "".join(output)
+    word_to_key = {command.name: command.key for command in spelling_commands}
+    return "".join(word_to_key.get(word, "") for word in text.split())
 
 def string_to_camel_case(input_str: str, lower: bool = False) -> str:
     """Capitalizes the first letter of each word in a string.

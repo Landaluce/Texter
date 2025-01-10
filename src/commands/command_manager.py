@@ -1,7 +1,7 @@
 from src.commands.command_executors import (ProgrammingCommandExecutor, KeyboardCommandExecutor, SwitchCommandExecutor,
                                             InfoCommandExecutor, GitCommandExecutor, TerminalCommandExecutor,
-                                            SelectionCommandExecutor, SpellingCommandExecutor,
-                                            InteractiveCommandExecutor, BrowserCommandExecutor)
+                                            SelectionCommandExecutor, InteractiveCommandExecutor,
+                                            BrowserCommandExecutor)
 from src.utils.constants import CommandType
 
 
@@ -32,7 +32,6 @@ class CommandManager:
         self.git_command_executor = GitCommandExecutor(self.key)
         self.terminal_command_executor = TerminalCommandExecutor(self.key, self.name)
         self.selection_command_executor = SelectionCommandExecutor(self.name)
-        self.spelling_command_executor = SpellingCommandExecutor(self.key, self.name)
         self.interactive_command_executor = InteractiveCommandExecutor(self.name)
         self.browser_command_executor = BrowserCommandExecutor(self.name)
 
@@ -73,9 +72,6 @@ class CommandManager:
 
         elif self.command_type == CommandType.SELECTION:
             self.selection_command_executor.execute()
-
-        elif self.command_type == CommandType.SPELLING:
-            self.spelling_command_executor.execute(app_state)
 
         elif self.command_type == CommandType.GIT:
             self.git_command_executor.execute()

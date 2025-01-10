@@ -307,18 +307,16 @@ class SelectionCommandExecutor:
             print(f"Unknown command: {self.name}")
 
 
-class SpellingCommandExecutor:
-
-    def __init__(self, key: str, name: str):
-        self.key = key
-        self.name = name
-
-    def execute(self, app_state) -> None:
-        gui.write(self.key)
-        spelling_output = convert_to_spelling(self.name, app_state.spelling_commands)
-        if spelling_output:
-            gui.write(spelling_output)
-
+# class SpellingCommandExecutor:
+#
+#     def __init__(self, key: str, name: str):
+#         self.key = key
+#         self.name = name
+#
+#     def execute(self, app_state) -> None:
+#         spelling_output = convert_to_spelling(self.name, app_state.spelling_commands)
+#         if spelling_output:
+#             gui.write(spelling_output)
 
 
 class InteractiveCommandExecutor:
