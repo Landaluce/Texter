@@ -37,16 +37,21 @@ class TexterUI:
         self.background_color = "#1f618d"
         self.font_color = "white"
         self.imgs_path = f"{os.path.abspath('../src/imgs/')}/"
-        self.wakeup_button_image = tk.PhotoImage(file=f"{self.imgs_path}play.png")
+        self.wakeup_button_image = self.load_image("play.png")
         self.wakeup_button_image.configure(width=25, height=25)
-        self.go_to_sleep_button_image = tk.PhotoImage(file=f"{self.imgs_path}pause.png")
+        self.go_to_sleep_button_image = self.load_image("pause.png")
         self.go_to_sleep_button_image.configure(width=25, height=25)
-        self.terminate_button_image = tk.PhotoImage(file=f"{self.imgs_path}stop.png")
+        self.terminate_button_image = self.load_image("stop.png")
         self.terminate_button_image.configure(width=25, height=25)
-        self.collapse_button_image = tk.PhotoImage(file=f"{self.imgs_path}collapse.png")
+        self.collapse_button_image = self.load_image("collapse.png")
         self.collapse_button_image.configure(width=25, height=25)
-        self.expand_button_image = tk.PhotoImage(file=f"{self.imgs_path}expand.png")
+        self.expand_button_image = self.load_image("expand.png")
         self.expand_button_image.configure(width=25, height=25)
+
+    def load_image(self, filename):
+        """Load and resize an image."""
+        path = os.path.join(self.imgs_path, filename)
+        return tk.PhotoImage(file=path)
 
     def init_ui(self, app_state, commands: dict) -> None:
         """
@@ -68,7 +73,14 @@ class TexterUI:
         self.app_state = app_state
 
         # Set the dimensions and position of the window (width x height + x_offset + y_offset
-        self.root.geometry("300x600+100+100")
+        window_width = 300
+        window_height = 600
+        window_position_x = 100
+        window_position_y = 100
+        self.root.geometry(
+            self.root.geometry(f"{window_width}x{window_height}+{window_position_x}+{window_position_y}")
+        )
+
         # Disable resizing both horizontally and vertically
         self.root.resizable(False, False)
 
@@ -247,6 +259,19 @@ class TexterUI:
 
         return active_commands
 
+    @staticmethod
+    def format_command_block(command_type, commands):
+        """Format commands as a string block for display."""
+        block = "┌────────────────────────────┐\n"
+        block += f"│ {command_type}:\n"
+        block += "├────────────────────────────┤\n"
+        for command in commands:
+            for key, val in json.loads(command).items():
+                if key == "name":
+                    block += f" {val}\n"
+        block += "└────────────────────────────┘\n"
+        return block
+
     def print_all_commands(self) -> None:
         """
         Display the active commands in the user interface based on the provided commands.
@@ -255,16 +280,8 @@ class TexterUI:
             None
         """
         commands = self.get_active_commands()
-        for command_type in commands:
-            self.commands_text_box.insert(tk.END, "┌────────────────────────────┐\n")
-            self.commands_text_box.insert(tk.END, f"│ {command_type}:\n")
-            self.commands_text_box.insert(tk.END, "├────────────────────────────┤\n")
-            for command in commands[command_type]:
-                for key, val in json.loads(command).items():
-                    if key == "name":
-                        self.commands_text_box.insert(tk.END, f" {val}")
-                self.commands_text_box.insert(tk.END, "\n")
-            self.commands_text_box.insert(tk.END, "└────────────────────────────┘\n")
+        for command_type, command_list in commands.items():
+            self.commands_text_box.insert(tk.END, self.format_command_block(command_type, command_list))
 
     def print_status(self) -> None:
         """
@@ -300,7 +317,6 @@ class TexterUI:
         self.status_text_box.config(state=tk.NORMAL)  # Enable editing to insert text
         self.status_text_box.delete(1.0, tk.END)  # Clear the current content
         self.status_text_box.insert(tk.END, status_message)  # Insert new status
-        # self.status_text_box.see(tk.END)  # Scroll to the end
         self.status_text_box.config(state=tk.DISABLED)  # Disable editing again
 
     def update_commands(self) -> None:
