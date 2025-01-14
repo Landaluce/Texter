@@ -225,6 +225,7 @@ class AppState:
 
     def switch_capitalization(self) -> None:
         self.capitalize = not self.capitalize
+        self.punctuation = self.capitalize
         self.update_status()
 
     def set_programming(self, state: bool) -> None:

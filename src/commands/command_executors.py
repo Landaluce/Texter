@@ -224,6 +224,7 @@ class SwitchCommandExecutor:
             "terminal off": lambda: setattr(app_state, "terminal", False),
             "switch mode": app_state.switch_mode,
             "switch punctuation": lambda :(app_state.switch_punctuation()),
+            "switch caps": lambda: (app_state.switch_capitalization()),
             "switch to java": lambda: (app_state.set_programming_language(ProgrammingLanguage.JAVA),
                                        app_state.load_programming_commands()),
             "switch to python": lambda: (app_state.set_programming_language(ProgrammingLanguage.PYTHON),

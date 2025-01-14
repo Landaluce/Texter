@@ -59,6 +59,21 @@
         "name": "switch mode",
         "key": "switch mode",
         "command_type": "switch"
+      },
+      {
+        "name": "switch punctuation",
+        "key": "switch punctuation",
+        "command_type": "switch"
+      },
+      {
+        "name": "switch caps",
+        "key": "switch caps",
+        "command_type": "switch"
+      },
+      {
+        "name": "switch cups",
+        "key": "switch cups",
+        "command_type": "switch"
       }
     ]
 }
