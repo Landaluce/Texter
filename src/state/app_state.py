@@ -189,12 +189,12 @@ class AppState:
         Returns:
         str: A formatted string showing the current state
         """
-        return (f"Typing: {'started' if self.typing_active else 'stopped'}\n"
-                f"Mode: {self.mode.value}\n"
+        return (f"Typing: {'Started' if self.typing_active else 'Stopped'}\n"
+                f"Mode: {self.mode.value.capitalize()}\n"
                 f"Programming: {'On' if self.programming else 'Off'} | "
                 f"{self.programming_language.value.capitalize()}\n"
                 f"Terminal: {'On' if self.terminal else 'Off'} | "
-                f"{self.terminal_os.value if self.terminal else ''}\n"
+                f"{self.terminal_os.value.capitalize()}\n"
                 f"Punctuation: {'On' if self.punctuation else 'Off'} | "
                 f"Caps: {'On' if self.capitalize else 'Off'}"
         )
