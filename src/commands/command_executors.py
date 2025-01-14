@@ -339,6 +339,41 @@ class BrowserCommandExecutor:
         self.name = name
 
     def execute(self) -> None:
+        command_mapping = {
+            "browser right": lambda: gui.hotkey("ctrl", "tab"),
+            "browser left": lambda: gui.hotkey("ctrl", "shift", "tab"),
+            "new chrome window": lambda: gui.hotkey("ctrl", "n"),
+            "new firefox window": lambda: gui.hotkey("ctrl", "n"),
+            "new incognito window": lambda: gui.hotkey("ctrl", "n"),
+            "focus chrome": lambda: self.focus_browser_window(),
+            "focus firefox": lambda: self.focus_browser_window("Firefox"),
+            "go back": lambda: gui.hotkey("alt", "left"),
+            "go forward": lambda: gui.hotkey("alt", "right"),
+            "refresh page": lambda: gui.hotkey("ctrl", "r"),
+            "stop refreshing": lambda: gui.press("esc"),
+            "scroll down": lambda: gui.scroll(-100),
+            "scroll up": lambda: gui.scroll(100),
+            "scroll to top": lambda: gui.hotkey("ctrl", "home"),
+            "scroll to bottom": lambda: gui.hotkey("ctrl", "end"),
+            "new tab": lambda: gui.hotkey("ctrl", "t"),
+            "close tab": lambda: gui.hotkey("ctrl", "w"),
+            "next tab": lambda: gui.hotkey("ctrl", "tab"),
+            "previous tab": lambda: gui.hotkey("ctrl", "shift", "tab"),
+            "reopen closed tab": lambda: gui.hotkey("ctrl", "shift", "t"),
+            "close window": lambda: gui.hotkey("alt", "f4"),
+            "minimize window": lambda: gui.hotkey("win", "down"),
+            "maximize window": lambda: gui.hotkey("win", "up"),
+            "open downloads": lambda: gui.hotkey("ctrl", "j"),
+            "open history": lambda: gui.hotkey("ctrl", "h"),
+            "open settings": lambda: (gui.hotkey("alt", "e"), gui.press("s")),
+            "zoom in": lambda: gui.hotkey("ctrl", "+"),
+            "zoom out": lambda: gui.hotkey("ctrl", "-"),
+            "reset zoom": lambda: gui.hotkey("ctrl", "0"),
+            "bookmark page": lambda: gui.hotkey("ctrl", "d"),
+            "print page": lambda: gui.hotkey("ctrl", "p"),
+            "save page": lambda: gui.hotkey("ctrl", "s"),
+        }
+
         if self.name.startswith("browser"):
             if "right" in self.name:
                 gui.hotkey("Ctrl", "Tab")
@@ -350,71 +385,14 @@ class BrowserCommandExecutor:
                     if not num_str.isdigit():
                         num_str = str(numeric_str_to_int(num_str))
                     gui.hotkey("ctrl", num_str)
-                except:
+                except Exception:
                     pass
-        elif self.name.startswith("new"):
-            if "chrome window" in self.name or "firefox" in self.name:
-                gui.hotkey("Ctrl", "n")
-            elif "incognito" in self.name:
-                gui.hotkey("Ctrl", "n")
-        elif self.name.startswith("focus chrome"):
-            self.focus_browser_window()
-        elif self.name.startswith("focus firefox"):
-            self.focus_browser_window("Firefox")
-
-        elif self.name.startswith("go back"):
-            gui.hotkey('alt', 'left')
-        elif self.name.startswith("go forward"):
-            gui.hotkey('alt', 'right')
-        elif self.name.startswith("refresh page"):
-            gui.hotkey('ctrl', 'r')
-        elif self.name.startswith("stop refreshing"):
-            gui.press('esc')
-        elif self.name.startswith("scroll down"):
-            gui.scroll(-100)
-        elif self.name.startswith("scroll up"):
-            gui.scroll(100)
-        elif self.name.startswith("scroll to top"):
-            gui.hotkey('ctrl', 'home')
-        elif self.name.startswith("scroll to bottom"):
-            gui.hotkey('ctrl', 'end')
-        elif self.name.startswith("new tab"):
-            gui.hotkey('ctrl', 't')
-        elif self.name.startswith("close tab"):
-            gui.hotkey('ctrl', 'w')
-        elif self.name.startswith("next tab"):
-            gui.hotkey('ctrl', 'tab')
-        elif self.name.startswith("previous tab"):
-            gui.hotkey('ctrl', 'shift', 'tab')
-        elif self.name.startswith("reopen closed tab"):
-            gui.hotkey('ctrl', 'shift', 't')
-        elif self.name.startswith("close window"):
-            gui.hotkey('alt', 'f4')
-        elif self.name.startswith("minimize window"):
-            gui.hotkey('win', 'down')
-        elif self.name.startswith("maximize window"):
-            gui.hotkey('win', 'up')
-        elif self.name.startswith("open downloads"):
-            gui.hotkey('ctrl', 'j')
-        elif self.name.startswith("open history"):
-            gui.hotkey('ctrl', 'h')
-        elif self.name.startswith("open settings"):
-            gui.hotkey('alt', 'e')
-            gui.press('s')
-        elif self.name.startswith("zoom in"):
-            gui.hotkey('ctrl', '+')
-        elif self.name.startswith("zoom out"):
-            gui.hotkey('ctrl', '-')
-        elif self.name.startswith("reset zoom"):
-            gui.hotkey('ctrl', '0')
-        elif self.name.startswith("bookmark page"):
-            gui.hotkey('ctrl', 'd')
-        elif self.name.startswith("print page"):
-            gui.hotkey('ctrl', 'p')
-        elif self.name.startswith("save page"):
-            gui.hotkey('ctrl', 's')
         else:
-            pass#gui.write(self.name)
+            # Match specific command strings to their actions
+            for command, action in command_mapping.items():
+                if self.name.startswith(command):
+                    action()
+                    break
 
     @staticmethod
     def start_browser(browser="chrome", url=None) -> None:
