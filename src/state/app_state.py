@@ -225,12 +225,9 @@ class AppState:
 
     def switch_capitalization(self) -> None:
         self.capitalize = not self.capitalize
-        self.punctuation = self.capitalize
+        if self.capitalize:
+            self.punctuation = True
         self.update_status()
-
-    def set_programming(self, state: bool) -> None:
-        """Enable or disable programming mode."""
-        self.programming = state
 
     def set_programming_language(self, language: ProgrammingLanguage) -> None:
         """Set the programming language."""
