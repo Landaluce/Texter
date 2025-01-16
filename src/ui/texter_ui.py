@@ -168,7 +168,7 @@ class TexterUI:
         self.commands_text_box.config(state=tk.DISABLED)
         self.commands_text_box.place(x=10, y=330, width=280, height=255)
 
-    def reload_commands(self):
+    def reload_commands(self):  # TODO: remove/add reload commands
         """Reload the commands from the updated commands file and display them in the UI."""
         # Clear the commands text box
         self.commands_text_box.commands(state=tk.NORMAL)
