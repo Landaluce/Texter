@@ -2,7 +2,6 @@ import json
 import os
 import sys
 import tkinter as tk
-from src.utils.command_utils import get_commands
 
 
 class TexterUI:
@@ -174,7 +173,7 @@ class TexterUI:
         self.commands_text_box.commands(state=tk.NORMAL)
         self.commands_text_box.delete(1.0, tk.END)
 
-        commands = get_commands(self.command_files_directory)
+        # commands = get_commands(self.command_files_directory)
 
         # Re-display the commands
         self.print_all_commands()
@@ -237,9 +236,11 @@ class TexterUI:
         self.app_state.update_status()
 
     def get_active_commands(self):
+        """Get active commands to display in the UI"""
         active_commands = {}
 
         def process_commands(commands, type_name):
+            """Creates a list of commands"""
             lst = []
             for command in commands:
                 temp_dict = command.commands_to_dict()
