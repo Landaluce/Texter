@@ -57,7 +57,6 @@ class TexterUI:
         self.add_command_button = None
         self.commands = None
 
-
     def load_image(self, filename):
         """Load and resize an image."""
         path = os.path.join(self.imgs_path, filename)
@@ -169,7 +168,6 @@ class TexterUI:
         self.commands_text_box.config(state=tk.DISABLED)
         self.commands_text_box.place(x=10, y=330, width=280, height=255)
 
-
     def reload_commands(self):
         """Reload the commands from the updated commands file and display them in the UI."""
         # Clear the commands text box
@@ -240,6 +238,7 @@ class TexterUI:
 
     def get_active_commands(self):
         active_commands = {}
+
         def process_commands(commands, type_name):
             lst = []
             for command in commands:
