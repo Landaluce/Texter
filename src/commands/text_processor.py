@@ -1,5 +1,55 @@
+"""
+This module defines the `TextProcessor` class, which provides methods for processing text, including
+restoring punctuation, capitalizing sentences, and handling overlapping chunks for predictions.
+It uses a model from Hugging Face's pipeline to perform text restoration and utilizes chunking
+and overlap techniques to handle long inputs efficiently.
+
+Key Features:
+1. **Text Preprocessing**: Cleans input text by removing unnecessary punctuation while preserving acronyms.
+2. **Punctuation Restoration**: Restores punctuation to text that has been stripped of punctuation marks.
+3. **Sentence Capitalization**: Capitalizes the first letter of each sentence in the given text.
+4. **Chunking and Overlap**: Processes long texts by breaking them into smaller chunks with overlapping words.
+5. **Prediction Alignment**: Aligns predictions with the original text and restores punctuation, taking confidence scores into account.
+
+Classes:
+- `TextProcessor`: The main class for text processing that provides methods for punctuation restoration,
+  sentence capitalization, and handling predictions with chunking and overlap.
+
+Methods:
+- `__init__(self, model="oliverguhr/fullstop-punctuation-multilang-large", chunk_size=230, overlap=5)`:
+   Initializes the `TextProcessor` with a specific Hugging Face model and settings for chunking and overlap.
+
+- `preprocess(text)`:
+   Removes unnecessary punctuation and preserves acronyms in the input text.
+
+- `restore_punctuation(self, text)`:
+   Restores punctuation to text based on model predictions.
+
+- `capitalize_sentences(text)`:
+   Capitalizes the first letter of each sentence in the input text.
+
+- `_predict(self, words)`:
+   Processes input words by performing predictions using chunking and overlap.
+
+- `_generate_chunks(self, words)`:
+   Generates overlapping chunks of words for prediction.
+
+- `_align_predictions(words, results, confidence_threshold=0.8)`:
+   Aligns the model predictions with the input words, merging subword tokens and filtering based on confidence scores.
+
+- `_prediction_to_text(predictions)`:
+   Converts aligned predictions into a text string with restored punctuation.
+
+Dependencies:
+- `re`: Regular expression library for text processing.
+- `transformers`: Hugging Face's library for working with pre-trained models.
+
+Usage Example:
+    text_processor = TextProcessor()
+    text_with_punctuation = text_processor.restore_punctuation("this is a test sentence without punctuation")
+    capitalized_text = text_processor.capitalize_sentences(text_with_punctuation)
+"""
 import re
-import torch
 from transformers import pipeline
 
 
@@ -25,8 +75,8 @@ class TextProcessor:
     @staticmethod
     def _initialize_pipeline(model):
         """Initialize the Hugging Face pipeline."""
-        device = 0 if torch.cuda.is_available() else -1
-        return pipeline("ner", model=model, grouped_entities=False, device=device)
+        # device = 0 if torch.cuda.is_available() else -1
+        return pipeline("ner", model=model, grouped_entities=False, device=-1)
 
     @staticmethod
     def preprocess(text):
@@ -68,7 +118,7 @@ class TextProcessor:
     @staticmethod
     def capitalize_sentences(text):
         """
-        Capitalize the first letter of each sentence in the text.
+        Capitalizes the first letter of each sentence in the text.
 
         Args:
             text (str): The input text with sentences.
@@ -76,10 +126,9 @@ class TextProcessor:
         Returns:
             str: The text with properly capitalized sentences.
         """
-        text = re.sub(r"(?<=[.!?]) +", "##SPLIT##", text)  # Mark sentence boundaries
-        sentences = text.split("##SPLIT##")
-        sentences = [sentence.strip().capitalize() for sentence in sentences]
-        return " ".join(sentences)
+        sentences = re.split(r'([.!?])\s*', text)
+        sentences = [sentence.capitalize() for sentence in sentences if sentence.strip()]
+        return "".join(sentences)
 
     def _predict(self, words):
         """
@@ -97,7 +146,6 @@ class TextProcessor:
         for chunk in chunks:
             text = " ".join(chunk)
             results = self.pipe(text)
-
             tagged_words.extend(self._align_predictions(chunk, results))
 
         return tagged_words
@@ -119,56 +167,52 @@ class TextProcessor:
                 break
 
     @staticmethod
-    def _align_predictions(chunk, results):
+    def _align_predictions(words, results, confidence_threshold=0.8):
         """
-        Align predictions from the model with the input chunk.
+        Aligns predictions from the model with the input words,
+        merging subword tokens to their corresponding word.
 
         Args:
-            chunk (list): The current chunk of words.
-            results (list): The model's predictions for the chunk.
+            words (list): List of original words.
+            results (list): List of token-level predictions.
+            confidence_threshold (float): Minimum score to consider a label valid.
 
         Returns:
-            list: Aligned words with their labels and scores.
+            list: Aligned predictions at the word level.
         """
-        tagged = []
+        aligned = []
         result_index = 0
-        char_index = 0
 
-        for word in chunk:
-            char_index += len(word) + 1  # Account for the space after each word
+        for word in words:
+            label = "0"  # Default label
+            max_score = 0.0
 
-            # Find the corresponding prediction
-            while result_index < len(results) and char_index > results[result_index]["end"]:
+            while result_index < len(results) and results[result_index]["word"].startswith("▁"):
+                token = results[result_index]
+                if token["score"] > confidence_threshold:
+                    label = token["entity"]  # Assign label with confidence
+                    max_score = max(max_score, token["score"])
                 result_index += 1
 
-            # Default values if no prediction matches
-            label = "0"
-            score = 0.0
+            aligned.append((word, label, max_score))
 
-            if result_index < len(results):
-                label = results[result_index]["entity"]
-                score = results[result_index]["score"]
-
-            tagged.append((word, label, score))
-
-        return tagged
+        return aligned
 
     @staticmethod
     def _prediction_to_text(predictions):
         """
-        Convert predictions into a punctuated text.
+        Converts aligned predictions into punctuated text.
 
         Args:
-            predictions (list): List of tuples (word, label, score).
+            predictions (list): Aligned predictions (word, label, score).
 
         Returns:
-            str: The text with restored punctuation.
+            str: The punctuated text.
         """
-        result = ""
-        for word, label, _ in predictions:
-            result += word
-            if label == "0":
-                result += " "
-            elif label in ".,?-:":
-                result += label + " "
-        return result.strip()
+        result = []
+        for i, (word, label, _) in enumerate(predictions):
+            if label in ".,?-:" and (i == len(predictions) - 1 or predictions[i + 1][1] == "0"):
+                result.append(f"{word}{label}")  # Append punctuation directly to the word
+            else:
+                result.append(word)  # No punctuation
+        return " ".join(result)
