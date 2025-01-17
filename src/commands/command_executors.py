@@ -1,3 +1,25 @@
+"""
+Module that defines classes for executing various types of commands in a GUI.
+The classes support programming, keyboard, terminal, selection, switch, and interactive commands.
+
+Each command executor corresponds to a specific action, such as typing programming commands (Python/Java),
+executing terminal commands, simulating keyboard actions, switching app states, or interacting with the browser.
+The primary function of each class is to simulate user interactions within a graphical interface.
+
+Classes:
+    - ProgrammingCommandExecutor: Executes programming commands for Python and Java.
+    - KeyboardCommandExecutor: Executes keyboard-related commands such as hotkeys and key presses.
+    - SwitchCommandExecutor: Executes commands to switch application states (e.g., programming mode, terminal mode).
+    - InfoCommandExecutor: Executes info commands that simply type text into the GUI.
+    - GitCommandExecutor: Executes Git-related commands within the terminal or GUI.
+    - TerminalCommandExecutor: Executes terminal-related commands such as navigating directories or system commands.
+    - SelectionCommandExecutor: Executes commands to manipulate selected text (e.g., copy, paste, delete).
+    - InteractiveCommandExecutor: Executes interactive commands, including fetching and reading out the time or date.
+    - BrowserCommandExecutor: Executes browser-related commands such as switching tabs, opening windows, and navigating pages.
+
+Each executor is initialized with a command key or name and can be invoked to simulate a GUI interaction.
+"""
+
 import subprocess
 from wave import Error
 import pyautogui as gui
@@ -11,7 +33,11 @@ from src.utils.date_time_utils import (get_current_time, get_current_date, month
 
 class ProgrammingCommandExecutor:
     """
-    Represents a command that can be executed to generate programming code.
+    A class that executes programming commands within a graphical user interface (GUI).
+
+    This class takes a key (representing the programming command) as input during initialization
+    and provides methods to execute the corresponding programming actions based on the selected
+    programming language (currently supports Python and Java).
     """
 
     def __init__(self, key: str):
@@ -28,7 +54,7 @@ class ProgrammingCommandExecutor:
         Executes the programming command based on the selected language.
 
         Args:
-            app_state (AppState): The current application state.
+            app_state (AppState): The current application state object containing the selected programming language.
         """
         if app_state.programming_language == ProgrammingLanguage.PYTHON:
             self._execute_python_command()
@@ -137,12 +163,24 @@ class ProgrammingCommandExecutor:
             gui.write(class_name)
 
     def _create_java_public_method(self) -> None:
+        """Generates a Java public method structure."""
         self._create_java_method("public")
 
     def _create_java_private_method(self) -> None:
+        """Generates a Java private method structure."""
         self._create_java_method("private")
 
     def _create_java_method(self, access_level: str) -> None:
+        """
+        Generates a Java method structure based on the specified access level.
+
+        This method extracts the method name from the command key, constructs the
+        method declaration with the given access level (e.g., "public", "private"), and
+        positions the cursor for further editing.
+
+        Args:
+            access_level (str): The access level of the method (e.g., "public", "private").
+        """
         method_name = self.key[len("create " + access_level + " "):].strip()  # Extract method name
         method_name = string_to_snake_case(method_name)
         gui.write(access_level + " void () {}")
@@ -154,7 +192,7 @@ class ProgrammingCommandExecutor:
 
 class KeyboardCommandExecutor:
     """
-    Represents a command that can be executed to generate keyboard code.
+    Represents a command that can be executed to generate keyboard keystrokes.
     """
 
     def __init__(self, key: str, name, num_key: str = None):
@@ -242,30 +280,73 @@ class SwitchCommandExecutor:
 
 
 class InfoCommandExecutor:
+    """
+    Executes an info command.
 
+    Args:
+        key (str): The key to be typed.
+    """
     def __init__(self, key: str):
+        """
+        Initializes an InfoCommandExecutor instance.
+
+        Args:
+            key (str): The key to be typed.
+        """
         self.key = key
 
     def execute(self) -> None:
+        """
+        Executes the info command.
+        """
         gui.write(self.key)
 
 
 class GitCommandExecutor:
+    """
+    Executes a Git command by typing the specified key.
 
+    Args:
+        key (str): The key associated with the Git command.
+        """
     def __init__(self, key: str):
+        """
+        Initializes a GitCommandExecutor instance.
+
+        Args:
+            key (str): The key associated with the Git command.
+        """
         self.key = key
 
     def execute(self) -> None:
+        """
+        Executes the info command.
+        """
         gui.write(self.key)
 
 
 class TerminalCommandExecutor:
+    """
+    A class that executes selection commands within a GUI.
+    """
 
     def __init__(self, key: str, name: str):
+        """
+        Initializes a `TerminalCommandExecutor` instance.
+
+        Args:
+            name (str): The name of the selection command to be executed.
+        """
         self.key = key
         self.name = name
 
     def execute(self, app_state) -> None:
+        """
+        Executes a terminal command.
+
+        Args:
+            app_state (AppState): The current application state, including information about the terminal OS.
+        """
         simple_command_names = ["view current directory", "list directory contents", "show network information",
                                 "show system information", "check active processes", "show system information",
                                 "clear terminal screen"]
@@ -280,8 +361,20 @@ class TerminalCommandExecutor:
 
 
 class SelectionCommandExecutor:
+    """
+    A class that executes selection commands within a GUI.
 
+    This class takes a command name as input during initialization and provides an `execute` method
+    to perform the corresponding selection action. Supported commands include selecting a line,
+    selecting all text, deleting text, copying, and pasting.
+    """
     def __init__(self, name: str):
+        """
+        Initializes a `SelectionCommandExecutor` instance.
+
+        Args:
+            name (str): The name of the selection command to be executed.
+        """
         self.name = name
 
     def execute(self) -> None:
@@ -308,11 +401,23 @@ class SelectionCommandExecutor:
 
 
 class InteractiveCommandExecutor:
+    """
+    A class that executes interactive commands within a GUI.
+    """
 
     def __init__(self, name: str):
+        """
+        Initializes a `SelectionCommandExecutor` instance.
+
+        Args:
+            name (str): The name of the selection command to be executed.
+        """
         self.name = name
 
     def execute(self) -> None:
+        """
+        Executes the interactive command.
+        """
         if self.name.startswith("what time is it") or self.name.startswith("what's the time"):
             current_time = get_current_time()
             text_to_speech("it's " + current_time)
@@ -334,11 +439,22 @@ class InteractiveCommandExecutor:
 
 
 class BrowserCommandExecutor:
-
+    """
+    A class that executes browser commands within a GUI.
+    """
     def __init__(self, name: str):
+        """
+        Initializes a `SelectionCommandExecutor` instance.
+
+        Args:
+            name (str): The name of the selection command to be executed.
+        """
         self.name = name
 
     def execute(self) -> None:
+        """
+        Executes the interactive command.
+        """
         command_mapping = {
             "browser right": lambda: gui.hotkey("ctrl", "tab"),
             "browser left": lambda: gui.hotkey("ctrl", "shift", "tab"),
@@ -385,7 +501,7 @@ class BrowserCommandExecutor:
                     if not num_str.isdigit():
                         num_str = str(numeric_str_to_int(num_str))
                     gui.hotkey("ctrl", num_str)
-                except Exception:
+                except (ValueError, IndexError):
                     pass
         else:
             # Match specific command strings to their actions
@@ -397,12 +513,12 @@ class BrowserCommandExecutor:
     @staticmethod
     def start_browser(browser="chrome", url=None) -> None:
         """
-            Starts Chrome or Firefox browser. Optionally opens a specific URL.
+        Starts Chrome or Firefox browser. Optionally opens a specific URL.
 
-            Args:
-                browser (str): Either "chrome" or "firefox".
-                url (str): Optional URL to open in the browser.
-            """
+        Args:
+            browser (str): Either "chrome" or "firefox".
+            url (str): Optional URL to open in the browser.
+        """
         try:
             if browser.lower() == "chrome":
                 command = ["google-chrome"]
@@ -425,6 +541,12 @@ class BrowserCommandExecutor:
             print(f"An error occurred: {e}")
 
     def focus_browser_window(self, browser="Chrome") -> None:
+        """
+        Attempts to focus an existing browser window based on the provided name.
+
+        Args:
+            browser (str, optional): The name of the browser window to focus. Defaults to "Chrome".
+        """
         try:
             # Search for the browser window
             result = subprocess.run(

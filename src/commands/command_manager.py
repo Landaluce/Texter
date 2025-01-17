@@ -1,3 +1,43 @@
+"""
+This module defines the CommandManager class, which handles the execution of various commands
+based on recognized speech input. Commands can be of different types such as keyboard, programming,
+switch, terminal, and more. The CommandManager initializes the appropriate command executors
+and provides methods for executing and converting commands to a dictionary representation.
+
+Key Features:
+1. **Command Execution**:
+   - Executes different command types using specific executors for each command type.
+   - Supports various commands like keyboard input, programming actions, terminal commands, and more.
+
+2. **Command Representation**:
+   - Converts command objects into dictionaries for easy storage or transmission.
+
+Classes:
+- `CommandManager`:
+   Manages different command types and their corresponding executors. It also provides methods
+   for executing commands and converting them into a dictionary format.
+
+Methods:
+- `__init__(self, name: str, command_type: CommandType, key=None, num_key=None)`:
+   Initializes a new command instance with the given name, command type, key, and optional num_key.
+
+- `commands_to_dict(self, include_num_key: bool=True) -> dict`:
+   Converts the current command object into a dictionary format.
+
+- `execute(self, app_state)`:
+   Executes the appropriate command based on the command type. It interacts with the application state
+   to perform the desired action (e.g., typing, switching modes, terminal commands, etc.).
+
+Dependencies:
+- `src.commands.command_executors`: Contains the specific command executors for each command type (e.g., `KeyboardCommandExecutor`, `ProgrammingCommandExecutor`).
+- `src.utils.constants`: Contains the `CommandType` enum, which classifies commands into various categories.
+
+Usage:
+    command = CommandManager(name="Type Hello", command_type=CommandType.KEYBOARD, key="h")
+    command.execute(app_state)
+    command_dict = command.commands_to_dict(include_num_key=False)
+"""
+
 from src.commands.command_executors import (ProgrammingCommandExecutor, KeyboardCommandExecutor, SwitchCommandExecutor,
                                             InfoCommandExecutor, GitCommandExecutor, TerminalCommandExecutor,
                                             SelectionCommandExecutor, InteractiveCommandExecutor,
@@ -8,17 +48,17 @@ from src.utils.constants import CommandType
 class CommandManager:
     """
     Represents a command that can be executed based on recognized speech input.
-
-    Attributes:
-        name (str): The name of the command.
-        command_type (CommandType): The type of command (e.g., KEYBOARD, SWITCH).
-        key (str, optional): The key to be pressed for keyboard or programming commands.
-        num_key (str, optional): The key used for commands that can be repeated multiple times.
     """
 
     def __init__(self, name: str, command_type: CommandType, key=None, num_key=None):
         """
         Initializes a new Command instance.
+
+        Args:
+            name (str): The name of the command.
+            command_type (CommandType): The type of command (e.g., KEYBOARD, SWITCH).
+            key (str, optional): The key to be pressed for keyboard or programming commands.
+            num_key (str, optional): The key used for commands that can be repeated multiple times.
         """
         self.name = name
         self.command_type = command_type
@@ -36,6 +76,15 @@ class CommandManager:
         self.browser_command_executor = BrowserCommandExecutor(self.name)
 
     def commands_to_dict(self, include_num_key: bool=True) -> dict:
+        """
+        Converts the current command object into a dictionary representation.
+
+        Args:
+          include_num_key (bool, optional): A flag indicating whether to include the "num_key" in the output dictionary.
+
+        Returns:
+          dict: A dictionary representation of the command object.
+        """
         command_dict = {
             "name": self.name,
             "command_type": self.command_type.name,

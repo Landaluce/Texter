@@ -1,3 +1,27 @@
+"""
+This module defines the `get_commands` function, which retrieves and combines commands from all JSON files in a specified directory.
+
+The function searches for all JSON files in the given directory whose filenames end with 'commands.json' and loads the
+commands from each of these files. The loaded commands are merged into a single dictionary, which is then returned.
+
+Methods:
+- `get_commands(directory: str) -> dict`:
+    Retrieves commands from all JSON files in the specified directory.
+
+    Parameters:
+    - `directory` (str): The path to the directory containing the command JSON files.
+
+    Returns:
+    - `dict`: A dictionary containing the combined commands from all found JSON files.
+
+    Error Handling:
+    - If the directory does not exist or is invalid, the function returns an empty dictionary.
+    - If a file is not found or cannot be parsed as JSON, the function prints an error message and continues processing other files.
+
+Example Usage:
+    commands = get_commands("/path/to/commands/directory")
+"""
+
 import glob
 import json
 import os

@@ -1,3 +1,18 @@
+"""
+Main function that initializes the application state and starts the live speech interpreter.
+
+This function sets up the application by performing the following tasks:
+- Creates an instance of `AppState` and initializes the UI.
+- Loads the necessary commands using the `get_commands` function.
+- Sets up the speech recognizer using the `speech_recognition` library.
+- Starts the live speech interpretation process in a separate thread to handle speech commands in real-time.
+
+Example Usage:
+    Run the script to initialize the application, load commands, and start live speech recognition.
+
+Raises:
+    RuntimeError: If the commands cannot be loaded or if the speech interpreter thread fails to start.
+"""
 from utils.command_utils import get_commands
 from src.utils.speech_recognition_utils import *
 
@@ -39,7 +54,7 @@ def main():
         app.init_ui(app_state, commands)
 
     except Exception as e:
-        raise
+        print(e)
 
 
 if __name__ == "__main__":

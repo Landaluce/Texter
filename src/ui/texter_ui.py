@@ -1,3 +1,93 @@
+"""
+This module defines the `TexterUI` class, which provides a graphical user interface (GUI) for the Texter application.
+The GUI allows users to interact with the app by entering text commands, controlling typing modes, and displaying status and active commands.
+The interface is built using the `tkinter` library and includes various buttons, labels, and text boxes for interaction.
+
+Key Features:
+1. **Interactive Commands**: Users can view, add, or interact with various command types (e.g., info, selection, programming).
+2. **Status Display**: A section of the interface shows the current status of the app, including typing mode and other relevant information.
+3. **Window Control**: Includes buttons to manage the app's state (e.g., wake up, go to sleep, terminate).
+4. **Text Input**: A non-editable text box displays input, while allowing users to append text programmatically.
+
+Methods:
+- `__init__(self, command_files_directory)`:
+   Initializes the `TexterUI` instance, setting up attributes and initializing the window.
+
+- `load_image(filename)`:
+   Loads and resizes an image for use in buttons (e.g., wake up, terminate).
+
+- `init_ui(self, app_state, commands)`:
+   Initializes the user interface, setting up input elements, buttons, labels, and status sections based on the app's state and commands.
+
+- `configure_window(self)`:
+   Configures the main window's dimensions, position, and appearance.
+
+- `create_input_section(self)`:
+   Creates the section of the UI where input is displayed.
+
+- `create_action_buttons(self)`:
+   Creates buttons for various actions (e.g., wake up, go to sleep, terminate).
+
+- `create_status_section(self)`:
+   Creates the status section, displaying information about the app's current state.
+
+- `create_commands_section(self)`:
+   Creates a section for displaying commands and controlling the display of active commands.
+
+- `reload_commands(self)`:
+   Reloads commands from an updated file and refreshes the command display.
+
+- `toggle_status_textbox(self)`:
+   Toggles the visibility of the commands section, expanding or collapsing it.
+
+- `on_terminate_button_click(self)`:
+   Terminates the application and closes the main window.
+
+- `terminate_all_threads(self)`:
+   Safely terminates all threads and exits the application.
+
+- `on_wake_up_button_click(self)`:
+   Activates the typing mode and updates the UI status.
+
+- `on_go_to_sleep_button_click(self)`:
+   Deactivates the typing mode and updates the UI status.
+
+- `get_active_commands(self)`:
+   Retrieves all active commands grouped by type (e.g., info commands, git commands).
+
+- `format_command_block(command_type, commands)`:
+   Formats commands into a string block for display.
+
+- `print_all_commands(self)`:
+   Displays all active commands in the UI.
+
+- `print_status(self)`:
+   Updates the UI to reflect the current status of the app.
+
+- `append_text(self, text)`:
+   Appends text to the input text box and scrolls to the end.
+
+- `update_status(self, status_message)`:
+   Updates the status text box in a thread-safe manner.
+
+- `update_commands(self)`:
+   Updates the commands display in a thread-safe manner.
+
+- `_update_status_ui(self, status_message)`:
+   Updates the status text box with the latest status message.
+
+- `_update_commands_ui(self)`:
+   Updates the commands text box with the latest list of commands.
+
+Dependencies:
+- `tkinter`: The standard Python library for creating GUIs.
+- `json`: Used for processing commands as JSON objects.
+- `os`, `sys`: Libraries for working with file paths and system functionalities.
+
+Usage Example:
+    texter_ui = TexterUI(command_files_directory="/path/to/commands")
+    texter_ui.init_ui(app_state, commands_dict)
+"""
 import json
 import os
 import sys
@@ -218,8 +308,12 @@ class TexterUI:
             if hasattr(self, "speech_thread") and self.speech_thread.is_alive():
                 self.speech_thread.join()
             sys.exit(0)  # Terminate the main thread and exit the program
-        except:
-            pass
+        except AttributeError as e:
+            # Handle the case where the speech_thread attribute is missing
+            print(f"Error: {e}")
+        except Exception as e:
+            # Catch any other unexpected exceptions
+            print(f"Unexpected error: {e}")
 
     def on_wake_up_button_click(self) -> None:
         """

@@ -1,3 +1,44 @@
+"""
+This module defines the `AppState` class, which encapsulates the state and behavior
+of an application supporting multiple modes, commands, and configurations.
+
+The `AppState` class manages:
+- Typing and application modes (e.g., dictation, spelling).
+- Commands for various functionalities, including keyboard, terminal, programming, and more.
+- Configurations for programming languages and terminal operating systems.
+- Application settings such as punctuation, capitalization, and spelling.
+
+Features:
+1. Command Management:
+   - Dynamically loads commands based on configurations.
+   - Handles and executes commands across different categories (e.g., terminal, programming).
+2. Mode and State Management:
+   - Switches between dictation and spelling modes.
+   - Toggles features like punctuation, capitalization, and typing activity.
+3. Programming and Terminal Support:
+   - Supports different programming languages for contextual commands.
+   - Adapts terminal commands based on the operating system.
+4. Status Reporting:
+   - Generates and updates status strings reflecting the current application state.
+   - Integrates with a UI or prints to the console when UI is unavailable.
+5. Script Management:
+   - Allows the script to restart itself programmatically.
+
+Dependencies:
+- `sys`: For accessing system-specific parameters and functions.
+- `subprocess`: For restarting the application script.
+- `src.commands.command_manager.CommandManager`: For managing individual commands.
+- `src.utils.constants`: For enumerations like `CommandType`, `ProgrammingLanguage`, `TerminalOS`, and `Mode`.
+
+Usage:
+    app_state = AppState()
+    app_state.load_commands(commands_config)
+    app_state.switch_typing()
+    app_state.handle_command("example_command")
+
+Classes:
+- `AppState`: Represents the core state and functionality of the application.
+"""
 import sys
 import subprocess
 from src.commands.command_manager import CommandManager
@@ -218,12 +259,14 @@ class AppState:
         self.update_status()
 
     def switch_punctuation(self) -> None:
+        """Toggle punctuation On/OFF."""
         self.punctuation = not self.punctuation
         if not self.punctuation:
             self.capitalize = False
         self.update_status()
 
     def switch_capitalization(self) -> None:
+        """Toggle capitalization On/OFF."""
         self.capitalize = not self.capitalize
         if self.capitalize:
             self.punctuation = True

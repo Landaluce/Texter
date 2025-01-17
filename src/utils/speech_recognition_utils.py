@@ -1,3 +1,59 @@
+"""
+This module defines the core functions for running a live speech-to-text interpreter
+with command recognition and typing capabilities.
+
+Key Features:
+1. **Live Speech Interpretation**:
+   - Continuously listens for speech input and processes it in real-time.
+   - Uses a speech recognizer to convert spoken words into text.
+
+2. **Command Handling**:
+   - Identifies and executes predefined commands such as text formatting and application control.
+   - Supports modes like dictation and spelling for text processing.
+
+3. **Text Processing**:
+   - Converts recognized text to specific cases (e.g., camel case, snake case).
+   - Restores punctuation and capitalizes sentences based on application settings.
+
+4. **Error Handling**:
+   - Handles common errors during speech recognition (e.g., timeouts, unknown audio).
+   - Processes special cases in recognized text to improve command recognition.
+
+Functions:
+- `run_live_speech_interpreter(app_state, app_ui, recognizer)`:
+   Runs the live speech interpreter in a separate thread.
+
+- `live_speech_interpreter(app_state, texter_ui, recognizer)`:
+   Main loop for listening to and processing speech commands.
+
+- `recognize_speech(recognizer, timeout)`:
+   Captures and processes audio input using the given speech recognizer.
+
+- `process_special_cases(text)`:
+   Replaces specific phrases in the recognized text to handle common misinterpretations.
+
+- `handle_spelling_mode(app_state, text)`:
+   Processes text in spelling mode, converting input into a spelling-friendly format.
+
+- `handle_dictation_mode(app_state, texter_ui, text)`:
+   Processes text in dictation mode, supporting command recognition and formatting.
+
+Dependencies:
+- `threading`: For running the interpreter in a separate thread.
+- `pyautogui`: For automating typing actions.
+- `speech_recognition`: For converting speech to text.
+- `src.commands.text_processor.TextProcessor`: For text processing tasks.
+- `src.state.app_state.AppState`: Represents the application's current state.
+- `src.ui.texter_ui.TexterUI`: UI integration for displaying recognized text and status updates.
+- `src.utils.string_utils`: Utilities for text conversion (e.g., camel case, snake case).
+- `src.utils.error_handler.noalsaerr`: Suppresses ALSA-related errors during microphone usage.
+
+Usage:
+    recognizer = sr.Recognizer()
+    app_state = AppState()
+    app_ui = TexterUI()
+    run_live_speech_interpreter(app_state, app_ui, recognizer)
+"""
 from __future__ import annotations
 import threading  # noqa: F401
 import pyautogui as gui
@@ -8,8 +64,38 @@ from src.state.app_state import AppState
 from src.ui.texter_ui import TexterUI
 from src.utils.string_utils import string_to_snake_case, string_to_camel_case, convert_to_spelling
 
-text_processor = TextProcessor()
 
+def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognizer) -> None:
+    """
+    This function runs the live speech interpreter in a separate thread.
+    """
+    while not app_state.terminate:
+        live_speech_interpreter(app_state, app_ui, recognizer)
+
+def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer: sr.Recognizer):
+    """
+    Continuously listens for and interprets speech commands, executing corresponding actions.
+
+    This function utilizes a speech recognizer to convert spoken words into text and then processes
+    the text to determine if it matches any predefined commands. If a command is recognized, it is
+    executed; otherwise, the spoken text is typed out if typing mode is active.
+
+    Parameters:
+        texter_ui(TexterUI): frontend
+        app_state (AppState): The current application state, including typing status and loaded commands.
+        recognizer (sr.Recognizer): The speech recognition object used to process the audio input.
+    """
+    with noalsaerr():
+        while not app_state.terminate:
+            text = recognize_speech(recognizer)
+            if text:
+                text = text.lower()
+                text = process_special_cases(text)
+
+                texter_ui.append_text("You said:" + "~" + text + "~")
+
+                handle_dictation_mode(app_state, texter_ui, text)
+                handle_spelling_mode(app_state, text)
 
 def recognize_speech(recognizer: sr.Recognizer, timeout: int = 2) -> str or None:
     """
@@ -43,7 +129,6 @@ def recognize_speech(recognizer: sr.Recognizer, timeout: int = 2) -> str or None
             return None
     return None
 
-
 def process_special_cases(text: str) -> str:
     """Handles special case replacements in recognized text."""
     if not isinstance(text, str):
@@ -58,7 +143,7 @@ def process_special_cases(text: str) -> str:
         text = text.replace(target, replacement)
     return text
 
-def handle_spelling_mode(app_state, texter_ui, text: str):
+def handle_spelling_mode(app_state, text: str):
     """Processes text in spelling mode."""
     spelling_output = convert_to_spelling(text, app_state.spelling_commands)
     if spelling_output:
@@ -79,44 +164,8 @@ def handle_dictation_mode(app_state, texter_ui, text: str):
     elif not app_state.handle_command(text):
         if app_state.typing_active:
             if app_state.punctuation:
+                text_processor = TextProcessor()
                 text = text_processor.restore_punctuation(text)
                 if app_state.capitalize:
                     text = text_processor.capitalize_sentences(text)
             gui.write(text)
-
-
-def live_speech_interpreter(
-        app_state: AppState, texter_ui: TexterUI, recognizer: sr.Recognizer
-):
-    """
-    Continuously listens for and interprets speech commands, executing corresponding actions.
-
-    This function utilizes a speech recognizer to convert spoken words into text and then processes
-    the text to determine if it matches any predefined commands. If a command is recognized, it is
-    executed; otherwise, the spoken text is typed out if typing mode is active.
-
-    Parameters:
-        texter_ui(TexterUI): frontend
-        app_state (AppState): The current application state, including typing status and loaded commands.
-        recognizer (sr.Recognizer): The speech recognition object used to process the audio input.
-    """
-    with noalsaerr():
-        while not app_state.terminate:
-            text = recognize_speech(recognizer)
-            if text:
-                text = text.lower()
-                text = process_special_cases(text)
-
-                texter_ui.append_text("You said:" + "~" + text + "~")
-
-                handle_dictation_mode(app_state, texter_ui, text)
-                handle_spelling_mode(app_state, texter_ui, text)
-
-
-
-def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognizer) -> None:
-    """
-    This function runs the live speech interpreter in a separate thread.
-    """
-    while not app_state.terminate:
-        live_speech_interpreter(app_state, app_ui, recognizer)

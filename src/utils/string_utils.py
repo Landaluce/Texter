@@ -1,3 +1,39 @@
+"""
+This module provides various utility functions for string manipulations, number extractions, and text conversions.
+
+Functions:
+- `numeric_str_to_int`: Converts a numeric string (e.g., "three") to its corresponding integer value.
+    - Args:
+        - `numeric_str` (str): The numeric string (e.g., "three") to convert.
+    - Returns:
+        - `int`: The corresponding integer value.
+
+- `convert_to_spelling`: Converts spoken words (e.g., "alpha", "beta") to corresponding spelling characters.
+    - Args:
+        - `text` (str): The input text (e.g., "alpha beta") to process.
+        - `spelling_commands` (list): A list of spelling commands mapping words to their corresponding letters.
+    - Returns:
+        - `str`: A string containing the converted spelling characters (e.g., "ab").
+
+- `string_to_camel_case`: Converts a string to camelCase, with an option to lowercase the first word.
+    - Args:
+        - `input_str` (str): The input string to convert.
+        - `lower` (bool): If True, the first word will be lowercase. Defaults to False.
+    - Returns:
+        - `str`: The input string in camelCase format.
+
+- `string_to_snake_case`: Converts a given string to snake_case format.
+    - Args:
+        - `input_str` (str): The input string to be converted.
+    - Returns:
+        - `str`: The string in snake_case format, where spaces are replaced with underscores.
+
+- `extract_number_from_string`: Extracts and returns a numeric value from the input text.
+    - Args:
+        - `text` (str): The command text from which to extract the number.
+    - Returns:
+        - `int`: The extracted numeric value, or 1 if extraction fails.
+"""
 from word2number import w2n
 import speech_recognition as sr
 

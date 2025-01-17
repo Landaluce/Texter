@@ -1,3 +1,32 @@
+"""
+This module provides several utility functions for working with dates and times.
+
+Functions:
+- `get_current_time`: Retrieves the current time in 24-hour format.
+    - Returns a string in the format "HH:MM" (e.g., "14:30").
+
+- `get_day_of_week`: Retrieves the day of the week for a given date.
+    - Args:
+        - `date_str`: A string representing the date (e.g., '2024-12-16').
+        - `date_format`: The format of the input date string (default is "%Y-%m-%d").
+    - Returns:
+        - A string representing the day of the week (e.g., 'Monday').
+
+- `get_current_date`: Retrieves the current date and time as a `datetime` object.
+    - Returns a `datetime` object representing the current date and time.
+
+- `month_number_to_name`: Converts a numeric month (1-12) to its corresponding month name.
+    - Args:
+        - `month_number`: The numeric representation of a month (1 for January, 2 for February, etc.).
+    - Returns:
+        - The name of the month (e.g., "January") or an error message if the input is invalid.
+
+- `day_number_to_name`: Converts a day number (e.g., 1, 2, 3) into its ordinal representation (e.g., 1st, 2nd, 3rd).
+    - Args:
+        - `day_number`: The day number to be converted.
+    - Returns:
+        - A string representing the day number with its ordinal suffix (e.g., "1st", "2nd", "3rd").
+"""
 from datetime import datetime
 
 
