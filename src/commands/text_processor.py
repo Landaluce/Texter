@@ -51,6 +51,8 @@ Usage Example:
 """
 import re
 from transformers import pipeline
+import warnings
+warnings.filterwarnings("ignore", message="`grouped_entities` is deprecated")
 
 
 class TextProcessor:
@@ -59,7 +61,7 @@ class TextProcessor:
     and handling overlapping chunks for predictions.
     """
 
-    def __init__(self, model="oliverguhr/fullstop-punctuation-multilang-large", chunk_size=230, overlap=5):
+    def __init__(self, model="distilbert-base-uncased-finetuned-sst-2-english", chunk_size=230, overlap=5):
         """
         Initialize the TextProcessor with a specific model and settings.
 
