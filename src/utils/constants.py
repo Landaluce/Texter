@@ -27,6 +27,7 @@ Enums:
     - `SPELLING`: Represents spelling mode.
 """
 from enum import Enum, auto
+import pyautogui as gui
 
 
 class CommandType(Enum):
@@ -65,3 +66,61 @@ class Mode(Enum):
     """
     DICTATION = "dictation"
     SPELLING = "spelling"
+
+
+simple_terminal_command_names = ["view current directory", "list directory contents", "show network information",
+                                "show system information", "check active processes", "show system information",
+                                "clear terminal screen"]
+
+command_groups = {
+    "keyboard_commands": CommandType.KEYBOARD,
+    "info_commands": CommandType.INFO,
+    "selection_commands": CommandType.SELECTION,
+    "switch_commands": CommandType.SWITCH,
+    "spelling_commands": CommandType.SPELLING,
+    "git_commands": CommandType.GIT,
+    "interactive_commands": CommandType.INTERACTIVE,
+    "browser_commands": CommandType.BROWSER,
+}
+
+selection_commands_map = {
+    "select line": lambda: gui.hotkey("home", "shift", "end"),
+    "select all": lambda: gui.hotkey("ctrl", "a"),
+    "delete line": lambda: gui.hotkey("home", "shift", "end", "backspace"),
+    "delete all": lambda: gui.hotkey("ctrl", "a", "backspace"),
+    "copy": lambda: gui.hotkey("ctrl", "c"),
+    "paste": lambda: gui.hotkey("ctrl", "v"),
+}
+
+browser_commands_map = {
+    "browser right": lambda: gui.hotkey("ctrl", "tab"),
+    "browser left": lambda: gui.hotkey("ctrl", "shift", "tab"),
+    "new chrome window": lambda: gui.hotkey("ctrl", "n"),
+    "new firefox window": lambda: gui.hotkey("ctrl", "n"),
+    "new incognito window": lambda: gui.hotkey("ctrl", "n"),
+    "go back": lambda: gui.hotkey("alt", "left"),
+    "go forward": lambda: gui.hotkey("alt", "right"),
+    "refresh page": lambda: gui.hotkey("ctrl", "r"),
+    "stop refreshing": lambda: gui.press("esc"),
+    "scroll down": lambda: gui.scroll(-100),
+    "scroll up": lambda: gui.scroll(100),
+    "scroll to top": lambda: gui.hotkey("ctrl", "home"),
+    "scroll to bottom": lambda: gui.hotkey("ctrl", "end"),
+    "new tab": lambda: gui.hotkey("ctrl", "t"),
+    "close tab": lambda: gui.hotkey("ctrl", "w"),
+    "next tab": lambda: gui.hotkey("ctrl", "tab"),
+    "previous tab": lambda: gui.hotkey("ctrl", "shift", "tab"),
+    "reopen closed tab": lambda: gui.hotkey("ctrl", "shift", "t"),
+    "close window": lambda: gui.hotkey("alt", "f4"),
+    "minimize window": lambda: gui.hotkey("win", "down"),
+    "maximize window": lambda: gui.hotkey("win", "up"),
+    "open downloads": lambda: gui.hotkey("ctrl", "j"),
+    "open history": lambda: gui.hotkey("ctrl", "h"),
+    "open settings": lambda: (gui.hotkey("alt", "e"), gui.press("s")),
+    "zoom in": lambda: gui.hotkey("ctrl", "+"),
+    "zoom out": lambda: gui.hotkey("ctrl", "-"),
+    "reset zoom": lambda: gui.hotkey("ctrl", "0"),
+    "bookmark page": lambda: gui.hotkey("ctrl", "d"),
+    "print page": lambda: gui.hotkey("ctrl", "p"),
+    "save page": lambda: gui.hotkey("ctrl", "s"),
+}

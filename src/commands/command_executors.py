@@ -23,7 +23,8 @@ Each executor is initialized with a command key or name and can be invoked to si
 import subprocess
 from wave import Error
 import pyautogui as gui
-from src.utils.constants import ProgrammingLanguage, TerminalOS
+from src.utils.constants import (ProgrammingLanguage, TerminalOS, selection_commands_map, browser_commands_map,
+                                simple_terminal_command_names)
 from src.utils.text_to_speech import text_to_speech
 from src.utils.string_utils import (string_to_snake_case, string_to_camel_case, extract_number_from_string,
     numeric_str_to_int)
@@ -252,7 +253,7 @@ class SwitchCommandExecutor:
         Args:
             app_state (AppState): The current application state.
         """
-        command_map = {
+        switch_command_map = {
             "go to sleep": lambda: setattr(app_state, "typing_active", False),
             "wake up": lambda: setattr(app_state, "typing_active", True),
             "refresh texter": app_state.restart_script,
@@ -274,8 +275,8 @@ class SwitchCommandExecutor:
                                        app_state.load_terminal_commands()),
         }
 
-        if self.name in command_map:
-            command_map[self.name]()
+        if self.name in switch_command_map:
+            switch_command_map[self.name]()
             app_state.update_status()
 
 
@@ -347,13 +348,10 @@ class TerminalCommandExecutor:
         Args:
             app_state (AppState): The current application state, including information about the terminal OS.
         """
-        simple_command_names = ["view current directory", "list directory contents", "show network information",
-                                "show system information", "check active processes", "show system information",
-                                "clear terminal screen"]
         if ((self.name.startswith("change permissions") and app_state.terminal_os == TerminalOS.LINUX) or
                 self.name.startswith("go to")):
             gui.write(self.key)
-        elif self.name in simple_command_names:
+        elif self.name in simple_terminal_command_names:
             gui.write(self.key)
             gui.hotkey("enter")
         else:
@@ -384,17 +382,8 @@ class SelectionCommandExecutor:
         This method performs actions such as selecting a line, selecting all text, deleting text,
         copying, or pasting based on the recognized command.
         """
-        commands = {
-            "select line": lambda: gui.hotkey("home", "shift", "end"),
-            "select all": lambda: gui.hotkey("ctrl", "a"),
-            "delete line": lambda: gui.hotkey("home", "shift", "end", "backspace"),
-            "delete all": lambda: gui.hotkey("ctrl", "a", "backspace"),
-            "copy": lambda: gui.hotkey("ctrl", "c"),
-            "paste": lambda: gui.hotkey("ctrl", "v"),
-        }
-
-        command_executed = commands.get(self.name)
-        if self.name in commands:
+        command_executed = selection_commands_map.get(self.name)
+        if self.name in selection_commands_map:
             command_executed()
         else:
             print(f"Unknown command: {self.name}")
@@ -455,40 +444,11 @@ class BrowserCommandExecutor:
         """
         Executes the interactive command.
         """
-        command_mapping = {
-            "browser right": lambda: gui.hotkey("ctrl", "tab"),
-            "browser left": lambda: gui.hotkey("ctrl", "shift", "tab"),
-            "new chrome window": lambda: gui.hotkey("ctrl", "n"),
-            "new firefox window": lambda: gui.hotkey("ctrl", "n"),
-            "new incognito window": lambda: gui.hotkey("ctrl", "n"),
-            "focus chrome": lambda: self.focus_browser_window(),
-            "focus firefox": lambda: self.focus_browser_window("Firefox"),
-            "go back": lambda: gui.hotkey("alt", "left"),
-            "go forward": lambda: gui.hotkey("alt", "right"),
-            "refresh page": lambda: gui.hotkey("ctrl", "r"),
-            "stop refreshing": lambda: gui.press("esc"),
-            "scroll down": lambda: gui.scroll(-100),
-            "scroll up": lambda: gui.scroll(100),
-            "scroll to top": lambda: gui.hotkey("ctrl", "home"),
-            "scroll to bottom": lambda: gui.hotkey("ctrl", "end"),
-            "new tab": lambda: gui.hotkey("ctrl", "t"),
-            "close tab": lambda: gui.hotkey("ctrl", "w"),
-            "next tab": lambda: gui.hotkey("ctrl", "tab"),
-            "previous tab": lambda: gui.hotkey("ctrl", "shift", "tab"),
-            "reopen closed tab": lambda: gui.hotkey("ctrl", "shift", "t"),
-            "close window": lambda: gui.hotkey("alt", "f4"),
-            "minimize window": lambda: gui.hotkey("win", "down"),
-            "maximize window": lambda: gui.hotkey("win", "up"),
-            "open downloads": lambda: gui.hotkey("ctrl", "j"),
-            "open history": lambda: gui.hotkey("ctrl", "h"),
-            "open settings": lambda: (gui.hotkey("alt", "e"), gui.press("s")),
-            "zoom in": lambda: gui.hotkey("ctrl", "+"),
-            "zoom out": lambda: gui.hotkey("ctrl", "-"),
-            "reset zoom": lambda: gui.hotkey("ctrl", "0"),
-            "bookmark page": lambda: gui.hotkey("ctrl", "d"),
-            "print page": lambda: gui.hotkey("ctrl", "p"),
-            "save page": lambda: gui.hotkey("ctrl", "s"),
-        }
+        browser_commands = browser_commands_map
+        # Handle instance-specific logic
+        browser_commands["focus chrome"] = lambda: self.focus_browser_window()
+        browser_commands["focus firefox"] = lambda: self.focus_browser_window("Firefox")
+
 
         if self.name.startswith("browser"):
             if "right" in self.name:
@@ -504,8 +464,7 @@ class BrowserCommandExecutor:
                 except (ValueError, IndexError):
                     pass
         else:
-            # Match specific command strings to their actions
-            for command, action in command_mapping.items():
+            for command, action in browser_commands_map.items():
                 if self.name.startswith(command):
                     action()
                     break

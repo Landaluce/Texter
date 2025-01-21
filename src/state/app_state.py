@@ -42,7 +42,7 @@ Classes:
 import sys
 import subprocess
 from src.commands.command_manager import CommandManager
-from src.utils.constants import CommandType, ProgrammingLanguage, TerminalOS, Mode
+from src.utils.constants import CommandType, ProgrammingLanguage, TerminalOS, Mode, command_groups
 
 
 class AppState:
@@ -95,17 +95,6 @@ class AppState:
     def load_commands(self, commands: dict) -> None:
         """Loads all command groups from the given dictionary."""
         self.commands = commands
-
-        command_groups = {
-            "keyboard_commands": CommandType.KEYBOARD,
-            "info_commands": CommandType.INFO,
-            "selection_commands": CommandType.SELECTION,
-            "switch_commands": CommandType.SWITCH,
-            "spelling_commands": CommandType.SPELLING,
-            "git_commands": CommandType.GIT,
-            "interactive_commands": CommandType.INTERACTIVE,
-            "browser_commands": CommandType.BROWSER,
-        }
 
         # Dynamically load common commands
         for group, command_type in command_groups.items():
