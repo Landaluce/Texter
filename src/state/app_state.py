@@ -95,21 +95,34 @@ class AppState:
     def load_commands(self, commands: dict) -> None:
         """Loads all command groups from the given dictionary."""
         self.commands = commands
-        self.keyboard_commands = self._load_commands(commands.get("keyboard_commands", []), CommandType.KEYBOARD)
-        self.info_commands = self._load_commands(commands.get("info_commands", []), CommandType.INFO)
-        self.selection_commands = self._load_commands(commands.get("selection_commands", []), CommandType.SELECTION)
-        self.switch_commands = self._load_commands(commands.get("switch_commands", []), CommandType.SWITCH)
-        self.programming_commands = self._load_commands(
-            commands.get(f"{self.programming_language.value}_commands", []), CommandType.PROGRAMMING
-        ) if self.programming else []
-        self.terminal_commands = self._load_commands(
-            commands.get(f"{self.terminal_os.value}_commands", []), CommandType.TERMINAL
-        ) if self.terminal else []
-        self.spelling_commands = self._load_commands(commands.get("spelling_commands", []), CommandType.SPELLING)
-        self.git_commands = self._load_commands(commands.get("git_commands", []), CommandType.GIT)
-        self.interactive_commands = self._load_commands(commands.get("interactive_commands", []),
-                                                        CommandType.INTERACTIVE)
-        self.browser_commands = self._load_commands(commands.get("browser_commands", []), CommandType.BROWSER)
+
+        command_groups = {
+            "keyboard_commands": CommandType.KEYBOARD,
+            "info_commands": CommandType.INFO,
+            "selection_commands": CommandType.SELECTION,
+            "switch_commands": CommandType.SWITCH,
+            "spelling_commands": CommandType.SPELLING,
+            "git_commands": CommandType.GIT,
+            "interactive_commands": CommandType.INTERACTIVE,
+            "browser_commands": CommandType.BROWSER,
+        }
+
+        # Dynamically load common commands
+        for group, command_type in command_groups.items():
+            setattr(self, group, self._load_commands(commands.get(group, []), command_type))
+
+        # Load programming commands (if applicable)
+        self.programming_commands = (
+            self._load_commands(commands.get(f"{self.programming_language.value}_commands", []),
+                                CommandType.PROGRAMMING)
+            if self.programming else []
+        )
+
+        # Load terminal commands (if applicable)
+        self.terminal_commands = (
+            self._load_commands(commands.get(f"{self.terminal_os.value}_commands", []), CommandType.TERMINAL)
+            if self.terminal else []
+        )
 
     @staticmethod
     def _load_commands(commands_list: list, command_type: CommandType) -> list:
