@@ -124,3 +124,10 @@ browser_commands_map = {
     "print page": lambda: gui.hotkey("ctrl", "p"),
     "save page": lambda: gui.hotkey("ctrl", "s"),
 }
+
+replacements = {
+        "dexter": "texter",
+        "texture": "texter",
+        "lift": "left",
+        "wright": "right",
+    }

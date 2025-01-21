@@ -63,6 +63,7 @@ from src.utils.error_handler import noalsaerr
 from src.state.app_state import AppState
 from src.ui.texter_ui import TexterUI
 from src.utils.string_utils import string_to_snake_case, string_to_camel_case, convert_to_spelling
+from constants import replacements
 
 
 def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognizer) -> None:
@@ -130,26 +131,39 @@ def recognize_speech(recognizer: sr.Recognizer, timeout: int = 2) -> str or None
     return None
 
 def process_special_cases(text: str) -> str:
-    """Handles special case replacements in recognized text."""
+    """
+    Handles special case replacements in recognized text.
+
+    Args:
+        text (str): The input text to process.
+
+    Returns:
+        str: The processed text with replacements applied.
+
+    Raises:
+        ValueError: If the input is not a string.
+    """
     if not isinstance(text, str):
         raise ValueError(f"Expected 'txt' to be a string, but got {type(text)}")
-    replacements = {
-        "dexter": "texter",
-        "texture": "texter",
-        "lift": "left",
-        "wright": "right",
-    }
+
     for target, replacement in replacements.items():
         text = text.replace(target, replacement)
     return text
 
-def handle_spelling_mode(app_state, text: str):
-    """Processes text in spelling mode."""
+def handle_spelling_mode(app_state, text: str) -> None:
+    """
+    Processes text in spelling mode by converting it to its spelled-out equivalent
+    and applying necessary replacements.
+
+    Args:
+        app_state: The application's state, containing spelling-related configurations.
+        text (str): The input text to be processed.
+    """
     spelling_output = convert_to_spelling(text, app_state.spelling_commands)
     if spelling_output:
         gui.write(spelling_output)
 
-def handle_dictation_mode(app_state, texter_ui, text: str):
+def handle_dictation_mode(app_state, texter_ui, text: str) -> None:
     """Processes text in dictation mode."""
     if text.startswith("camel case") or text.startswith("camelcase"):
         gui.write(string_to_camel_case(text[len("camel case") + 1:]))
