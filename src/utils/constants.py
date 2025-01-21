@@ -33,7 +33,6 @@ class CommandType(Enum):
     """
     Enum representing the different types of commands that can be processed.
     """
-
     KEYBOARD = auto()
     SWITCH = auto()
     PROGRAMMING = auto()
