@@ -47,3 +47,5 @@ src/log.txt
 Thumbs.db
 
 current.txt
+imports.txt
+src/temp.py
