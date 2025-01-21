@@ -29,7 +29,8 @@ Methods:
    to perform the desired action (e.g., typing, switching modes, terminal commands, etc.).
 
 Dependencies:
-- `src.commands.command_executors`: Contains the specific command executors for each command type (e.g., `KeyboardCommandExecutor`, `ProgrammingCommandExecutor`).
+- `src.commands.command_executors`: Contains the specific command executors for each command type (e.g.,
+    `KeyboardCommandExecutor`, `ProgrammingCommandExecutor`).
 - `src.utils.constants`: Contains the `CommandType` enum, which classifies commands into various categories.
 
 Usage:
