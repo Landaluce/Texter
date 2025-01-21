@@ -28,12 +28,34 @@ from ctypes import CFUNCTYPE, c_char_p, c_int, cdll
 ERROR_HANDLER_FUNC = CFUNCTYPE(None, c_char_p, c_int, c_char_p, c_int, c_char_p)
 
 def py_error_handler(filename, line, function, err, fmt):
+    """
+       A Python error handler function for redirecting or suppressing ALSA error messages.
+
+       Args:
+           filename (str): The name of the source file where the error occurred.
+           line (int): The line number in the source file where the error occurred.
+           function (str): The name of the function where the error occurred.
+           err (int): The error code.
+           fmt (str): The formatted error message string.
+       """
     pass
 
 c_error_handler = ERROR_HANDLER_FUNC(py_error_handler)
 
 @contextmanager
 def noalsaerr():
+    """
+        A context manager to suppress ALSA (Advanced Linux Sound Architecture) error messages.
+
+        This temporarily sets a custom error handler using ALSA's `snd_lib_error_set_handler`
+        function to redirect or suppress error messages. The original error handler is restored
+        after exiting the context.
+
+        Example:
+            with noalsaerr():
+                # Code that may trigger ALSA warnings or errors
+                ...
+        """
     a_sound = cdll.LoadLibrary('libasound.so')
     a_sound.snd_lib_error_set_handler(c_error_handler)
     yield
