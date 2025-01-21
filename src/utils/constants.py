@@ -1,31 +1,67 @@
 """
-This module defines several Enums to categorize and represent different types of commands, programming languages, operating systems, and modes.
+This module defines several Enums, mappings, and utility constants to categorize and process various command types,
+programming languages, operating systems, modes, and command mappings.
 
-Enums:
-- `CommandType`: Represents the different types of commands that can be processed.
-    - `KEYBOARD`: Represents keyboard-related commands.
-    - `SWITCH`: Represents switch commands.
-    - `PROGRAMMING`: Represents programming commands.
-    - `INFO`: Represents informational commands.
-    - `SELECTION`: Represents selection commands.
-    - `TERMINAL`: Represents terminal commands.
-    - `SPELLING`: Represents spelling-related commands.
-    - `GIT`: Represents git-related commands.
-    - `INTERACTIVE`: Represents interactive commands.
-    - `BROWSER`: Represents browser-related commands.
+### Contents:
 
-- `ProgrammingLanguage`: Represents different programming languages that can be processed.
-    - `PYTHON`: Represents the Python programming language.
-    - `JAVA`: Represents the Java programming language.
+1. **Enums**:
+   - `CommandType`: Represents the different types of commands that can be processed.
+       - `KEYBOARD`: Keyboard-related commands.
+       - `SWITCH`: Commands to toggle or switch settings.
+       - `PROGRAMMING`: Commands specific to programming tasks.
+       - `INFO`: Informational commands.
+       - `SELECTION`: Commands for text selection and manipulation.
+       - `TERMINAL`: Commands for terminal interactions.
+       - `SPELLING`: Spelling-related commands.
+       - `GIT`: Commands for Git version control tasks.
+       - `INTERACTIVE`: Commands for interactive operations.
+       - `BROWSER`: Browser-related commands.
 
-- `TerminalOS`: Represents the different operating systems that can be processed in terminal-related tasks.
-    - `LINUX`: Represents the Linux operating system.
-    - `WINDOWS`: Represents the Windows operating system.
+   - `ProgrammingLanguage`: Represents supported programming languages.
+       - `PYTHON`: Represents the Python programming language.
+       - `JAVA`: Represents the Java programming language.
 
-- `Mode`: Represents different modes that can be processed.
-    - `DICTATION`: Represents dictation mode.
-    - `SPELLING`: Represents spelling mode.
+   - `TerminalOS`: Represents supported operating systems for terminal commands.
+       - `LINUX`: Represents the Linux operating system.
+       - `WINDOWS`: Represents the Windows operating system.
+
+   - `Mode`: Represents operational modes for the application.
+       - `DICTATION`: Dictation mode for processing spoken input.
+       - `SPELLING`: Spelling mode for spelling out words.
+
+2. **Mappings**:
+   - `command_groups`: Maps command group names to their corresponding `CommandType`.
+   - `selection_commands_map`: Maps selection-related commands to their corresponding `pyautogui` actions.
+   - `browser_commands_map`: Maps browser-related commands to their corresponding `pyautogui` actions.
+
+3. **Constants**:
+   - `simple_terminal_command_names`: A list of common terminal command names for basic operations.
+   - `replacements`: A dictionary of common text replacements for correcting recognition errors.
+
+### Examples:
+
+- **Command Group Mapping**:
+    ```python
+    command_groups["keyboard_commands"]  # Returns CommandType.KEYBOARD
+    ```
+
+- **Selection Command Execution**:
+    ```python
+    selection_commands_map["select all"]()  # Executes the keyboard shortcut to select all text.
+    ```
+
+- **Browser Command Execution**:
+    ```python
+    browser_commands_map["refresh page"]()  # Refreshes the current browser tab.
+    ```
+
+- **Replacement Application**:
+    ```python
+    text = "wright turn"
+    corrected_text = text.replace("wright", "right")
+    ```
 """
+
 from enum import Enum, auto
 import pyautogui as gui
 
@@ -126,8 +162,8 @@ browser_commands_map = {
 }
 
 replacements = {
-        "dexter": "texter",
-        "texture": "texter",
-        "lift": "left",
-        "wright": "right",
-    }
+    "dexter": "texter",
+    "texture": "texter",
+    "lift": "left",
+    "wright": "right",
+}
