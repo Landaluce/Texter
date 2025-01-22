@@ -20,9 +20,9 @@ Classes:
 Each executor is initialized with a command key or name and can be invoked to simulate a GUI interaction.
 """
 
-import subprocess
 from wave import Error
 import pyautogui as gui
+from src.utils.command_utils import focus_browser_window
 from src.utils.constants import (ProgrammingLanguage, TerminalOS, selection_commands_map, browser_commands_map,
                                 simple_terminal_command_names)
 from src.utils.text_to_speech import text_to_speech
@@ -446,8 +446,8 @@ class BrowserCommandExecutor:
         """
         browser_commands = browser_commands_map
         # Handle instance-specific logic
-        browser_commands["focus chrome"] = lambda: self.focus_browser_window()
-        browser_commands["focus firefox"] = lambda: self.focus_browser_window("Firefox")
+        browser_commands["focus chrome"] = lambda: focus_browser_window()
+        browser_commands["focus firefox"] = lambda: focus_browser_window("Firefox")
 
 
         if self.name.startswith("browser"):
@@ -468,57 +468,3 @@ class BrowserCommandExecutor:
                 if self.name.startswith(command):
                     action()
                     break
-
-    @staticmethod
-    def start_browser(browser="chrome", url=None) -> None:
-        """
-        Starts Chrome or Firefox browser. Optionally opens a specific URL.
-
-        Args:
-            browser (str): Either "chrome" or "firefox".
-            url (str): Optional URL to open in the browser.
-        """
-        try:
-            if browser.lower() == "chrome":
-                command = ["google-chrome"]
-            elif browser.lower() == "firefox":
-                command = ["firefox"]
-            else:
-                print("Unsupported browser. Use 'chrome' or 'firefox'.")
-                return
-
-            # Add URL to command if provided
-            if url:
-                command.append(url)
-
-            # Run the command
-            subprocess.Popen(command)
-            print(f"Started {browser} successfully.")
-        except FileNotFoundError:
-            print(f"Error: {browser.capitalize()} is not installed or not in PATH.")
-        except Exception as e:
-            print(f"An error occurred: {e}")
-
-    def focus_browser_window(self, browser="Chrome") -> None:
-        """
-        Attempts to focus an existing browser window based on the provided name.
-
-        Args:
-            browser (str, optional): The name of the browser window to focus. Defaults to "Chrome".
-        """
-        try:
-            # Search for the browser window
-            result = subprocess.run(
-                ["xdotool", "search", "--name", browser],
-                capture_output=True,
-                text=True
-            )
-            window_id = result.stdout.splitlines()[0]  # Get the first matching window ID
-
-            # Focus the window
-            subprocess.run(["xdotool", "windowactivate", window_id])
-        except IndexError:
-            text_to_speech(f"No open {browser} window found. starting {browser}")
-            self.start_browser(browser)
-        except Exception as e:
-            print(f"Error: {e}")
