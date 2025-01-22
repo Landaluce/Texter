@@ -61,9 +61,8 @@ programming languages, operating systems, modes, and command mappings.
     corrected_text = text.replace("wright", "right")
     ```
 """
-
 from enum import Enum, auto
-import pyautogui as gui
+from src.utils.gui_utils import press, scroll
 
 
 class CommandType(Enum):
@@ -120,45 +119,45 @@ command_groups = {
 }
 
 selection_commands_map = {
-    "select line": lambda: gui.hotkey("home", "shift", "end"),
-    "select all": lambda: gui.hotkey("ctrl", "a"),
-    "delete line": lambda: gui.hotkey("home", "shift", "end", "backspace"),
-    "delete all": lambda: gui.hotkey("ctrl", "a", "backspace"),
-    "copy": lambda: gui.hotkey("ctrl", "c"),
-    "paste": lambda: gui.hotkey("ctrl", "v"),
+    "select line": lambda: press("home", "shift", "end"),
+    "select all": lambda: press("ctrl", "a"),
+    "delete line": lambda: press("home", "shift", "end", "backspace"),
+    "delete all": lambda: press("ctrl", "a", "backspace"),
+    "copy": lambda: press("ctrl", "c"),
+    "paste": lambda: press("ctrl", "v"),
 }
 
 browser_commands_map = {
-    "browser right": lambda: gui.hotkey("ctrl", "tab"),
-    "browser left": lambda: gui.hotkey("ctrl", "shift", "tab"),
-    "new chrome window": lambda: gui.hotkey("ctrl", "n"),
-    "new firefox window": lambda: gui.hotkey("ctrl", "n"),
-    "new incognito window": lambda: gui.hotkey("ctrl", "n"),
-    "go back": lambda: gui.hotkey("alt", "left"),
-    "go forward": lambda: gui.hotkey("alt", "right"),
-    "refresh page": lambda: gui.hotkey("ctrl", "r"),
-    "stop refreshing": lambda: gui.press("esc"),
-    "scroll down": lambda: gui.scroll(-100),
-    "scroll up": lambda: gui.scroll(100),
-    "scroll to top": lambda: gui.hotkey("ctrl", "home"),
-    "scroll to bottom": lambda: gui.hotkey("ctrl", "end"),
-    "new tab": lambda: gui.hotkey("ctrl", "t"),
-    "close tab": lambda: gui.hotkey("ctrl", "w"),
-    "next tab": lambda: gui.hotkey("ctrl", "tab"),
-    "previous tab": lambda: gui.hotkey("ctrl", "shift", "tab"),
-    "reopen closed tab": lambda: gui.hotkey("ctrl", "shift", "t"),
-    "close window": lambda: gui.hotkey("alt", "f4"),
-    "minimize window": lambda: gui.hotkey("win", "down"),
-    "maximize window": lambda: gui.hotkey("win", "up"),
-    "open downloads": lambda: gui.hotkey("ctrl", "j"),
-    "open history": lambda: gui.hotkey("ctrl", "h"),
-    "open settings": lambda: (gui.hotkey("alt", "e"), gui.press("s")),
-    "zoom in": lambda: gui.hotkey("ctrl", "+"),
-    "zoom out": lambda: gui.hotkey("ctrl", "-"),
-    "reset zoom": lambda: gui.hotkey("ctrl", "0"),
-    "bookmark page": lambda: gui.hotkey("ctrl", "d"),
-    "print page": lambda: gui.hotkey("ctrl", "p"),
-    "save page": lambda: gui.hotkey("ctrl", "s"),
+    "browser right": lambda: press("ctrl", "tab"),
+    "browser left": lambda: press("ctrl", "shift", "tab"),
+    "new chrome window": lambda: press("ctrl", "n"),
+    "new firefox window": lambda: press("ctrl", "n"),
+    "new incognito window": lambda: press("ctrl", "n"),
+    "go back": lambda: press("alt", "left"),
+    "go forward": lambda: press("alt", "right"),
+    "refresh page": lambda: press("ctrl", "r"),
+    "stop refreshing": lambda: press("esc"),
+    "scroll down": lambda: scroll(-100),
+    "scroll up": lambda: scroll(100),
+    "scroll to top": lambda: press("ctrl", "home"),
+    "scroll to bottom": lambda: press("ctrl", "end"),
+    "new tab": lambda: press("ctrl", "t"),
+    "close tab": lambda: press("ctrl", "w"),
+    "next tab": lambda: press("ctrl", "tab"),
+    "previous tab": lambda: press("ctrl", "shift", "tab"),
+    "reopen closed tab": lambda: press("ctrl", "shift", "t"),
+    "close window": lambda: press("alt", "f4"),
+    "minimize window": lambda: press("win", "down"),
+    "maximize window": lambda: press("win", "up"),
+    "open downloads": lambda: press("ctrl", "j"),
+    "open history": lambda: press("ctrl", "h"),
+    "open settings": lambda: (press("alt", "e"), press("s")),
+    "zoom in": lambda: press("ctrl", "+"),
+    "zoom out": lambda: press("ctrl", "-"),
+    "reset zoom": lambda: press("ctrl", "0"),
+    "bookmark page": lambda: press("ctrl", "d"),
+    "print page": lambda: press("ctrl", "p"),
+    "save page": lambda: press("ctrl", "s"),
 }
 
 replacements = {

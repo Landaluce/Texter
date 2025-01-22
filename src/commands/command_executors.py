@@ -21,7 +21,7 @@ Each executor is initialized with a command key or name and can be invoked to si
 """
 
 from wave import Error
-import pyautogui as gui
+from src.utils.gui_utils import press, write
 from src.utils.command_utils import focus_browser_window
 from src.utils.constants import (ProgrammingLanguage, TerminalOS, selection_commands_map, browser_commands_map,
                                 simple_terminal_command_names)
@@ -65,8 +65,8 @@ class ProgrammingCommandExecutor:
     def _execute_python_command(self) -> None:
         """Handles Python-specific commands."""
         if self.key == "print statement":
-            gui.write("print()")
-            gui.hotkey("left")
+            write("print()")
+            press("left")
         elif self.key.startswith("create class"):
             self._create_python_class()
         elif self.key.startswith("create method"):
@@ -76,63 +76,63 @@ class ProgrammingCommandExecutor:
         elif self.key.startswith("new script"):
             self._create_new_python_script()
         elif self.key == "integer":
-            gui.write("int")
+            write("int")
         elif self.key == "string":
-            gui.write("str")
+            write("str")
         elif self.key == "double":
-            gui.write("float")
+            write("float")
         else:
-            gui.write(self.key)
+            write(self.key)
 
     def _create_python_class(self) -> None:
         """Generates a Python class structure."""
         class_name = self.key[len("create class"):].strip()  # Extract class name
         class_name = string_to_camel_case(class_name)
-        gui.write("class :")
-        gui.hotkey("enter")
-        gui.hotkey("tab")
-        gui.write("def __init__(self):")
-        gui.hotkey("up")
-        gui.hotkey("left")
+        write("class :")
+        press("enter")
+        press("tab")
+        write("def __init__(self):")
+        press("up")
+        press("left")
         if len(class_name):
-            gui.write(class_name)
+            write(class_name)
 
     def _create_python_method(self) -> None:
         """Generates a Python method structure."""
         method_name = self.key[len("create method"):].strip()  # Extract method name
         method_name = string_to_snake_case(method_name)
-        gui.write("def (self):")
+        write("def (self):")
         for _ in range(0, 7):
-            gui.hotkey("left")
+            press("left")
         if len(method_name):
-            gui.write(method_name)
+            write(method_name)
 
     def _create_python_function(self) -> None:
         """Generates a Python function structure."""
         function_name = self.key[len("create function"):].strip()  # Extract function name
         function_name = string_to_snake_case(function_name)
-        gui.write("def :()")
+        write("def :()")
         for _ in range(0, 3):
-            gui.hotkey("left")
+            press("left")
         if len(function_name):
-            gui.write(function_name)
+            write(function_name)
 
     @staticmethod
     def _create_new_python_script() -> None:
         """Generates a Python script structure."""
-        gui.write("main():")
-        gui.hotkey("enter")
-        gui.hotkey("enter")
-        gui.write('if __name__ == "__main__":')
-        gui.hotkey("enter")
-        gui.write("main")
+        write("main():")
+        press("enter")
+        press("enter")
+        write('if __name__ == "__main__":')
+        press("enter")
+        write("main")
 
     def _execute_java_command(self) -> None:
         """Handles Java-specific commands."""
         if self.key == "print statement":
-            gui.write("System.out.println();")
-            gui.hotkey("left")
-            gui.hotkey("left")
+            write("System.out.println();")
+            press("left")
+            press("left")
         elif self.key.startswith("create class"):
             self._create_java_class()
         elif (
@@ -148,20 +148,20 @@ class ProgrammingCommandExecutor:
         ):
             self._create_java_private_method()
         else:
-            gui.write(self.key)
+            write(self.key)
 
     def _create_java_class(self) -> None:
         """Generates a Java class structure."""
         class_name = self.key[len("create class"):].strip()  # Extract class name
         class_name = string_to_camel_case(class_name)
-        gui.write("public class  {")
-        gui.hotkey("enter")
-        gui.hotkey("up")
-        gui.hotkey("end")
-        gui.hotkey("left")
-        gui.hotkey("left")
+        write("public class  {")
+        press("enter")
+        press("up")
+        press("end")
+        press("left")
+        press("left")
         if len(class_name):
-            gui.write(class_name)
+            write(class_name)
 
     def _create_java_public_method(self) -> None:
         """Generates a Java public method structure."""
@@ -184,11 +184,11 @@ class ProgrammingCommandExecutor:
         """
         method_name = self.key[len("create " + access_level + " "):].strip()  # Extract method name
         method_name = string_to_snake_case(method_name)
-        gui.write(access_level + " void () {}")
+        write(access_level + " void () {}")
         for _ in range(0, 5):
-            gui.hotkey("left")
+            press("left")
         if len(method_name):
-            gui.write(method_name)
+            write(method_name)
 
 
 class KeyboardCommandExecutor:
@@ -229,7 +229,7 @@ class KeyboardCommandExecutor:
                     print(e)
                     num = 1
         for _ in range(num):
-            gui.hotkey(self.key)
+            press(self.key)
 
 
 class SwitchCommandExecutor:
@@ -300,7 +300,7 @@ class InfoCommandExecutor:
         """
         Executes the info command.
         """
-        gui.write(self.key)
+        write(self.key)
 
 
 class GitCommandExecutor:
@@ -323,7 +323,7 @@ class GitCommandExecutor:
         """
         Executes the info command.
         """
-        gui.write(self.key)
+        write(self.key)
 
 
 class TerminalCommandExecutor:
@@ -350,12 +350,12 @@ class TerminalCommandExecutor:
         """
         if ((self.name.startswith("change permissions") and app_state.terminal_os == TerminalOS.LINUX) or
                 self.name.startswith("go to")):
-            gui.write(self.key)
+            write(self.key)
         elif self.name in simple_terminal_command_names:
-            gui.write(self.key)
-            gui.hotkey("enter")
+            write(self.key)
+            press("enter")
         else:
-            pass #gui.write(self.key)
+            pass #write(self.key)
 
 
 class SelectionCommandExecutor:
@@ -452,15 +452,15 @@ class BrowserCommandExecutor:
 
         if self.name.startswith("browser"):
             if "right" in self.name:
-                gui.hotkey("Ctrl", "Tab")
+                press("Ctrl", "Tab")
             elif "left" in self.name or "lyft" in self.name:
-                gui.hotkey("Ctrl", "Shift", "Tab")
+                press("Ctrl", "Shift", "Tab")
             else:
                 try:
                     num_str = self.name.split(" ")[1].strip()
                     if not num_str.isdigit():
                         num_str = str(numeric_str_to_int(num_str))
-                    gui.hotkey("ctrl", num_str)
+                    press("ctrl", num_str)
                 except (ValueError, IndexError):
                     pass
         else:

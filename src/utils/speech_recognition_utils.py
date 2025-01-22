@@ -56,7 +56,7 @@ Usage:
 """
 from __future__ import annotations
 import threading  # noqa: F401
-import pyautogui as gui
+from src.utils.gui_utils import write
 import speech_recognition as sr
 from src.commands.text_processor import TextProcessor
 from src.utils.error_handler import noalsaerr
@@ -161,16 +161,16 @@ def handle_spelling_mode(app_state, text: str) -> None:
     """
     spelling_output = convert_to_spelling(text, app_state.spelling_commands)
     if spelling_output:
-        gui.write(spelling_output)
+        write(spelling_output)
 
 def handle_dictation_mode(app_state, texter_ui, text: str) -> None:
     """Processes text in dictation mode."""
     if text.startswith("camel case") or text.startswith("camelcase"):
-        gui.write(string_to_camel_case(text[len("camel case") + 1:]))
+        write(string_to_camel_case(text[len("camel case") + 1:]))
     elif text.startswith("small camel case"):
-        gui.write(string_to_camel_case(text[len("small camel case") + 1:], True))
+        write(string_to_camel_case(text[len("small camel case") + 1:], True))
     elif text.startswith("snake case"):
-        gui.write(string_to_snake_case(text[len("snake case") + 1:].strip()))
+        write(string_to_snake_case(text[len("snake case") + 1:].strip()))
     elif text == "terminate texter":
         print("Terminating Texter...")
         app_state.terminate = True
@@ -182,4 +182,4 @@ def handle_dictation_mode(app_state, texter_ui, text: str) -> None:
                 text = text_processor.restore_punctuation(text)
                 if app_state.capitalize:
                     text = text_processor.capitalize_sentences(text)
-            gui.write(text)
+            write(text)
