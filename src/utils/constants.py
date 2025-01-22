@@ -64,6 +64,8 @@ programming languages, operating systems, modes, and command mappings.
 from enum import Enum, auto
 from src.utils.gui_utils import press, scroll
 
+window_height_in_pixels = 100
+
 
 class CommandType(Enum):
     """
@@ -137,8 +139,8 @@ browser_commands_map = {
     "go forward": lambda: press("alt", "right"),
     "refresh page": lambda: press("ctrl", "r"),
     "stop refreshing": lambda: press("esc"),
-    "scroll down": lambda: scroll(-100),
-    "scroll up": lambda: scroll(100),
+    "scroll down": lambda: scroll(-window_height_in_pixels),
+    "scroll up": lambda: scroll(window_height_in_pixels),
     "scroll to top": lambda: press("ctrl", "home"),
     "scroll to bottom": lambda: press("ctrl", "end"),
     "new tab": lambda: press("ctrl", "t"),
