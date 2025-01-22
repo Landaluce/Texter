@@ -37,6 +37,7 @@ programming languages, operating systems, modes, and command mappings.
 3. **Constants**:
    - `simple_terminal_command_names`: A list of common terminal command names for basic operations.
    - `replacements`: A dictionary of common text replacements for correcting recognition errors.
+   - 'window_height_in_pixels': window height in pixels for scrolling
 
 ### Examples:
 
