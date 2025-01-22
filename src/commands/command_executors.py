@@ -64,7 +64,7 @@ class ProgrammingCommandExecutor:
 
     def _execute_python_command(self) -> None:
         """Handles Python-specific commands."""
-        commands = {
+        python_commands_map = {
             "print statement": lambda: (write("print()"), press("left")),
             "integer": lambda: write("int"),
             "string": lambda: write("str"),
@@ -76,13 +76,16 @@ class ProgrammingCommandExecutor:
         }
 
         # Execute the corresponding function or default to writing the key
-        command_action = commands.get(self.key, lambda: write(self.key))
+        command_action = python_commands_map.get(self.key, lambda: write(self.key))
         command_action()
+
+    def _extract_name_from_key(self, input_str: str):
+        name = self.key[len(input_str)].strip()  # Extract class name
+        return string_to_camel_case(name)
 
     def _create_python_class(self) -> None:
         """Generates a Python class structure."""
-        class_name = self.key[len("create class"):].strip()  # Extract class name
-        class_name = string_to_camel_case(class_name)
+        class_name = self._extract_name_from_key("create class")
         write("class :")
         press("enter")
         press("tab")
@@ -94,8 +97,7 @@ class ProgrammingCommandExecutor:
 
     def _create_python_method(self) -> None:
         """Generates a Python method structure."""
-        method_name = self.key[len("create method"):].strip()  # Extract method name
-        method_name = string_to_snake_case(method_name)
+        method_name = self._extract_name_from_key("create method")
         write("def (self):")
         for _ in range(0, 7):
             press("left")
@@ -104,8 +106,7 @@ class ProgrammingCommandExecutor:
 
     def _create_python_function(self) -> None:
         """Generates a Python function structure."""
-        function_name = self.key[len("create function"):].strip()  # Extract function name
-        function_name = string_to_snake_case(function_name)
+        function_name = self._extract_name_from_key("create function")
         write("def :()")
         for _ in range(0, 3):
             press("left")
@@ -147,8 +148,7 @@ class ProgrammingCommandExecutor:
 
     def _create_java_class(self) -> None:
         """Generates a Java class structure."""
-        class_name = self.key[len("create class"):].strip()  # Extract class name
-        class_name = string_to_camel_case(class_name)
+        class_name = self._extract_name_from_key("create class")
         write("public class  {")
         press("enter")
         press("up")
@@ -177,8 +177,7 @@ class ProgrammingCommandExecutor:
         Args:
             access_level (str): The access level of the method (e.g., "public", "private").
         """
-        method_name = self.key[len("create " + access_level + " "):].strip()  # Extract method name
-        method_name = string_to_snake_case(method_name)
+        method_name = self._extract_name_from_key("create " + access_level + " ")
         write(access_level + " void () {}")
         for _ in range(0, 5):
             press("left")
