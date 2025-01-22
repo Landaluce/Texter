@@ -64,25 +64,20 @@ class ProgrammingCommandExecutor:
 
     def _execute_python_command(self) -> None:
         """Handles Python-specific commands."""
-        if self.key == "print statement":
-            write("print()")
-            press("left")
-        elif self.key.startswith("create class"):
-            self._create_python_class()
-        elif self.key.startswith("create method"):
-            self._create_python_method()
-        elif self.key.startswith("create function"):
-            self._create_python_function()
-        elif self.key.startswith("new script"):
-            self._create_new_python_script()
-        elif self.key == "integer":
-            write("int")
-        elif self.key == "string":
-            write("str")
-        elif self.key == "double":
-            write("float")
-        else:
-            write(self.key)
+        commands = {
+            "print statement": lambda: (write("print()"), press("left")),
+            "integer": lambda: write("int"),
+            "string": lambda: write("str"),
+            "double": lambda: write("float"),
+            "create class": self._create_python_class,
+            "create method": self._create_python_method,
+            "create function": self._create_python_function,
+            "new script": self._create_new_python_script,
+        }
+
+        # Execute the corresponding function or default to writing the key
+        command_action = commands.get(self.key, lambda: write(self.key))
+        command_action()
 
     def _create_python_class(self) -> None:
         """Generates a Python class structure."""
