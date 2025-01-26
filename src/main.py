@@ -15,7 +15,7 @@ Raises:
 """
 from utils.command_utils import get_commands
 from src.utils.speech_recognition_utils import *
-from src.utils.constants import command_files_directory
+from src.constants.main_constants import command_files_directory
 
 
 def main():

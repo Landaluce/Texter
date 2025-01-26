@@ -42,7 +42,8 @@ Classes:
 import sys
 import subprocess
 from src.commands.command_manager import CommandManager
-from src.utils.constants import CommandType, ProgrammingLanguage, TerminalOS, Mode, command_groups
+from src.constants.command_constants import CommandType, ProgrammingLanguage, TerminalOS
+from src.constants.app_state_constants import command_groups, Mode
 
 
 class AppState:

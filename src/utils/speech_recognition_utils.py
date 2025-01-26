@@ -63,7 +63,7 @@ from src.utils.error_handler import noalsaerr
 from src.state.app_state import AppState
 from src.ui.texter_ui import TexterUI
 from src.utils.string_utils import string_to_snake_case, string_to_camel_case, convert_to_spelling
-from src.utils.constants import replacements
+from src.constants.speech_recognition_constants import replacements
 
 
 def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognizer) -> None:

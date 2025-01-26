@@ -43,7 +43,7 @@ from src.commands.command_executors import (ProgrammingCommandExecutor, Keyboard
                                             InfoCommandExecutor, GitCommandExecutor, TerminalCommandExecutor,
                                             SelectionCommandExecutor, InteractiveCommandExecutor,
                                             BrowserCommandExecutor)
-from src.utils.constants import CommandType
+from src.constants.command_constants import CommandType
 
 
 class CommandManager:
