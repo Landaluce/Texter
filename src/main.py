@@ -13,8 +13,12 @@ Example Usage:
 Raises:
     RuntimeError: If the commands cannot be loaded or if the speech interpreter thread fails to start.
 """
+import speech_recognition as sr
+import threading  # noqa: F401
+from src.state.app_state import AppState
+from src.ui.texter_ui import TexterUI
+from src.utils.live_speech_interpreter import run_live_speech_interpreter
 from utils.command_utils import get_commands
-from src.utils.speech_recognition_utils import *
 from src.constants.main_constants import command_files_directory
 
 

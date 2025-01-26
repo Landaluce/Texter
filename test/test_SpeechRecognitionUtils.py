@@ -1,7 +1,8 @@
 import unittest
 from unittest.mock import patch, MagicMock
 import speech_recognition as sr
-from src.utils.speech_recognition_utils import recognize_speech, live_speech_interpreter
+from src.utils.speech_recognition import recognize_speech
+from src.utils.live_speech_interpreter import live_speech_interpreter
 
 
 class TestSpeechRecognitionUtils(unittest.TestCase):
