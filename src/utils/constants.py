@@ -65,6 +65,7 @@ programming languages, operating systems, modes, and command mappings.
 from enum import Enum, auto
 from src.utils.gui_utils import press, scroll
 
+command_files_directory = "speech_commands"
 window_height_in_pixels = 100
 
 

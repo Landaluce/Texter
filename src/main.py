@@ -15,6 +15,7 @@ Raises:
 """
 from utils.command_utils import get_commands
 from src.utils.speech_recognition_utils import *
+from src.utils.constants import command_files_directory
 
 
 def main():
@@ -32,8 +33,6 @@ def main():
     Raises:
         RuntimeError: If commands cannot be loaded or threads fail to start.
     """
-    command_files_directory = "speech_commands"
-
     try:
         app = TexterUI(command_files_directory)
         recognizer = sr.Recognizer()
