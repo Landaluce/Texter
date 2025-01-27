@@ -33,7 +33,7 @@ yarn-error.log
 *.log
 src/log.txt
 logging_config.py
-src/app.log
+
 
 # Temporary files
 *.tmp
@@ -41,6 +41,7 @@ src/app.log
 *.bak
 *.swp
 *.mp3
+temp.py
 
 # macOS
 .DS_Store
