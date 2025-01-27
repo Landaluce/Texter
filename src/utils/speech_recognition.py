@@ -25,19 +25,19 @@ def recognize_speech(recognizer: sr.Recognizer, timeout: int = 2) -> Optional[st
         try:
             audio = recognizer.listen(source, timeout=timeout)
             text = recognizer.recognize_google(audio).lower()
-            logging.info(f"voice input: {text}")
+            logging.getLogger('general_logger').info(f"voice input: {text}")
             return text
 
         except sr.UnknownValueError:
-            logging.warning("Could not understand audio (sr.UnknownValueError)")
+            logging.getLogger('warning_logger').warning("Could not understand audio (sr.UnknownValueError)")
             pass
         except sr.RequestError as e:
-            logging.error(f"Error from Speech Recognition service: {e}")
+            logging.getLogger('error_logger').error(f"Error from Speech Recognition service: {e}")
             return None
         except sr.WaitTimeoutError:
-            logging.error("waiting time error")
+            logging.getLogger('error_logger').error("waiting time error")
             return None
         except Exception as e:
-            logging.error(f"unexpected error: {e}")
+            logging.getLogger('error_logger').error(f"unexpected error: {e}")
             return None
     return None
