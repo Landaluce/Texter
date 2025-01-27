@@ -32,6 +32,8 @@ yarn-error.log
 # Logs
 *.log
 src/log.txt
+logging_config.py
+src/app.log
 
 # Temporary files
 *.tmp
