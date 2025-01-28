@@ -7,6 +7,8 @@ import threading  # noqa: F401
 import logging
 from logging_config import setup_logging
 setup_logging()
+warning_logger = logging.getLogger('warning_logger')
+error_logger = logging.getLogger('error_logger')
 
 
 def recognize_speech(recognizer: sr.Recognizer, timeout: int = 2) -> Optional[str]:
@@ -28,15 +30,15 @@ def recognize_speech(recognizer: sr.Recognizer, timeout: int = 2) -> Optional[st
             return text
 
         except sr.UnknownValueError:
-            logging.getLogger('warning_logger').warning("Could not understand audio (sr.UnknownValueError)")
+            warning_logger.warning("Could not understand audio (sr.UnknownValueError)")
             pass
         except sr.RequestError as e:
-            logging.getLogger('error_logger').error(f"Error from Speech Recognition service: {e}")
+            error_logger.error(f"Error from Speech Recognition service: {e}")
             return None
         except sr.WaitTimeoutError:
-            logging.getLogger('error_logger').error("waiting time error")
+            error_logger.error("waiting time error")
             return None
         except Exception as e:
-            logging.getLogger('error_logger').error(f"unexpected error: {e}")
+            error_logger.error(f"unexpected error: {e}")
             return None
     return None
