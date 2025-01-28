@@ -1,13 +1,14 @@
 from __future__ import annotations
-
 import speech_recognition as sr
-
+import logging
+from logging_config import setup_logging
 from src.state.app_state import AppState
 from src.ui.texter_ui import TexterUI
 from src.utils.error_handler import noalsaerr
 from src.utils.command_handler import handle_spelling_mode, handle_dictation_mode
 from src.utils.speech_recognition import recognize_speech
 from src.utils.special_case_processor import process_special_cases
+setup_logging()
 
 
 def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognizer) -> None:
@@ -38,7 +39,7 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
                 text = text.lower()
                 text = process_special_cases(text)
 
-                texter_ui.append_text("You said:" + "~" + text + "~")
-
+                texter_ui.append_text(f"You said:~{text}~")
+                logging.getLogger('general_logger').info(f"You said:~{text}~")
                 handle_dictation_mode(app_state, texter_ui, text)
                 handle_spelling_mode(app_state, text)

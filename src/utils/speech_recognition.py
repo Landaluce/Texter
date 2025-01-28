@@ -25,7 +25,6 @@ def recognize_speech(recognizer: sr.Recognizer, timeout: int = 2) -> Optional[st
         try:
             audio = recognizer.listen(source, timeout=timeout)
             text = recognizer.recognize_google(audio).lower()
-            logging.getLogger('general_logger').info(f"voice input: {text}")
             return text
 
         except sr.UnknownValueError:
