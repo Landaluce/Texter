@@ -47,6 +47,11 @@ import json
 import os
 import subprocess
 from src.utils.text_to_speech import text_to_speech
+import logging
+from logging_config import setup_logging
+setup_logging()
+warning_logger = logging.getLogger('warning_logger')
+error_logger = logging.getLogger('error_logger')
 
 
 def get_commands(directory: str) -> dict:
@@ -62,6 +67,7 @@ def get_commands(directory: str) -> dict:
     # Check if directory is valid
     if not os.path.isdir(directory):
         "The specified directory does not exist or is not a valid directory."
+        error_logger.error(f"{directory} does not exist or is not a valid directory")
         return {}
 
     commands = {}
@@ -75,9 +81,9 @@ def get_commands(directory: str) -> dict:
                 # Merge commands from each file
                 commands.update(file_commands)
         except FileNotFoundError:
-            print(f"Commands file {file} not found.")
+            warning_logger.warning(f"Commands file {file} not found.")
         except json.JSONDecodeError:
-            print(f"Invalid JSON format in commands file {file}.")
+            error_logger.error(f"Invalid JSON format in commands file {file}.")
 
     return commands
 
@@ -103,7 +109,7 @@ def focus_browser_window(browser="Chrome") -> None:
         text_to_speech(f"No open {browser} window found. starting {browser}")
         start_browser(browser)
     except Exception as e:
-        print(f"Error: {e}")
+        error_logger.error(f"Error: {e}")
 
 def start_browser(browser="chrome", url=None) -> None:
     """
@@ -130,6 +136,6 @@ def start_browser(browser="chrome", url=None) -> None:
         subprocess.Popen(command)
         print(f"Started {browser} successfully.")
     except FileNotFoundError:
-        print(f"Error: {browser.capitalize()} is not installed or not in PATH.")
+        error_logger.error(f"Error: {browser.capitalize()} is not installed or not in PATH.")
     except Exception as e:
-        print(f"An error occurred: {e}")
+        error_logger.error(f"An error occurred: {e}")
