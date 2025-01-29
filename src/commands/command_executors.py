@@ -23,12 +23,17 @@ Each executor is initialized with a command key or name and can be invoked to si
 from wave import Error
 from src.utils.gui_utils import press, write
 from src.utils.command_utils import focus_browser_window
-from src.constants.command_constants import ProgrammingLanguage, TerminalOS, simple_terminal_command_names, \
-    selection_commands_map, browser_commands_map
+from src.constants.command_constants import (ProgrammingLanguage, TerminalOS, simple_terminal_command_names,
+                                             selection_commands_map, browser_commands_map)
 from src.utils.text_to_speech import text_to_speech
 from src.utils.string_utils import string_to_camel_case, extract_number_from_string, numeric_str_to_int
 from src.utils.date_time_utils import (get_current_time, get_current_date, month_number_to_name, day_number_to_name,
                                        get_day_of_week)
+import logging
+from logging_config import setup_logging
+setup_logging()
+warning_logger = logging.getLogger('warning_logger')
+error_logger = logging.getLogger('error_logger')
 
 
 class ProgrammingCommandExecutor:
@@ -219,7 +224,7 @@ class KeyboardCommandExecutor:
                 try:
                     num = extract_number_from_string(self.name[len(self.num_key):])
                 except Error as e:
-                    print(e)
+                    error_logger.error(e)
                     num = 1
         for _ in range(num):
             press(self.key)
@@ -379,7 +384,7 @@ class SelectionCommandExecutor:
         if self.name in selection_commands_map:
             command_executed()
         else:
-            print(f"Unknown command: {self.name}")
+            error_logger.error(f"Unknown command: {self.name}")
 
 
 class InteractiveCommandExecutor:
