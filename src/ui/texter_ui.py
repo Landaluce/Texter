@@ -92,6 +92,11 @@ import json
 import os
 import sys
 import tkinter as tk
+import logging
+from logging_config import setup_logging
+setup_logging()
+warning_logger = logging.getLogger('warning_logger')
+error_logger = logging.getLogger('error_logger')
 
 
 class TexterUI:
@@ -310,10 +315,10 @@ class TexterUI:
             sys.exit(0)  # Terminate the main thread and exit the program
         except AttributeError as e:
             # Handle the case where the speech_thread attribute is missing
-            print(f"Error: {e}")
+            error_logger.error(f"Error: {e}")
         except Exception as e:
             # Catch any other unexpected exceptions
-            print(f"Unexpected error: {e}")
+            error_logger.error(f"Unexpected error: {e}")
 
     def on_wake_up_button_click(self) -> None:
         """
