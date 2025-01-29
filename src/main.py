@@ -20,6 +20,11 @@ from src.ui.texter_ui import TexterUI
 from src.utils.live_speech_interpreter import run_live_speech_interpreter
 from utils.command_utils import get_commands
 from src.constants.main_constants import command_files_directory
+import logging
+from logging_config import setup_logging
+setup_logging()
+warning_logger = logging.getLogger('warning_logger')
+error_logger = logging.getLogger('error_logger')
 
 
 def main():
@@ -57,7 +62,7 @@ def main():
         app.init_ui(app_state, commands)
 
     except Exception as e:
-        print(e)
+        error_logger.error(f"exception: {e}")
 
 
 if __name__ == "__main__":
