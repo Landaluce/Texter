@@ -33,7 +33,8 @@ def press(*keyboard_keys) -> None:
     Parameters:
     - keyboard_key (str): The key to press.
     """
-    gui.hotkey(keyboard_keys)
+    for key in keyboard_keys:
+        gui.hotkey(key)
 
 def write(text: str) -> None:
     """
