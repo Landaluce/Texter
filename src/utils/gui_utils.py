@@ -26,15 +26,15 @@ Functions:
 """
 import pyautogui as gui
 
-def press(*keyboard_keys) -> None:
+def press(keyboard_key: str, count: int=1) -> None:
     """
     Simulates pressing a single keyboard key.
 
     Parameters:
     - keyboard_key (str): The key to press.
     """
-    for key in keyboard_keys:
-        gui.hotkey(key)
+    for _ in range(0, count):
+        gui.hotkey(keyboard_key)
 
 def write(text: str) -> None:
     """

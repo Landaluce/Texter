@@ -66,13 +66,12 @@ def get_commands(directory: str) -> dict:
     """
     # Check if directory is valid
     if not os.path.isdir(directory):
-        "The specified directory does not exist or is not a valid directory."
         error_logger.error(f"{directory} does not exist or is not a valid directory")
         return {}
 
     commands = {}
     # Find all JSON files ending with commands in the specified directory
-    json_files = glob.glob(os.path.join(directory, "*commands.json"))
+    json_files = glob.glob(os.path.join(directory, "**", "*commands.json"), recursive=True)
 
     for file in json_files:
         try:
