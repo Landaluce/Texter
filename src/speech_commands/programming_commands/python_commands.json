@@ -7,6 +7,7 @@
         {"name": "new script", "key": "new script"},
         {"name": "integer", "key": "integer"},
         {"name": "string", "key": "string"},
-        {"name": "double", "key": "double"}
+        {"name": "double", "key": "double"},
+        {"name": "new environment", "key": "python3 -m venv .venv"}
     ]
 }
