@@ -22,15 +22,17 @@ Each executor is initialized with a command key or name and can be invoked to si
 
 from wave import Error
 from src.utils.gui_utils import press, write
-from src.utils.command_utils import focus_browser_window
+from src.utils.command_utils import focus_browser_window, create_python_class, create_python_method, \
+    create_python_function, create_new_python_script, create_java_class, create_java_method
 from src.constants.command_constants import (ProgrammingLanguage, TerminalOS, simple_terminal_command_names,
                                              selection_commands_map, browser_commands_map)
 from src.utils.text_to_speech import text_to_speech
-from src.utils.string_utils import string_to_camel_case, extract_number_from_string, numeric_str_to_int
+from src.utils.string_utils import extract_number_from_string, numeric_str_to_int
 from src.utils.date_time_utils import (get_current_time, get_current_date, month_number_to_name, day_number_to_name,
                                        get_day_of_week)
 import logging
 from logging_config import setup_logging
+
 setup_logging()
 warning_logger = logging.getLogger('warning_logger')
 error_logger = logging.getLogger('error_logger')
@@ -73,120 +75,42 @@ class ProgrammingCommandExecutor:
             "integer": lambda: write("int"),
             "string": lambda: write("str"),
             "double": lambda: write("float"),
-            "create class": self._create_python_class,
-            "create method": self._create_python_method,
-            "create function": self._create_python_function,
-            "new script": self._create_new_python_script,
+
+            "create class": lambda: (create_python_class()),
+            "create method": lambda: (create_python_method()),
+            "create function": lambda: (create_python_function()),
+            "new script": lambda: (create_new_python_script()),
         }
 
-        # Execute the corresponding function or default to writing the key
         command_action = python_commands_map.get(self.key, lambda: write(self.key))
         command_action()
 
-    def _extract_name_from_key(self, input_str: str):
-        name = self.key[len(input_str)].strip()  # Extract class name
-        return string_to_camel_case(name)
-
-    def _create_python_class(self) -> None:
-        """Generates a Python class structure."""
-        class_name = self._extract_name_from_key("create class")
-        write("class :")
-        press("enter")
-        press("tab")
-        write("def __init__(self):")
-        press("up")
-        press("left")
-        if len(class_name):
-            write(class_name)
-
-    def _create_python_method(self) -> None:
-        """Generates a Python method structure."""
-        method_name = self._extract_name_from_key("create method")
-        write("def (self):")
-        for _ in range(0, 7):
-            press("left")
-        if len(method_name):
-            write(method_name)
-
-    def _create_python_function(self) -> None:
-        """Generates a Python function structure."""
-        function_name = self._extract_name_from_key("create function")
-        write("def :()")
-        for _ in range(0, 3):
-            press("left")
-        if len(function_name):
-            write(function_name)
-
-    @staticmethod
-    def _create_new_python_script() -> None:
-        """Generates a Python script structure."""
-        write("main():")
-        press("enter")
-        press("enter")
-        write('if __name__ == "__main__":')
-        press("enter")
-        write("main")
-
     def _execute_java_command(self) -> None:
         """Handles Java-specific commands."""
-        if self.key == "print statement":
-            write("System.out.println();")
-            press("left")
-            press("left")
-        elif self.key.startswith("create class"):
-            self._create_java_class()
-        elif (
-                self.key.startswith("create method")
-                or self.key.startswith("create public method")
-                or self.key.startswith("create function")
-                or self.key.startswith("create public function")
-        ):
-            self._create_java_public_method()
-        elif (
-                self.key.startswith("create private method")
-                or self.key.startswith("create private function")
-        ):
-            self._create_java_private_method()
-        else:
-            write(self.key)
+        java_commands_map = {
 
-    def _create_java_class(self) -> None:
-        """Generates a Java class structure."""
-        class_name = self._extract_name_from_key("create class")
-        write("public class  {")
-        press("enter")
-        press("up")
-        press("end")
-        press("left")
-        press("left")
-        if len(class_name):
-            write(class_name)
+            "print statement": lambda : (write("System.out.println();"), press("left", 2)),
 
-    def _create_java_public_method(self) -> None:
+            "create class": lambda : (create_java_class()),
+            "create method": lambda : (self._create_java_public_method()),
+            "create private method": lambda : (self._create_java_private_method()),
+
+            "create function": lambda : (self._create_java_public_method()),
+            "create private function": lambda : (self._create_java_private_method()),
+        }
+
+        command_action = java_commands_map.get(self.key, lambda: write(self.key))
+        command_action()
+
+    @staticmethod
+    def _create_java_public_method() -> None:
         """Generates a Java public method structure."""
-        self._create_java_method("public")
+        create_java_method("public")
 
-    def _create_java_private_method(self) -> None:
+    @staticmethod
+    def _create_java_private_method() -> None:
         """Generates a Java private method structure."""
-        self._create_java_method("private")
-
-    def _create_java_method(self, access_level: str) -> None:
-        """
-        Generates a Java method structure based on the specified access level.
-
-        This method extracts the method name from the command key, constructs the
-        method declaration with the given access level (e.g., "public", "private"), and
-        positions the cursor for further editing.
-
-        Args:
-            access_level (str): The access level of the method (e.g., "public", "private").
-        """
-        method_name = self._extract_name_from_key("create " + access_level + " ")
-        write(access_level + " void () {}")
-        for _ in range(0, 5):
-            press("left")
-        if len(method_name):
-            write(method_name)
+        create_java_method("private")
 
 
 class KeyboardCommandExecutor:
@@ -210,22 +134,20 @@ class KeyboardCommandExecutor:
         """
         Executes the keyboard command.
         """
-        n = self.name[len(self.num_key):]
+        name_suffix = self.name[len(self.num_key):]
 
-        if ":" in n:
+        if ":" in name_suffix:
             try:
-                num = int(n.split(":")[0])
+                num = int(name_suffix.split(":")[0])
             except ValueError:
                 num = 1
         else:
-            if self.name[len(self.num_key):].isdigit():
-                num = int(self.name[len(self.num_key):])
-            else:
-                try:
-                    num = extract_number_from_string(self.name[len(self.num_key):])
-                except Error as e:
-                    error_logger.error(e)
-                    num = 1
+            try:
+                num = int(name_suffix) if name_suffix.isdigit() else extract_number_from_string(name_suffix)
+            except Error as e:
+                error_logger.error(e)
+                num = 1
+
         for _ in range(num):
             press(self.key)
 
@@ -252,25 +174,24 @@ class SwitchCommandExecutor:
             app_state (AppState): The current application state.
         """
         switch_command_map = {
-            "go to sleep": lambda: setattr(app_state, "typing_active", False),
-            "wake up": lambda: setattr(app_state, "typing_active", True),
+            "go to sleep": lambda: (setattr(app_state, "typing_active", False)),
+            "wake up": lambda: (setattr(app_state, "typing_active", True)),
             "refresh texter": app_state.restart_script,
-            "programming on": lambda: setattr(app_state, "programming", True),
-            "programming off": lambda: setattr(app_state, "programming", False),
-            "terminal on": lambda: setattr(app_state, "terminal", True),
-            "terminal off": lambda: setattr(app_state, "terminal", False),
-            "switch mode": lambda: app_state.switch_mode(),
-            "switch punctuation": lambda: app_state.switch_punctuation(),
+            "programming on": lambda: (setattr(app_state, "programming", True)),
+            "programming off": lambda: (setattr(app_state, "programming", False)),
+            "terminal on": lambda: (setattr(app_state, "terminal", True)),
+            "terminal off": lambda: (setattr(app_state, "terminal", False)),
+            "switch mode": lambda: (app_state.switch_mode()),
+            "switch punctuation": lambda: (app_state.switch_punctuation()),
             "switch caps": lambda: app_state.switch_capitalization(),
-            "switch cups": lambda: app_state.switch_capitalization(), # TODO: find better way to fix
             "switch to java": lambda: (app_state.set_programming_language(ProgrammingLanguage.JAVA),
                                        app_state.load_programming_commands()),
             "switch to python": lambda: (app_state.set_programming_language(ProgrammingLanguage.PYTHON),
-                                       app_state.load_programming_commands()),
+                                         app_state.load_programming_commands()),
             "switch to windows": lambda: (app_state.set_terminal_os(TerminalOS.WINDOWS),
-                                       app_state.load_terminal_commands()),
+                                          app_state.load_terminal_commands()),
             "switch to linux": lambda: (app_state.set_terminal_os(TerminalOS.LINUX),
-                                       app_state.load_terminal_commands()),
+                                        app_state.load_terminal_commands()),
         }
 
         if self.name in switch_command_map:
@@ -285,6 +206,7 @@ class InfoCommandExecutor:
     Args:
         key (str): The key to be typed.
     """
+
     def __init__(self, key: str):
         """
         Initializes an InfoCommandExecutor instance.
@@ -308,6 +230,7 @@ class GitCommandExecutor:
     Args:
         key (str): The key associated with the Git command.
         """
+
     def __init__(self, key: str):
         """
         Initializes a GitCommandExecutor instance.
@@ -353,7 +276,7 @@ class TerminalCommandExecutor:
             write(self.key)
             press("enter")
         else:
-            pass #write(self.key)
+            pass  #write(self.key)
 
 
 class SelectionCommandExecutor:
@@ -364,6 +287,7 @@ class SelectionCommandExecutor:
     to perform the corresponding selection action. Supported commands include selecting a line,
     selecting all text, deleting text, copying, and pasting.
     """
+
     def __init__(self, name: str):
         """
         Initializes a `SelectionCommandExecutor` instance.
@@ -405,22 +329,20 @@ class InteractiveCommandExecutor:
         """
         Executes the interactive command.
         """
-        if self.name.startswith("what time is it") or self.name.startswith("what's the time"):
+        if self.name.startswith(("what time is it", "what's the time")):
             current_time = get_current_time()
-            text_to_speech("it's " + current_time)
+            text_to_speech(f"it's {current_time}")
+
         elif self.name.startswith("what's the date"):
             current_date_time = get_current_date()
+            month, day = current_date_time.strftime("%m-%d").split("-")
+            month_name = month_number_to_name(int(month))
+            day_name = day_number_to_name(int(day))
 
-            month_day = current_date_time.strftime("%m-%d")
-            date = month_day.split("-")
-            month = month_number_to_name(int(date[0]))
-            day = day_number_to_name(int(date[1]))
-
-            y_m_d = str(current_date_time.strftime("%Y-%m-%d"))
-            week_day = get_day_of_week(y_m_d)
-
-            current_date = f"{week_day}, {month} {day}"
+            week_day = get_day_of_week(current_date_time.strftime("%Y-%m-%d"))
+            current_date = f"{week_day}, {month_name} {day_name}"
             text_to_speech(current_date)
+
         else:
             text_to_speech("no input")
 
@@ -429,6 +351,7 @@ class BrowserCommandExecutor:
     """
     A class that executes browser commands within a GUI.
     """
+
     def __init__(self, name: str):
         """
         Initializes a `SelectionCommandExecutor` instance.
@@ -446,7 +369,6 @@ class BrowserCommandExecutor:
         # Handle instance-specific logic
         browser_commands["focus chrome"] = lambda: focus_browser_window()
         browser_commands["focus firefox"] = lambda: focus_browser_window("Firefox")
-
 
         if self.name.startswith("browser"):
             if "right" in self.name:
