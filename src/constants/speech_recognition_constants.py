@@ -3,4 +3,5 @@ replacements = {
     "texture": "texter",
     "lift": "left",
     "wright": "right",
+    "switch cups": "switch caps",
 }
