@@ -258,22 +258,25 @@ class AppState:
 
     def switch_typing(self) -> None:
         """Toggle typing On/OFF."""
-        self.typing_active = not self.typing_active
+        self.switch_attribute("typing_active")
         self.update_status()
 
     def switch_punctuation(self) -> None:
         """Toggle punctuation On/OFF."""
-        self.punctuation = not self.punctuation
-        if not self.punctuation:
-            self.capitalize = False
+        self.switch_attribute("punctuation")
+        self.punctuation = self.capitalize or self.punctuation
         self.update_status()
 
     def switch_capitalization(self) -> None:
         """Toggle capitalization On/OFF."""
-        self.capitalize = not self.capitalize
-        if self.capitalize:
-            self.punctuation = True
+        self.switch_attribute("capitalize")
+        self.capitalize = self.punctuation or self.capitalize
         self.update_status()
+
+    def switch_attribute(self, attribute):
+        """Toggle the boolean value of a given attribute."""
+        if hasattr(self, attribute):
+            setattr(self, attribute, not getattr(self, attribute))
 
     def set_programming_language(self, language: ProgrammingLanguage) -> None:
         """Set the programming language."""
