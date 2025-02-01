@@ -46,6 +46,8 @@ import glob
 import json
 import os
 import subprocess
+
+from src.utils.gui_utils import write, press
 from src.utils.text_to_speech import text_to_speech
 import logging
 from logging_config import setup_logging
@@ -138,3 +140,63 @@ def start_browser(browser="chrome", url=None) -> None:
         error_logger.error(f"Error: {browser.capitalize()} is not installed or not in PATH.")
     except Exception as e:
         error_logger.error(f"An error occurred: {e}")
+
+
+def create_python_class() -> None:
+    """Generates a Python class structure."""
+    write("class :")
+    press("enter")
+    press("tab")
+    write("def __init__(self):")
+    press("up")
+    press("left")
+
+
+def create_python_method() -> None:
+    """Generates a Python method structure."""
+    write("def (self):")
+    for _ in range(0, 7):
+        press("left")
+
+
+def create_python_function() -> None:
+    """Generates a Python function structure."""
+    write("def :()")
+    for _ in range(0, 3):
+        press("left")
+
+
+def create_new_python_script() -> None:
+    """Generates a Python script structure."""
+    write("main():")
+    press("enter", 2)
+    write('if __name__ == "__main__":')
+    press("enter")
+    write("main")
+
+
+def create_java_class() -> None:
+    """Generates a Java class structure."""
+
+    write("public class  {")
+    press("enter")
+    press("up")
+    press("end")
+    press("left")
+    press("left")
+
+
+def create_java_method(access_level: str) -> None:
+    """
+    Generates a Java method structure based on the specified access level.
+
+    This method extracts the method name from the command key, constructs the
+    method declaration with the given access level (e.g., "public", "private"), and
+    positions the cursor for further editing.
+
+    Args:
+        access_level (str): The access level of the method (e.g., "public", "private").
+    """
+    write(access_level + " void () {}")
+    for _ in range(0, 5):
+        press("left")
