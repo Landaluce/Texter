@@ -116,27 +116,30 @@ class TexterUI:
         self.root.title("Texter")
 
         self.app_state = None
-        self.background_color = "#1f618d"
+        self.background_color = "black"
         self.font_color = "white"
         self.imgs_path = f"{os.path.abspath('../src/imgs/')}/"
-
-        # initialize images
-        self.wakeup_button_image = self.load_image("play.png")
-        self.wakeup_button_image.configure(width=25, height=25)
-        self.go_to_sleep_button_image = self.load_image("pause.png")
-        self.go_to_sleep_button_image.configure(width=25, height=25)
-        self.terminate_button_image = self.load_image("stop.png")
-        self.terminate_button_image.configure(width=25, height=25)
-        self.collapse_button_image = self.load_image("collapse.png")
-        self.collapse_button_image.configure(width=25, height=25)
-        self.expand_button_image = self.load_image("expand.png")
-        self.expand_button_image.configure(width=25, height=25)
 
         # initialize window's dimensions
         self.window_width = 300
         self.window_height = 600
         self.window_position_x = 100
         self.window_position_y = 100
+
+        # set label dimensions
+        self.label_width = 280
+        self.label_height = 15
+
+        # set text_boxs dimensions
+        self.input_height = 100
+        self.status_height = 100
+        self.commands_height = 255
+
+        # set collapse/expand settings
+        self.collapsed_geometry = f"300x330"
+        self.expanded_geometry = f"300x605"
+        self.collapsed_commands_height = 0
+
 
         # initialize ui element
         self.commands_label = None
@@ -175,10 +178,10 @@ class TexterUI:
         self.root.attributes("-topmost", True)
 
         self.configure_window()
-        self.create_input_section()
-        self.create_action_buttons()
-        self.create_status_section()
-        self.create_commands_section()
+        self.configure_input_section()
+        self.configure_action_buttons()
+        self.configure_status_section()
+        self.configure_commands_section()
 
         # Create the main window
         self.root.mainloop()
@@ -191,41 +194,32 @@ class TexterUI:
         self.root.pack_propagate(False)
         self.root.configure(bg=self.background_color)
 
-    def create_input_section(self):
+    def configure_input_section(self):
         """Create the input section of the UI."""
         # Create Input label
         self.commands_label = tk.Label(self.root, text="Input", fg=self.font_color)
         self.commands_label.configure(bg=self.background_color)
-        self.commands_label.place(x=10, y=5, width=280, height=15)
+        self.commands_label.place(x=10, y=5, width=self.label_width, height=self.label_height)
 
-        self.input_text_box = tk.Text(self.root, wrap=tk.WORD, padx=10, width=280, height=100)
-        self.input_text_box.place(x=10, y=25, width=280, height=100)
+        self.input_text_box = tk.Text(self.root, wrap=tk.WORD, padx=0, fg=self.font_color, bg=self.background_color)
+        self.input_text_box.place(x=0, y=25, width=self.window_width, height=self.input_height)
         self.input_text_box.config(state=tk.DISABLED)  # Make the text box non-editable
 
-    def create_action_buttons(self):
+    def configure_action_buttons(self):
         """Create action buttons (Wake Up, Go to Sleep, Quit)."""
-        self.wake_up_button = tk.Button(
-            self.root,
-            image=self.wakeup_button_image,
-            command=self.on_wake_up_button_click,
-        )
-        self.wake_up_button.place(x=10, y=130, width=25, height=25)
+        self.wake_up_button = tk.Button(self.root, text="▶", command=self.on_wake_up_button_click, fg=self.font_color,
+                                        bg=self.background_color)
+        self.wake_up_button.place(x=10, y=130)#, width=25, height=25)
 
-        self.go_to_sleep_button = tk.Button(
-            self.root,
-            image=self.go_to_sleep_button_image,
-            command=self.on_go_to_sleep_button_click,
-        )
-        self.go_to_sleep_button.place(x=50, y=130, width=25, height=25)
+        self.go_to_sleep_button = tk.Button(self.root, text="||", fg=self.font_color, bg=self.background_color,
+                                            command=self.on_go_to_sleep_button_click,)
+        self.go_to_sleep_button.place(x=50, y=130)
 
-        self.terminate_button = tk.Button(
-            self.root,
-            image=self.terminate_button_image,
-            command=self.on_terminate_button_click,
-        )
-        self.terminate_button.place(x=90, y=130, width=25, height=25)
+        self.terminate_button = tk.Button(self.root, text="◼", fg=self.font_color, bg=self.background_color,
+                                          command=self.on_terminate_button_click,)
+        self.terminate_button.place(x=90, y=130)
 
-    def create_status_section(self):
+    def configure_status_section(self):
         """Create the status section of the UI."""
         self.status_label = tk.Label(
             self.root,
@@ -234,33 +228,30 @@ class TexterUI:
             text="Status" if self.app_state.typing_active else "Typing: Stopped",
         )
         self.status_label.configure(bg=self.background_color)
-        self.status_label.place(x=10, y=165, width=280, height=15)
+        self.status_label.place(x=10, y=165, width=self.label_width, height=self.label_height)
 
-        self.status_text_box = tk.Text(self.root, height=10, width=40)
+        self.status_text_box = tk.Text(self.root, fg=self.font_color, bg=self.background_color)
         self.print_status()
         self.status_text_box.config(state=tk.DISABLED)
-        self.status_text_box.place(x=10, y=185, width=280, height=100)
+        self.status_text_box.place(x=0, y=185, width=self.window_width, height=self.status_height)
 
-    def create_commands_section(self):
+    def configure_commands_section(self):
         """Create the commands section of the UI."""
         # Create Commands label
         self.commands_label = tk.Label(self.root, text="Commands", fg=self.font_color)
         self.commands_label.configure(bg=self.background_color)
-        self.commands_label.place(x=10, y=300, width=280, height=15)
+        self.commands_label.place(x=0, y=300, width=self.label_width, height=self.label_height)
 
         # Create expand/collapse button
-        self.toggle_commands_button = tk.Button(
-            self.root,
-            image=self.collapse_button_image,
-            command=self.toggle_status_textbox,
-        )
-        self.toggle_commands_button.place(x=10, y=295, width=25, height=25)
+        self.toggle_commands_button = tk.Button(self.root, text="▲", command=self.toggle_status_textbox,
+                                                bg=self.background_color, fg=self.font_color,)
+        self.toggle_commands_button.place(x=10, y=295)#, width=25, height=25)
 
         # Create a non-editable text box: commands
-        self.commands_text_box = tk.Text(self.root, height=10, width=40)
+        self.commands_text_box = tk.Text(self.root,fg=self. font_color, bg=self.background_color)
         self.print_all_commands()
         self.commands_text_box.config(state=tk.DISABLED)
-        self.commands_text_box.place(x=10, y=330, width=280, height=255)
+        self.commands_text_box.place(x=0, y=330, width=self.window_width, height=self.commands_height)
 
     def reload_commands(self):  # TODO: remove/add reload commands
         """Reload the commands from the updated commands file and display them in the UI."""
@@ -276,22 +267,14 @@ class TexterUI:
 
     def toggle_status_textbox(self):
         """Toggle between expanding and collapsing the Text widget."""
-        if self.commands_text_box.winfo_height() == 255:
-            self.commands_text_box.place(
-                width=280, height=0
-            )  # Collapse the Text widget
-            self.toggle_commands_button.config(
-                image=self.expand_button_image
-            )  # Change button immage to Collapse
-            self.root.geometry(f"300x330")  # Collapse window
+        if self.commands_text_box.winfo_height() == self.commands_height:
+            self.commands_text_box.place(width=self.window_width, height=self.collapsed_commands_height)
+            self.toggle_commands_button.config(text="▼")
+            self.root.geometry(self.collapsed_geometry)  # Collapse window
         else:
-            self.commands_text_box.place(
-                width=280, height=255
-            )  # Expand the Text widget
-            self.toggle_commands_button.config(
-                image=self.collapse_button_image
-            )  # Change button image to Expand
-            self.root.geometry(f"300x605")  # Expand window
+            self.commands_text_box.place(width=self.window_width, height=self.commands_height)
+            self.toggle_commands_button.config(text="▲",)
+            self.root.geometry(self.expanded_geometry)  # Expand window
 
     def on_terminate_button_click(self) -> None:
         """
@@ -367,14 +350,14 @@ class TexterUI:
     @staticmethod
     def format_command_block(command_type, commands):
         """Format commands as a string block for display."""
-        block = f"┌{'─' * 28}┐\n"
+        block = f"┌{'─' * 34}┐\n"
         block += f"│ {command_type}:\n"
-        block += f"├{'─' * 28}┤\n"
+        block += f"├{'─' * 34}┤\n"
         for command in commands:
             for key, val in json.loads(command).items():
                 if key == "name":
                     block += f" {val}\n"
-        block += f"└{'─' * 28}┘\n"
+        block += f"└{'─' * 34}┘\n"
         return block
 
     def print_all_commands(self) -> None:
