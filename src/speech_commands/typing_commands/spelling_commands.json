@@ -18,7 +18,7 @@
         {"name": "india", "key": "i", "num_key": "india ", "command_type": "spelling"},
         {"name": "julia", "key": "j", "num_key": "julia ", "command_type": "spelling"},
         {"name": "kilo", "key": "k", "num_key": "k ", "command_type": "spelling"},
-        {"name": "line", "key": "l", "num_key": "line ", "command_type": "spelling"},
+        {"name": "latin", "key": "l", "num_key": "latin ", "command_type": "spelling"},
         {"name": "mike", "key": "m", "num_key": "mike ", "command_type": "spelling"},
         {"name": "november", "key": "n", "num_key": "november ", "command_type": "spelling"},
         {"name": "oscar", "key": "o", "num_key": "oscar ", "command_type": "spelling"},
