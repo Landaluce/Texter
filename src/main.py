@@ -25,6 +25,32 @@ from logging_config import setup_logging
 setup_logging()
 warning_logger = logging.getLogger('warning_logger')
 error_logger = logging.getLogger('error_logger')
+info_logger = logging.getLogger('general_logger')
+
+
+def initialize_application():
+    """Initializes the application state, loads commands, and sets up UI."""
+    app = TexterUI(command_files_directory)
+    recognizer = sr.Recognizer()
+    app_state = AppState(app)
+
+    try:
+        commands = get_commands(command_files_directory)
+        app_state.load_commands(commands)
+        info_logger.info(f"Loaded {len(commands)} commands successfully.")
+    except Exception as e:
+        error_logger.info(f"Failed to load commands: {e}")
+        raise RuntimeError("Command loading failed.") from e
+
+    return app, app_state, recognizer, commands
+
+def start_speech_interpreter(app_state, app, recognizer):
+    """Starts the live speech interpreter in a separate thread."""
+    speech_thread = threading.Thread(
+        target=run_live_speech_interpreter, args=(app_state, app, recognizer), daemon=True
+    )
+    app.speech_thread = speech_thread
+    speech_thread.start()
 
 
 def main():
@@ -43,26 +69,15 @@ def main():
         RuntimeError: If commands cannot be loaded or threads fail to start.
     """
     try:
-        app = TexterUI(command_files_directory)
-        recognizer = sr.Recognizer()
-        app_state = AppState(app)
-
-        # Load commands
-        commands = get_commands(command_files_directory)
-        app_state.load_commands(commands)
-
-        # Start live speech interpreter thread
-        speech_thread = threading.Thread(
-            target=run_live_speech_interpreter, args=(app_state, app, recognizer), daemon=True
-        )
-        app.speech_thread = speech_thread
-        speech_thread.start()
+        app, app_state, recognizer, commands = initialize_application()
+        start_speech_interpreter(app_state, app, recognizer)
 
         # Initialize UI
+        info_logger.info("Starting UI...")
         app.init_ui(app_state, commands)
 
     except Exception as e:
-        error_logger.error(f"exception: {e}")
+        error_logger.error(f"Application startup failed: {e}", exc_info=True)
 
 
 if __name__ == "__main__":
