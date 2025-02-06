@@ -2,9 +2,9 @@
 Main function that initializes the application state and starts the live speech interpreter.
 
 This function sets up the application by performing the following tasks:
-- Creates an instance of `AppState` and initializes the UI.
-- Loads the necessary commands using the `get_commands` function.
-- Sets up the speech recognizer using the `speech_recognition` library.
+- Creates an instance of AppState and initializes the UI.
+- Loads the necessary commands using the get_commands function.
+- Sets up the speech recognizer using the speech_recognition library.
 - Starts the live speech interpretation process in a separate thread to handle speech commands in real-time.
 
 Example Usage:
@@ -49,15 +49,15 @@ def start_speech_interpreter(app_state, app, recognizer):
     speech_thread = threading.Thread(
         target=run_live_speech_interpreter, args=(app_state, app, recognizer), daemon=True
     )
-    app.speech_thread = speech_thread
     speech_thread.start()
+    app.speech_thread = speech_thread
 
 
 def main():
     """
     Initializes the application app_state and starts the live speech interpreter.
     This function sets up the application by:
-    - Creating an instance of `AppState`
+    - Creating an instance of AppState
     - Loading the necessary commands.
     - Initializing the speech recognizer.
     - Starting the live speech interpretation process in a separate thread.
