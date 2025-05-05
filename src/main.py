@@ -34,7 +34,6 @@ info_logger = logging.getLogger('general_logger')
 def initialize_application():
     """Initializes the application state, loads commands, and sets up UI."""
     app = TexterUI(command_files_directory)
-    recognizer = sr.Recognizer()
     app_state = AppState(app)
 
     try:
@@ -45,15 +44,17 @@ def initialize_application():
         error_logger.info(f"Failed to load commands: {e}")
         raise RuntimeError("Command loading failed.") from e
 
-    return app, app_state, recognizer, commands
+    return app, app_state, commands
 
-def start_speech_interpreter(app_state, app, recognizer):
+
+def start_speech_interpreter(app_state, app):
     """Starts the live speech interpreter in a separate thread."""
     speech_thread = threading.Thread(
-        target=run_live_speech_interpreter, args=(app_state, app, recognizer), daemon=True
+        target=run_live_speech_interpreter, args=(app_state, app), daemon=True
     )
     speech_thread.start()
     app.speech_thread = speech_thread
+
 
 def main():
     """
@@ -61,7 +62,6 @@ def main():
     This function sets up the application by:
     - Creating an instance of AppState
     - Loading the necessary commands.
-    - Initializing the speech recognizer.
     - Starting the live speech interpretation process in a separate thread.
 
     Example Usage:
@@ -71,8 +71,8 @@ def main():
         RuntimeError: If commands cannot be loaded or threads fail to start.
     """
     try:
-        app, app_state, recognizer, commands = initialize_application()
-        start_speech_interpreter(app_state, app, recognizer)
+        app, app_state, commands = initialize_application()
+        start_speech_interpreter(app_state, app)
 
         # Initialize UI
         info_logger.info("Starting UI...")

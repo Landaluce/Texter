@@ -10,16 +10,17 @@ from src.utils.speech_recognition import recognize_speech
 from src.utils.special_case_processor import process_special_cases
 setup_logging()
 
+recognizer = sr.Recognizer()
 
-def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI, recognizer) -> None:
+def run_live_speech_interpreter(app_state: AppState, app_ui: TexterUI) -> None:
     """
     This function runs the live speech interpreter in a separate thread.
     """
     while not app_state.terminate:
-        live_speech_interpreter(app_state, app_ui, recognizer)
+        live_speech_interpreter(app_state, app_ui)
 
 
-def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer: sr.Recognizer):
+def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI):
     """
     Continuously listens for and interprets speech commands, executing corresponding actions.
 
@@ -30,7 +31,6 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
     Parameters:
         texter_ui(TexterUI): frontend
         app_state (AppState): The current application state, including typing status and loaded commands.
-        recognizer (sr.Recognizer): The speech recognition object used to process the audio input.
     """
     with noalsaerr():
         while not app_state.terminate:
@@ -41,5 +41,6 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI, recognizer
 
                 texter_ui.append_text(f"You said:~{text}~")
                 logging.getLogger('general_logger').info(f"You said:~{text}~")
+
                 handle_dictation_mode(app_state, texter_ui, text)
                 handle_spelling_mode(app_state, text)
