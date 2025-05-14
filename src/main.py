@@ -72,7 +72,6 @@ def main():
         app, app_state, commands = initialize_application()
         start_speech_interpreter(app_state, app)
 
-        # Initialize UI
         info_logger.info("Starting UI...")
         app.init_ui(app_state, commands)
 
