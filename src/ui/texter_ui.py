@@ -42,13 +42,13 @@ Initializes the user interface, setting up input elements, buttons, labels, and 
 
 - `configure_window(self)`:
 
-Configures the main window's dimensions, position, and appearance.
+Configure the main window's dimensions, position, and appearance.
 
 
 
 - `create_input_section(self)`:
 
-Creates the section of the UI where input is displayed.
+Create the section of the UI where input is displayed.
 
 
 
@@ -66,7 +66,7 @@ Creates the status section, displaying information about the app's current state
 
 - `create_commands_section(self)`:
 
-Creates a section for displaying commands and controlling the display of active commands.
+Create a section for displaying commands and controlling the display of active commands.
 
 
 
@@ -108,7 +108,7 @@ Deactivates the typing mode and updates the UI status.
 
 - `get_active_commands(self)`:
 
-Retrieves all active commands grouped by type (e.g., info commands, git commands).
+Retrieve all active commands grouped by type (e.g., info commands, git commands).
 
 
 
@@ -384,6 +384,17 @@ class TexterUI:
         active_commands = {}
 
         def process_commands(commands, type_name):
+            """
+            Processes a list of command objects, converts each to a dictionary,
+            serializes it to JSON, and stores the list of JSON strings under a
+            specified type name in the active_commands dictionary.
+
+            Args:
+                commands (list): A list of command objects, each expected to have
+                                 a commands_to_dict() method.
+                type_name (str): The key under which the processed commands will be
+                                 stored in the active_commands dictionary.
+            """
             lst = []
             for command in commands:
                 temp_dict = command.commands_to_dict()
