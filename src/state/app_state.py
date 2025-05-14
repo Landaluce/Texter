@@ -20,7 +20,7 @@ Features:
    - Adapts terminal commands based on the operating system.
 4. Status Reporting:
    - Generates and updates status strings reflecting the current application state.
-   - Integrates with a UI or prints to the console when UI is unavailable.
+   - Integrates with a UI or prints to the console when the UI is unavailable.
 5. Script Management:
    - Allows the script to restart itself programmatically.
 
@@ -41,6 +41,8 @@ Classes:
 """
 import sys
 import subprocess
+from typing import List
+
 from src.commands.command_manager import CommandManager
 from src.constants.command_constants import CommandType, ProgrammingLanguage, TerminalOS
 from src.constants.app_state_constants import command_groups, Mode
@@ -48,7 +50,7 @@ from src.constants.app_state_constants import command_groups, Mode
 
 class AppState:
     """
-    Represents the state of the application, including typing status,
+    represents the state of the application, including typing status,
     the current programming language, and associated commands.
 
     Attributes:
@@ -76,7 +78,7 @@ class AppState:
 
         self.app_ui = app_ui
 
-        #Command groups
+        # Command groups
         self.switch_commands = []
         self.keyboard_commands = []
         self.info_commands = []
@@ -96,10 +98,13 @@ class AppState:
     def load_commands(self, commands: dict) -> None:
         """Loads all command groups from the given dictionary."""
         self.commands = commands
-
         # Dynamically load common commands
         for group, command_type in command_groups.items():
-            setattr(self, group, self._load_commands(commands.get(group, []), command_type))
+            try:
+                setattr(self, group, self._load_commands(commands.get(group, []), command_type))
+            except Exception as e:
+                print(f"could not load {group} commands")
+                print(e)
 
         # Load programming commands (if applicable)
         self.programming_commands = (
@@ -118,7 +123,8 @@ class AppState:
     def _load_commands(commands_list: list, command_type: CommandType) -> list:
         """Helper method to initialize commands from a given list."""
         return [
-            CommandManager(cmd.get("name", ""), command_type, cmd.get("key", ""), cmd.get("num_key", ""))
+            CommandManager(cmd.get("name", ""), command_type, cmd.get("key", ""), cmd.get("num_key", ""),
+                           cmd.get("action", ""))
             for cmd in commands_list
         ]
 
@@ -127,6 +133,7 @@ class AppState:
         Loads programming commands for the specified language from the commands file and sets the current language.
         """
         if not self.programming:
+            print("Warning: Cannot load programming commands, commands configuration not loaded.")
             return
         self.programming_commands = self._load_commands(self.commands[self.programming_language.value + "_commands"],
                                                         CommandType.PROGRAMMING)
@@ -134,17 +141,38 @@ class AppState:
 
     def load_terminal_commands(self) -> None:
         """
-        Loads terminal commands for the specified operating system from the commands file and sets the current os.
+        Loads terminal commands for the specified operating system from the command file and sets the current os.
         """
         if not self.terminal:
+            print("Warning: Cannot load terminal commands, commands configuration not loaded.")
             return
         self.terminal_commands = self._load_commands(self.commands[self.terminal_os.value + "_commands"],
                                                      CommandType.TERMINAL)
         self.update_status()
 
+    def get_all_commands(self) -> List[CommandManager]:
+        """
+        Compiles a single list of all currently loaded CommandManager objects from all groups.
+
+        Returns:
+            A list of all CommandManager objects.
+        """
+        return (
+                self.switch_commands +
+                self.keyboard_commands +
+                self.info_commands +
+                self.selection_commands +
+                self.programming_commands +
+                self.terminal_commands +
+                self.spelling_commands +
+                self.git_commands +
+                self.interactive_commands +
+                self.browser_commands
+        )
+
     def handle_command(self, text: str) -> bool:
         """
-        Processes a given text command by checking it against different command types.
+        Processes a given text command by checking it against all loaded commands.
 
         Parameters:
         - text (str): The command text to process.
@@ -152,74 +180,21 @@ class AppState:
         Returns:
         - bool: True if a command was successfully handled, False otherwise.
         """
-        command_handlers = [
-            self._handle_switch_commands,
-            self._handle_keyboard_command,
-            self._handle_programming_command,
-            self._handle_terminal_command,
-            self._handle_info_command,
-            self._handle_selection_command,
-            self._handle_spelling_command,
-            self._handle_git_command,
-            self._handle_interactive_command,
-            self._handle_browser_command
-        ]
-        for handler in command_handlers:
-            # noinspection PyArgumentList
-            if handler(text):
-                return True
-        return False
+        all_commands = self.get_all_commands()
 
-    def _handle_command(self, text: str, command_list: list) -> bool:
-        """
-        Handles a command if the text matches any of the provided commands.
-
-        Args:
-          self: The object containing the necessary attributes.
-          text: The command text to process.
-          command_list: A list of command objects.
-
-        Returns:
-          bool: True if a command was handled, False otherwise.
-        """
-        for command in command_list:
+        for command in all_commands:
             if text.startswith(command.name):
-                if hasattr(command, 'command_executor'):
-                    command.command_executor.execute(self)
-                else:
-                    command.execute(self)
-                return True
+                try:
+                    if hasattr(command, 'command_executor'):
+                        command.command_executor.execute(self)
+                    else:
+                        command.execute(self)
+                    return True
+                except Exception as e:
+                    print(f"Error executing command '{command.name}': {e}")
+                    # TODO: update UI with an error message
+                    return False
         return False
-
-    def _handle_switch_commands(self, text: str):
-        return self._handle_command(text, self.switch_commands)
-
-    def _handle_keyboard_command(self, text: str) -> bool:
-        return self._handle_command(text, self.keyboard_commands)
-
-    def _handle_git_command(self, text: str) -> bool:
-        return self._handle_command(text, self.git_commands)
-
-    def _handle_programming_command(self, text: str) -> bool:
-        return self._handle_command(text, self.programming_commands)
-
-    def _handle_terminal_command(self, text: str) -> bool:
-        return self._handle_command(text, self.terminal_commands)
-
-    def _handle_info_command(self, text: str) -> bool:
-        return self._handle_command(text, self.info_commands)
-
-    def _handle_selection_command(self, text: str) -> bool:
-        return self._handle_command(text, self.selection_commands)
-
-    def _handle_spelling_command(self, text: str) -> bool:
-        return self._handle_command(text, self.spelling_commands)
-
-    def _handle_interactive_command(self, text: str) -> bool:
-        return self._handle_command(text, self.interactive_commands)
-
-    def _handle_browser_command(self, text: str) -> bool:
-        return self._handle_command(text, self.browser_commands)
 
     def update_status(self) -> None:
         """Updates the UI with the current status or prints it to the console."""
@@ -276,7 +251,13 @@ class AppState:
     def switch_attribute(self, attribute):
         """Toggle the boolean value of a given attribute."""
         if hasattr(self, attribute):
-            setattr(self, attribute, not getattr(self, attribute))
+            current_value = getattr(self, attribute)
+            if isinstance(current_value, bool):
+                setattr(self, attribute, not current_value)
+            else:
+                print(f"Warning: Attribute '{attribute}' is not a boolean, cannot toggle.")
+        else:
+             print(f"Warning: Attribute '{attribute}' not found.")
 
     def set_programming_language(self, language: ProgrammingLanguage) -> None:
         """Set the programming language."""

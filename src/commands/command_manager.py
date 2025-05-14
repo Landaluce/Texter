@@ -38,12 +38,13 @@ Usage:
     command.execute(app_state)
     command_dict = command.commands_to_dict(include_num_key=False)
 """
-
-from src.commands.command_executors import (ProgrammingCommandExecutor, KeyboardCommandExecutor, SwitchCommandExecutor,
-                                            InfoCommandExecutor, GitCommandExecutor, TerminalCommandExecutor,
-                                            SelectionCommandExecutor, InteractiveCommandExecutor,
-                                            BrowserCommandExecutor)
+from src.commands.command_executors import (TerminalCommandExecutor, InteractiveCommandExecutor, ActionExecutor)
 from src.constants.command_constants import CommandType
+import logging
+from logging_config import setup_logging
+
+setup_logging()
+error_logger = logging.getLogger('error_logger')
 
 
 class CommandManager:
@@ -51,9 +52,9 @@ class CommandManager:
     Represents a command that can be executed based on recognized speech input.
     """
 
-    def __init__(self, name: str, command_type: CommandType, key=None, num_key=None):
+    def __init__(self, name: str, command_type: CommandType, key=None, num_key=None, action=None):
         """
-        Initializes a new Command instance.
+        initializes a new Command instance.
 
         Args:
             name (str): The name of the command.
@@ -65,16 +66,11 @@ class CommandManager:
         self.command_type = command_type
         self.key = key
         self.num_key = num_key
+        self.action = action
 
-        self.programming_command_executor = ProgrammingCommandExecutor(self.key)
-        self.keyboard_command_executor = KeyboardCommandExecutor(self.key, self.name, self.num_key)
-        self.switch_command_executor = SwitchCommandExecutor(self.name)
-        self.info_command_executor = InfoCommandExecutor(self.key)
-        self.git_command_executor = GitCommandExecutor(self.key)
+        self.action_executor = ActionExecutor()
         self.terminal_command_executor = TerminalCommandExecutor(self.key, self.name)
-        self.selection_command_executor = SelectionCommandExecutor(self.name)
         self.interactive_command_executor = InteractiveCommandExecutor(self.name)
-        self.browser_command_executor = BrowserCommandExecutor(self.name)
 
     def commands_to_dict(self, include_num_key: bool=True) -> dict:
         """
@@ -97,37 +93,23 @@ class CommandManager:
 
     def execute(self, app_state) -> None:
         """
-        Executes the command based on its type.
+    Executes the command according to its type using the current application state.
 
-        Parameters:
-            app_state (AppState): The current application state.
+    Args:
+        app_state (AppState): The current application state.
 
-        Depending on the command type, this method will either execute a keyboard command,
-        toggle typing activity, type out a programming or info command, or execute a selection command.
-        """
-        if self.command_type == CommandType.KEYBOARD:
-            self.keyboard_command_executor.execute()
-
-        elif self.command_type == CommandType.SWITCH:
-            self.switch_command_executor.execute(app_state)
-
-        elif self.command_type == CommandType.INFO:
-            self.info_command_executor.execute()
-
-        elif self.command_type == CommandType.PROGRAMMING:
-            self.programming_command_executor.execute(app_state)
+    Depending on the command type, delegates execution to the appropriate executor (action, terminal, or interactive).
+    """
+        if self.command_type == CommandType.SWITCH:
+            self.action_executor.execute(self.action, app_state)
 
         elif self.command_type == CommandType.TERMINAL:
             self.terminal_command_executor.execute(app_state)
 
-        elif self.command_type == CommandType.SELECTION:
-            self.selection_command_executor.execute()
-
-        elif self.command_type == CommandType.GIT:
-            self.git_command_executor.execute()
-
         elif self.command_type == CommandType.INTERACTIVE:
             self.interactive_command_executor.execute()
 
-        elif self.command_type == CommandType.BROWSER:
-            self.browser_command_executor.execute()
+        else:
+            print("in command manager.execute ELSE", self.command_type, self.action)
+            self.action_executor.execute(self.action)
+

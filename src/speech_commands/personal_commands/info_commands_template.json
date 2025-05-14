@@ -1,8 +1,9 @@
 {
   "info_commands": [
-    {"name": "input full name", "key": "Foo Bar", "command_type":"info"},
-    {"name": "input name", "key": "Foo", "command_type":"info"},
-    {"name": "input last name", "key": "Bar", "command_type":"command"},
-    {"name": "input gmail", "key": "foobar@gmail.com", "command_type":"command"}
+    {
+      "name": "input full name", "action": "write(\"Foo Bar\")", "command_type":"info"},
+    {"name": "input name", "action": "write(\"FFoo\")", "command_type":"info"},
+    {"name": "input last name", "action": "write(\"FBar\")", "command_type":"command"},
+    {"name": "input gmail", "action": "write(\"Ffoobar@gmail.com\")", "command_type":"command"}
   ]
 }

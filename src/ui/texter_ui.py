@@ -177,6 +177,9 @@ texter_ui = TexterUI(command_files_directory="/path/to/commands")
 texter_ui.init_ui(app_state, commands_dict)
 
 """
+from __future__ import annotations
+
+import threading
 import json
 import os
 import sys
@@ -236,6 +239,8 @@ class TexterUI:
         self.toggle_commands_button = None
         self.add_command_button = None
         self.commands = None
+
+        self.speech_thread: threading.Thread or None = None
 
     def load_image(self, filename):
         """Load and resize an image."""

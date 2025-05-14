@@ -1,3 +1,9 @@
+"""
+This module contains functions for handling user commands based on the application's mode.
+
+It includes functions to process text in spelling mode and dictation mode,
+interpreting commands and writing output as needed.
+"""
 from __future__ import annotations
 
 from src.commands.text_processor import TextProcessor
@@ -7,8 +13,8 @@ from src.utils.string_utils import convert_to_spelling, string_to_camel_case, st
 
 def handle_spelling_mode(app_state, text: str) -> None:
     """
-    Processes text in spelling mode by converting it to its spelled-out equivalent
-    and applying necessary replacements.
+    processes text in spelling mode by converting it to its spelled-out equivalent
+    and applying the necessary replacements.
 
     Args:
         app_state: The application's state, containing spelling-related configurations.

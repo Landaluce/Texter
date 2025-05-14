@@ -1,3 +1,10 @@
+"""
+This module contains the core logic for the live speech interpretation process.
+
+It uses the speech_recognition library to capture audio from the microphone,
+convert it to text, and then process the text to identify and handle commands
+or perform dictation based on the application's current state.
+"""
 from __future__ import annotations
 import speech_recognition as sr
 import logging
@@ -24,7 +31,7 @@ def live_speech_interpreter(app_state: AppState, texter_ui: TexterUI):
     """
     Continuously listens for and interprets speech commands, executing corresponding actions.
 
-    This function utilizes a speech recognizer to convert spoken words into text and then processes
+    This function uses a speech recognizer to convert spoken words into text and then processes
     the text to determine if it matches any predefined commands. If a command is recognized, it is
     executed; otherwise, the spoken text is typed out if typing mode is active.
 

@@ -1,5 +1,5 @@
 """
-Main function that initializes the application state and starts the live speech interpreter.
+The main function that initializes the application state and starts the live speech interpreter.
 
 This function sets up the application by performing the following tasks:
 - Creates an instance of AppState and initializes the UI.
@@ -15,8 +15,6 @@ Raises:
 """
 import threading  # noqa: F401
 import logging
-
-import speech_recognition as sr
 
 from logging_config import setup_logging
 from src.constants.main_constants import command_files_directory

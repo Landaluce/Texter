@@ -1,12 +1,12 @@
 {
   "java_commands": [
-        {"name": "print statement", "key": "print statement"},
-        {"name": "create class", "key": "create class"},
-        {"name": "create method", "key": "create method"},
-        {"name": "create public method", "key": "create public method"},
-        {"name": "create private method", "key": "create private method"},
-        {"name": "create function", "key": "create function"},
-        {"name": "create public function", "key": "create public function"},
-        {"name": "create private function", "key": "create private function"}
+        {"name": "print statement", "action": "write(\"System.out.println();\"), press(\"left\", 2)"},
+        {"name": "create class", "action": "write(\"public class  {\"), press(\"enter\"), press(\"up\"), press(\"end\"), press(\"left\"), press(\"left\")"},
+        {"name": "create method", "action": "write(access_level + \" void () {}\"), [press(\"left\") for _ in range(0, 5)]"},
+        {"name": "create public method", "action": "write(create_java_method(\"public\"))"},
+        {"name": "create private method", "action": "write(create_java_method(\"private\"))"},
+        {"name": "create function", "action": "write(create_java_method(\"public\"))"},
+        {"name": "create public function", "action": "write(create_java_method(\"public\"))"},
+        {"name": "create private function", "action": "write(create_java_method(\"private\"))"}
   ]
 }

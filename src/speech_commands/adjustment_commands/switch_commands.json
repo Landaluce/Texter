@@ -1,79 +1,94 @@
 {
     "switch_commands": [
-      {
-        "name": "wake up",
-        "key": "wake up",
-        "command_type": "switch"
-      },
-      {
-        "name": "go to sleep",
-        "key": "go to sleep",
-        "command_type": "switch"
-      },
-      {
-        "name": "refresh texter",
-        "key": "refresh texter",
-        "command_type": "switch"
-      },
-      {
-        "name": "programming on",
-        "key": "programming on",
-        "command_type": "switch"
-      },
-      {
-        "name": "programming off",
-        "key": "programming off",
-        "command_type": "switch"
-      },
-      {
-        "name": "switch to python",
-        "key": "switch to python",
-        "command_type": "switch"
-      },
-      {
-        "name": "switch to java",
-        "key": "switch to java",
-        "command_type": "switch"
-      },
-      {
-        "name": "terminal on",
-        "key": "terminal on",
-        "command_type": "switch"
-      },
-      {
-        "name": "terminal off",
-        "key": "terminal off",
-        "command_type": "switch"
-      },
-      {
-        "name": "switch to linux",
-        "key": "switch to linux",
-        "command_type": "switch"
-      },
-      {
-        "name": "switch to windows",
-        "key": "switch to windows",
-        "command_type": "switch"
-      },
-      {
-        "name": "switch mode",
-        "key": "switch mode",
-        "command_type": "switch"
-      },
-      {
-        "name": "switch punctuation",
-        "key": "switch punctuation",
-        "command_type": "switch"
-      },
-      {
-        "name": "switch caps",
-        "key": "switch caps",
-        "command_type": "switch"
-      },
-      {
-        "name": "switch cups",
-        "key": "switch cups",
-        "command_type": "switch"
-      }
+        {
+            "name": "wake up",
+            "key": "wake up",
+            "action": "setattr(app_state, \"typing_active\", True)",
+            "command_type": "switch"
+        },
+        {
+            "name": "go to sleep",
+            "key": "go to sleep",
+            "action": "setattr(app_state, \"typing_active\", False)",
+            "command_type": "switch"
+        },
+        {
+            "name": "refresh texter",
+            "key": "refresh texter",
+            "action": "app_state.restart_script()",
+            "command_type": "switch"
+        },
+        {
+            "name": "programming on",
+            "key": "programming on",
+            "action": "setattr(app_state, \"programming\", True)",
+            "command_type": "switch"
+        },
+        {
+            "name": "programming off",
+            "key": "programming off",
+            "action": "(setattr(app_state, \"programming\", False))",
+            "command_type": "switch"
+        },
+        {
+            "name": "switch to python",
+            "key": "switch to python",
+            "action": "(app_state.set_programming_language(ProgrammingLanguage.PYTHON), app_state.load_programming_commands())",
+            "command_type": "switch"
+        },
+        {
+            "name": "switch to java",
+            "key": "switch to java",
+            "action": "(app_state.set_programming_language(ProgrammingLanguage.JAVA), app_state.load_programming_commands())",
+            "command_type": "switch"
+        },
+        {
+            "name": "terminal on",
+            "key": "terminal on",
+            "action": "setattr(app_state, \"terminal\", True)",
+            "command_type": "switch"
+        },
+        {
+            "name": "terminal off",
+            "key": "terminal off",
+            "action": "setattr(app_state, \"terminal\", False)",
+            "command_type": "switch"
+        },
+        {
+            "name": "switch to linux",
+            "key": "switch to linux",
+            "action": "(app_state.set_terminal_os(TerminalOS.LINUX), app_state.load_terminal_commands())",
+            "command_type": "switch"
+        },
+        {
+            "name": "switch to windows",
+            "key": "switch to windows",
+            "action": "(app_state.set_terminal_os(TerminalOS.WINDOWS), app_state.load_terminal_commands())",
+            "command_type": "switch"
+        },
+        {
+            "name": "switch mode",
+            "key": "switch mode",
+            "action": "app_state.switch_mode()",
+            "command_type": "switch"
+        },
+        {
+            "name": "switch punctuation",
+            "key": "switch punctuation",
+            "action": "app_state.switch_punctuation()",
+            "command_type": "switch"
+        },
+        {
+            "name": "switch caps",
+            "key": "switch caps",
+            "action": "app_state.switch_capitalization()",
+            "command_type": "switch"
+        },
+        {
+            "name": "switch cups",
+            "key": "switch cups",
+            "action": "app_state.switch_capitalization()",
+            "command_type": "switch"
+        }
     ]
 }

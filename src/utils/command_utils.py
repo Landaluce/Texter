@@ -85,7 +85,6 @@ def get_commands(directory: str) -> dict:
             warning_logger.warning(f"Commands file {file} not found.")
         except json.JSONDecodeError:
             error_logger.error(f"Invalid JSON format in commands file {file}.")
-
     return commands
 
 def focus_browser_window(browser="Chrome") -> None:
@@ -142,50 +141,6 @@ def start_browser(browser="chrome", url=None) -> None:
         error_logger.error(f"An error occurred: {e}")
 
 
-def create_python_class() -> None:
-    """Generates a Python class structure."""
-    write("class :")
-    press("enter")
-    press("tab")
-    write("def __init__(self):")
-    press("up")
-    press("left")
-
-
-def create_python_method() -> None:
-    """Generates a Python method structure."""
-    write("def (self):")
-    for _ in range(0, 7):
-        press("left")
-
-
-def create_python_function() -> None:
-    """Generates a Python function structure."""
-    write("def :()")
-    for _ in range(0, 3):
-        press("left")
-
-
-def create_new_python_script() -> None:
-    """Generates a Python script structure."""
-    write("main():")
-    press("enter", 2)
-    write('if __name__ == "__main__":')
-    press("enter")
-    write("main")
-
-
-def create_java_class() -> None:
-    """Generates a Java class structure."""
-
-    write("public class  {")
-    press("enter")
-    press("up")
-    press("end")
-    press("left")
-    press("left")
-
-
 def create_java_method(access_level: str) -> None:
     """
     Generates a Java method structure based on the specified access level.
@@ -197,6 +152,4 @@ def create_java_method(access_level: str) -> None:
     Args:
         access_level (str): The access level of the method (e.g., "public", "private").
     """
-    write(access_level + " void () {}")
-    for _ in range(0, 5):
-        press("left")
+    (write(access_level + " void () {}"), [press("left") for _ in range(0, 5)])
