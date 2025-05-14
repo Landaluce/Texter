@@ -77,7 +77,6 @@ class TextProcessor:
     @staticmethod
     def _initialize_pipeline(model):
         """Initialize the Hugging Face pipeline."""
-        # device = 0 if torch.cuda.is_available() else -1
         return pipeline("ner", model=model, grouped_entities=False, device=-1)
 
     @staticmethod
