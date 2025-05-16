@@ -19,6 +19,86 @@
             "name": "get push",
             "action": "write(\"git push\")",
             "command_type": "git"
+        },
+        {
+            "name": "git init",
+            "action": "write(\"git init\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git clone",
+            "action": "write(\"git clone <repo-url>\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git log",
+            "action": "write(\"git log\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git branch",
+            "action": "write(\"git branch\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git branch create",
+            "action": "write(\"git branch <branch-name>\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git checkout",
+            "action": "write(\"git checkout <branch-name>\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git merge",
+            "action": "write(\"git merge <branch-name>\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git branch delete",
+            "action": "write(\"git branch -d <branch-name>\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git remote",
+            "action": "write(\"git remote\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git remote add",
+            "action": "write(\"git remote add <name> <url>\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git push remote",
+            "action": "write(\"git push <remote> <branch>\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git pull remote",
+            "action": "write(\"git pull <remote> <branch>\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git pull",
+            "action": "write(\"git pull\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git fetch",
+            "action": "write(\"git fetch\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git reset hard",
+            "action": "write(\"git reset --hard HEAD\")",
+            "command_type": "git"
+        },
+        {
+            "name": "git revert",
+            "action": "write(\"git revert <commit-hash>\")",
+            "command_type": "git"
         }
     ]
 }
