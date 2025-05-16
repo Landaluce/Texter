@@ -25,6 +25,13 @@
         {"name": "show system information", "key": "uname -a"},
         {"name": "change permissions", "key": "chmod [permissions] filename"},
         {"name": "clear terminal screen", "key": "clear"},
-        {"name": "set environment variable", "key": "export VAR_NAME=value"}
+        {"name": "set environment variable", "key": "export VAR_NAME=value"},
+        {"name": "search text recursively with grep", "key": "grep -r \"text\" directory_name"},
+        {"name": "search text case insensitive with grep", "key": "grep -i \"text\" filename"},
+        {"name": "grep lines not matching pattern", "key": "grep -v \"text\" filename"},
+        {"name": "grep count matches", "key": "grep -c \"text\" filename"},
+        {"name": "grep show line numbers", "key": "grep -n \"text\" filename"},
+        {"name": "grep exact word match", "key": "grep -w \"word\" filename"},
+        {"name": "grep extended regex", "key": "grep -E \"pattern\" filename"}
     ]
 }
