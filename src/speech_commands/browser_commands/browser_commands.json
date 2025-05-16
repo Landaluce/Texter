@@ -4,9 +4,9 @@
         {"name": "browser right", "key": "browser right", "command_type": "browser", "action": "press(\"ctrl\", \"tab\")"},
         {"name": "browser left", "key": "browser left", "command_type": "browser", "action": "press(\"ctrl\", \"shift\", \"tab\")"},
         {"name": "new chrome window", "key": "new chrome window", "command_type": "browser", "action": "press(\"ctrl\", \"n\")"},
-        {"name": "new firefox window", "key": "new firefox window", "command_type": "browser", "action": "\"ctrl\", \"n\""},
-        {"name": "new chrome incognito window", "key": "new chrome incognito window", "command_type": "browser", "action": "\"ctrl\", \"n\""},
-        {"name": "new firefox incognito window", "key": "new firefox incognito window", "command_type": "browser", "action": "\"ctrl\", \"n\""},
+        {"name": "new firefox window", "key": "new firefox window", "command_type": "browser", "action": "press(\"ctrl\", \"n\")"},
+        {"name": "new chrome incognito window", "key": "new chrome incognito window", "command_type": "browser", "action": "press(\"ctrl\", \"shift\", \"n\")"},
+        {"name": "new firefox incognito window", "key": "new firefox incognito window", "command_type": "browser", "action": "press(\\\"ctrl\\\", \\\"shift\\\", \\\"n\\\")\"},\"ctrl\", \"n\""},
         {"name": "focus chrome", "key": "focus chrome", "command_type": "browser", "action":  "press(\"alt\", \"tab\")"},
         {"name": "focus firefox", "key": "focus firefox", "command_type": "browser", "action":  "press(\"alt\", \"tab\")"},
 
