@@ -13,6 +13,7 @@ Example Usage:
 Raises:
     RuntimeError: If the commands cannot be loaded or if the speech interpreter thread fails to start.
 """
+import json
 import threading  # noqa: F401
 import logging
 
@@ -38,9 +39,17 @@ def initialize_application():
         commands = get_commands(command_files_directory)
         app_state.load_commands(commands)
         info_logger.info(f"Loaded {len(commands)} commands successfully.")
+    except FileNotFoundError:
+        error_logger.error(f"Command file directory not found: {command_files_directory}", exc_info=True)
+        raise RuntimeError("Command directory not found.")
+    except json.JSONDecodeError:
+        error_logger.error("Failed to parse command files (invalid JSON).", exc_info=True)
+        raise RuntimeError("Failed to parse command files.")
     except Exception as e:
-        error_logger.info(f"Failed to load commands: {e}")
-        raise RuntimeError("Command loading failed.") from e
+        error_logger.error(f"An unexpected error occurred while loading commands: {e}", exc_info=True)
+        raise RuntimeError("An unexpected error occurred during command loading.") from e
+
+    start_speech_interpreter(app_state, app)
 
     return app, app_state, commands
 
@@ -56,27 +65,16 @@ def start_speech_interpreter(app_state, app):
 
 def main():
     """
-    Initializes the application app_state and starts the live speech interpreter.
-    This function sets up the application by:
-    - Creating an instance of AppState
-    - Loading the necessary commands.
-    - Starting the live speech interpretation process in a separate thread.
-
-    Example Usage:
-        Run the script to start the application and speech recognition.
-
-    Raises:
-        RuntimeError: If commands cannot be loaded or threads fail to start.
+    Initializes and runs the application.
     """
     try:
         app, app_state, commands = initialize_application()
-        start_speech_interpreter(app_state, app)
-
         info_logger.info("Starting UI...")
         app.init_ui(app_state, commands)
-
+    except RuntimeError as e:
+        error_logger.critical(f"Application failed to initialize: {e}")
     except Exception as e:
-        error_logger.error(f"Application startup failed: {e}", exc_info=True)
+        error_logger.critical(f"An unhandled error occurred during application execution: {e}", exc_info=True)
 
 
 if __name__ == "__main__":
