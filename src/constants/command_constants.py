@@ -39,8 +39,3 @@ class TerminalOS(Enum):
     """
     LINUX = "linux"
     WINDOWS = "windows"
-
-
-simple_terminal_command_names = ["view current directory", "list directory contents", "show network information",
-                                "show system information", "check active processes", "show system information",
-                                "clear terminal screen"]

@@ -63,7 +63,7 @@ def convert_to_spelling(text: str, spelling_commands: list) -> str:
             input text: alpha beta
             output: ab
     """
-    word_to_key = {command.name: command.key for command in spelling_commands}
+    word_to_key = {command.name: command.action for command in spelling_commands}
     return "".join(word_to_key.get(word, "") for word in text.split())
 
 def string_to_camel_case(input_str: str, lower: bool = False) -> str:

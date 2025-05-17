@@ -1,26 +1,13 @@
 """
 Module that defines classes for executing various types of commands in a GUI.
-The classes support programming, keyboard, terminal, selection, switch, and interactive commands.
-
-Each command executor corresponds to a specific action, such as typing programming commands (Python/Java),
-executing terminal commands, simulating keyboard actions, switching app states, or interacting with the browser.
-The primary function of each class is to simulate user interactions within a graphical interface.
 
 Classes:
-    - ProgrammingCommandExecutor: Executes programming commands for Python and Java.
-    - KeyboardCommandExecutor: Executes keyboard-related commands such as hotkeys and key presses.
-    - SwitchCommandExecutor: Executes commands to switch application states (e.g., programming mode, terminal mode).
-    - InfoCommandExecutor: Executes info commands that simply type text into the GUI.
-    - GitCommandExecutor: Executes Git-related commands within the terminal or GUI.
-    - TerminalCommandExecutor: Executes terminal-related commands such as navigating directories or system commands.
-    - SelectionCommandExecutor: Executes commands to manipulate selected text (e.g., copy, paste, delete).
+    - ActionExecutor: Executes input action
     - InteractiveCommandExecutor: Executes interactive commands, including fetching and reading out the time or date.
-    - BrowserCommandExecutor: Executes browser-related commands such as switching tabs, opening windows, and navigating pages.
 
 Each executor is initialized with a command key or name and can be invoked to simulate a GUI interaction.
 """
-from src.utils.gui_utils import press, write
-from src.constants.command_constants import (TerminalOS, simple_terminal_command_names)
+from src.utils.gui_utils import press, write # DO NOT REMOVE
 from src.utils.text_to_speech import text_to_speech
 from src.utils.date_time_utils import (get_current_time, get_current_date, month_number_to_name, day_number_to_name,
                                        get_day_of_week)
@@ -47,38 +34,6 @@ class ActionExecutor:
         exec(action)
         if app_state:
             app_state.update_status()
-
-
-class TerminalCommandExecutor:
-    """
-    A class that executes selection commands within a GUI.
-    """
-
-    def __init__(self, key: str, name: str):
-        """
-        Initializes a `TerminalCommandExecutor` instance.
-
-        Args:
-            name (str): The name of the selection command to be executed.
-        """
-        self.key = key
-        self.name = name
-
-    def execute(self, app_state) -> None:
-        """
-        Executes a terminal command.
-
-        Args:
-            app_state (AppState): The current application state, including information about the terminal OS.
-        """
-        if ((self.name.startswith("change permissions") and app_state.terminal_os == TerminalOS.LINUX) or
-                self.name.startswith("go to")):
-            write(self.key)
-        elif self.name in simple_terminal_command_names:
-            write(self.key)
-            press("enter")
-        else:
-            pass
 
 
 class InteractiveCommandExecutor:

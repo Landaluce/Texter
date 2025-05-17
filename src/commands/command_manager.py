@@ -38,7 +38,7 @@ Usage:
     command.execute(app_state)
     command_dict = command.commands_to_dict(include_num_key=False)
 """
-from src.commands.command_executors import (TerminalCommandExecutor, InteractiveCommandExecutor, ActionExecutor)
+from src.commands.command_executors import ActionExecutor, InteractiveCommandExecutor
 from src.constants.command_constants import CommandType
 import logging
 from logging_config import setup_logging
@@ -69,7 +69,6 @@ class CommandManager:
         self.action = action
 
         self.action_executor = ActionExecutor()
-        self.terminal_command_executor = TerminalCommandExecutor(self.key, self.name)
         self.interactive_command_executor = InteractiveCommandExecutor(self.name)
 
     def commands_to_dict(self, include_num_key: bool=True) -> dict:
@@ -101,12 +100,11 @@ class CommandManager:
     Depending on the command type, delegates execution to the appropriate executor (action, terminal, or interactive).
     """
         if self.command_type == CommandType.SWITCH:
+            print("in command manager.execute IF", self.command_type, self.action)
             self.action_executor.execute(self.action, app_state)
 
-        elif self.command_type == CommandType.TERMINAL:
-            self.terminal_command_executor.execute(app_state)
-
         elif self.command_type == CommandType.INTERACTIVE:
+            print("in command manager.execute ELIF2", self.command_type, self.action)
             self.interactive_command_executor.execute()
 
         else:
