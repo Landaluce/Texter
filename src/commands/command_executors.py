@@ -1,11 +1,21 @@
 """
-Module that defines classes for executing various types of commands in a GUI.
+Command Executors Module
+
+This module defines classes for executing various types of commands within the Texter application.
 
 Classes:
-    - ActionExecutor: Executes input action
-    - InteractiveCommandExecutor: Executes interactive commands, including fetching and reading out the time or date.
+    ActionExecutor:
+        Executes predefined actions or operations, typically by evaluating a string of Python code.
+        Optionally updates the application state after execution.
 
-Each executor is initialized with a command key or name and can be invoked to simulate a GUI interaction.
+    InteractiveCommandExecutor:
+        Executes interactive commands, such as responding to user queries about the current time or date
+        using text-to-speech. Initialized with a command name and provides logic to handle specific
+        interactive requests.
+
+Usage:
+    Use ActionExecutor for direct action execution, and InteractiveCommandExecutor for commands
+    that require user interaction or dynamic responses.
 """
 from src.utils.gui_utils import press, write # DO NOT REMOVE
 from src.utils.text_to_speech import text_to_speech
