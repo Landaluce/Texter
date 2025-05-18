@@ -8,17 +8,13 @@ or perform dictation based on the application's current state.
 from __future__ import annotations
 import time
 import speech_recognition as sr
-import logging
-from logging_config import setup_logging
+from src.utils.logging_utils import info_logger, error_logger
 from src.state.app_state import AppState
 from src.ui.texter_ui import TexterUI
 from src.utils.error_handler import noalsaerr
 from src.utils.command_handler import handle_spelling_mode, handle_dictation_mode
 from src.utils.speech_recognition import recognize_speech
 from src.utils.special_case_processor import process_special_cases
-setup_logging()
-info_logger = logging.getLogger('general_logger')
-error_logger = logging.getLogger('error_logger')
 
 recognizer = sr.Recognizer()
 

@@ -47,13 +47,9 @@ import json
 import os
 import subprocess
 
+from src.utils.logging_utils import warning_logger, error_logger
 from src.utils.gui_utils import write, press
 from src.utils.text_to_speech import text_to_speech
-import logging
-from logging_config import setup_logging
-setup_logging()
-warning_logger = logging.getLogger('warning_logger')
-error_logger = logging.getLogger('error_logger')
 
 
 def get_commands(directory: str) -> dict:
