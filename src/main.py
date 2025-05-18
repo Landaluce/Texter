@@ -1,17 +1,15 @@
 """
-The main function that initializes the application state and starts the live speech interpreter.
+Main entry point for the Texter application.
 
-This function sets up the application by performing the following tasks:
-- Creates an instance of AppState and initializes the UI.
-- Loads the necessary commands using the get_commands function.
-- Sets up the speech recognizer using the speech_recognition library.
-- Starts the live speech interpretation process in a separate thread to handle speech commands in real-time.
+This script initializes logging, loads command definitions, sets up the application state and UI,
+and starts the live speech interpreter in a separate thread. It handles errors during initialization
+and ensures that the application is ready to process speech commands in real-time.
 
-Example Usage:
-    Run the script to initialize the application, load commands, and start live speech recognition.
+Example:
+    Run this script directly to launch the Texter application.
 
 Raises:
-    RuntimeError: If the commands cannot be loaded or if the speech interpreter thread fails to start.
+    RuntimeError: If command files cannot be loaded or if initialization fails.
 """
 import json
 import threading  # noqa: F401
