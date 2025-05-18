@@ -4,11 +4,7 @@ from typing import Optional
 
 import speech_recognition as sr
 import threading  # noqa: F401
-import logging
-from logging_config import setup_logging
-setup_logging()
-warning_logger = logging.getLogger('warning_logger')
-error_logger = logging.getLogger('error_logger')
+from src.utils.logging_utils import warning_logger, error_logger
 
 
 def recognize_speech(recognizer: sr.Recognizer, timeout: int = 2) -> Optional[str]:

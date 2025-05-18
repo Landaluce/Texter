@@ -179,19 +179,13 @@ texter_ui.init_ui(app_state, commands_dict)
 """
 from __future__ import annotations
 
+from src.utils.logging_utils import warning_logger, error_logger
 import threading
 import json
 import os
 import sys
 import tkinter as tk
 from tkinter import scrolledtext, ttk
-import logging
-
-from logging_config import setup_logging
-
-setup_logging()
-warning_logger = logging.getLogger('warning_logger')
-error_logger = logging.getLogger('error_logger')
 
 
 class TexterUI:
