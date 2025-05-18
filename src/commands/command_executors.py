@@ -17,18 +17,12 @@ Usage:
     Use ActionExecutor for direct action execution, and InteractiveCommandExecutor for commands
     that require user interaction or dynamic responses.
 """
+from src.utils.logging_utils import info_logger, warning_logger, error_logger
 from src.constants.command_constants import ProgrammingLanguage, TerminalOS
 from src.utils.gui_utils import press, write, scroll
 from src.utils.text_to_speech import text_to_speech
 from src.utils.date_time_utils import (get_current_time, get_current_date, month_number_to_name, day_number_to_name,
                                        get_day_of_week)
-import logging
-from logging_config import setup_logging
-
-setup_logging()
-warning_logger = logging.getLogger('warning_logger')
-error_logger = logging.getLogger('error_logger')
-info_logger = logging.getLogger('general_logger')
 
 
 class ActionExecutor:

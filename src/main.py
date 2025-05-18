@@ -13,19 +13,14 @@ Raises:
 """
 import json
 import threading  # noqa: F401
-import logging
 
-from logging_config import setup_logging
+from src.utils.logging_utils import info_logger, error_logger
 from src.constants.main_constants import command_files_directory
 from src.state.app_state import AppState
 from src.ui.texter_ui import TexterUI
 from src.utils.command_utils import get_commands
 from src.utils.live_speech_interpreter import run_live_speech_interpreter
 
-setup_logging()
-warning_logger = logging.getLogger('warning_logger')
-error_logger = logging.getLogger('error_logger')
-info_logger = logging.getLogger('general_logger')
 
 
 def initialize_application():

@@ -33,7 +33,6 @@ yarn-error.log
 # Logs
 *.log
 src/log.txt
-logging_config.py
 
 
 # Temporary files
