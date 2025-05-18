@@ -179,7 +179,9 @@ texter_ui.init_ui(app_state, commands_dict)
 """
 from __future__ import annotations
 
-from src.utils.logging_utils import warning_logger, error_logger
+from ast import literal_eval
+
+from src.utils.logging_utils import error_logger
 import threading
 import json
 import os
@@ -278,7 +280,7 @@ class TexterUI:
                                                                selectbackground="#515663",
                                                                font=("Consolas", 10))
         self.input_text_box.place(x=0, y=30, width=self.window_width, height=self.input_height)
-        self.input_text_box.config(state=tk.DISABLED)
+        self.input_text_box.config(state=literal_eval(tk.DISABLED))
 
     def configure_action_buttons(self):
         """Create action buttons."""
@@ -306,7 +308,7 @@ class TexterUI:
                                                                 selectbackground="#515663",
                                                                 font=("Consolas", 10))
         self.print_status()
-        self.status_text_box.config(state=tk.DISABLED)
+        self.status_text_box.config(state=literal_eval(tk.DISABLED))
         self.status_text_box.place(x=0, y=255, width=self.window_width, height=self.status_height)
 
     def configure_commands_section(self):
@@ -323,7 +325,7 @@ class TexterUI:
                                                                  selectbackground="#515663",
                                                                  font=("Consolas", 10))
         self.print_all_commands()
-        self.commands_text_box.config(state=tk.DISABLED)
+        self.commands_text_box.config(state=literal_eval(tk.DISABLED))
         self.commands_text_box.place(x=0, y=440, width=self.window_width, height=self.commands_height)
 
     def reload_commands(self):
@@ -456,11 +458,11 @@ class TexterUI:
 
     def update_commands(self) -> None:
         """Thread-safe commands update."""
-        self.root.after(0, self._update_commands_ui)
+        self.root.after(0, self._update_commands_ui) # type: ignore
 
     def _update_commands_ui(self) -> None:
         """Update commands text box."""
         self.commands_text_box.config(state=tk.NORMAL)
         self.commands_text_box.delete(1.0, tk.END)
         self.print_all_commands()
-        self.commands_text_box.config(state=tk.DISABLED)
+        self.commands_text_box.config(state=literal_eval(tk.DISABLED))
