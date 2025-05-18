@@ -40,11 +40,6 @@ Usage:
 """
 from src.commands.command_executors import ActionExecutor, InteractiveCommandExecutor
 from src.constants.command_constants import CommandType
-import logging
-from logging_config import setup_logging
-
-setup_logging()
-error_logger = logging.getLogger('error_logger')
 
 
 class CommandManager:
