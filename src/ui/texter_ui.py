@@ -179,15 +179,19 @@ texter_ui.init_ui(app_state, commands_dict)
 """
 from __future__ import annotations
 
-from ast import literal_eval
-
-from src.utils.logging_utils import error_logger
 import threading
 import json
 import os
 import sys
 import tkinter as tk
 from tkinter import scrolledtext, ttk
+import logging
+
+from logging_config import setup_logging
+
+setup_logging()
+warning_logger = logging.getLogger('warning_logger')
+error_logger = logging.getLogger('error_logger')
 
 
 class TexterUI:
@@ -280,7 +284,7 @@ class TexterUI:
                                                                selectbackground="#515663",
                                                                font=("Consolas", 10))
         self.input_text_box.place(x=0, y=30, width=self.window_width, height=self.input_height)
-        self.input_text_box.config(state=literal_eval(tk.DISABLED))
+        self.input_text_box.config(state=tk.DISABLED)
 
     def configure_action_buttons(self):
         """Create action buttons."""
@@ -308,7 +312,7 @@ class TexterUI:
                                                                 selectbackground="#515663",
                                                                 font=("Consolas", 10))
         self.print_status()
-        self.status_text_box.config(state=literal_eval(tk.DISABLED))
+        self.status_text_box.config(state=tk.DISABLED)
         self.status_text_box.place(x=0, y=255, width=self.window_width, height=self.status_height)
 
     def configure_commands_section(self):
@@ -325,7 +329,7 @@ class TexterUI:
                                                                  selectbackground="#515663",
                                                                  font=("Consolas", 10))
         self.print_all_commands()
-        self.commands_text_box.config(state=literal_eval(tk.DISABLED))
+        self.commands_text_box.config(state=tk.DISABLED)
         self.commands_text_box.place(x=0, y=440, width=self.window_width, height=self.commands_height)
 
     def reload_commands(self):
@@ -465,4 +469,4 @@ class TexterUI:
         self.commands_text_box.config(state=tk.NORMAL)
         self.commands_text_box.delete(1.0, tk.END)
         self.print_all_commands()
-        self.commands_text_box.config(state=literal_eval(tk.DISABLED))
+        self.commands_text_box.config(state=tk.DISABLED)
